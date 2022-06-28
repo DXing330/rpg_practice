@@ -1,0 +1,82 @@
+import random
+import sys
+from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
+                                   ItemBag_PC, Spell_PC)
+from rpg2_constants import Constants
+C = Constants()
+#function that adds a hero to the hero party list
+def add_to_party(h_p, p_pc):
+        #if the party isn't full you can add them
+        if len(h_p) < C.PARTY_LIMIT:
+                h_p.append(p_pc)
+        else:
+                print "The party is already full."
+#function that removes a hero from the hero party list
+def remove_from_party(heroes_party):
+        try:
+                number = int(raw_input("Which hero?"
+                                       "(First hero is number 1, etc.)"))
+                if 0 < number <= len(heroes_party):
+                        heroes_party.pop(number - 1)
+                else:
+                        print "That's fine if you changed your mind."
+        except ValueError, AttributeError:
+                print "That's fine if you changed your mind."
+
+#function that will pick a hero from the party
+def pick_hero(heroes_party):
+        hero = None
+        try:
+                number = int(raw_input("Which hero?"
+                                       "(First hero is number 1, etc.)"))
+                if 0 < number <= len(heroes_party):
+                        hero = heroes_party[(number - 1)]
+                else:
+                        print "That's not a real choice."
+                        hero = pick_hero(heroes_party)
+        except ValueError, AttributeError:
+                print "That's not a real choice."
+                hero = pick_hero(heroes_party)
+        return hero
+#function that picks a random hero from the party with health > 0
+def pick_random_healthy_hero(heroes_party):
+        try:
+                if len(heroes_party) > 1:
+                        x = random.randint(0, len(heroes_party) - 1)
+                        hero = heroes_party[x]
+                        if hero.health > 0:
+                                hero.stats()
+                        else:
+                                hero = pick_random_healthy_hero(heroes_party)
+                        return hero
+                else:
+                        hero = heroes_party[0]
+                        return hero
+
+        except ValueError:
+                print "The heroes have all been defeated."
+                return None
+#function that picks a random hero from the party who has been injured
+def pick_random_healthy_monster(monster_party):
+        x = random.randint(0, len(monster_party) - 1)
+        monster = monster_party[x]
+        if monster.health > 0:
+                monster.stats()
+        else:
+                monster = pick_random_healthy_monster(monster_party)
+        return monster
+#function that picks a monster
+def pick_monster(monster_party):
+        monster = None
+        try:
+                x = int(raw_input("Which monster?"
+                                  "(First monster is number 1, etc.)"))
+                if 0 < x <= len(monster_party):
+                        monster = monster_party[(x - 1)]
+                else:
+                        print "That's not a real choice."
+                        monster = pick_monster(monster_party)
+        except ValueError, AttributeError:
+                print "That's not a real choice."
+                monster = pick_monster(monster_party)
+        return monster
