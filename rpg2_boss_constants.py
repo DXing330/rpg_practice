@@ -7,7 +7,7 @@ C = Constants()
 class BOSS_CONSTANTS:
         def __init__(self):
                 #constants involved in boss battles
-                self.DEMON_GENERAL_HEALTH = 1000
+                self.DEMON_GENERAL_HEALTH = 1500
                 self.DEMON_GENERAL_ATK = 100
                 self.DEMON_GENERAL_DEFENSE = 40 
                 self.DEMON_GENERAL_SKILL = 15

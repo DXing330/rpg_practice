@@ -152,14 +152,21 @@ def use_advanced_magic(p_pc, s_pc, m_p):
                 s = int(input("Which spell do you want to use?"
                               "The first spell is number 1, etc."))
                 spell = s_pc[(s - 1)]
-                for monster in m_p:
+                if spell.targets > 1:
+                        for monster in m_p:
+                                if monster.element == spell.element:
+                                        print ("The magic has no effect on", monster.name)
+                                else:
+                                        monster.health = max((monster.health - (spell.power + p_pc.mana)),0)
+                                        print (spell.name, "hits", monster.name)
+                if spell.targets == 1:
+                        monster = party_func.pick_monster(m_p)
                         if monster.element == spell.element:
-                                print ("The magic has no effect on", monster.name)
+                                        print ("The magic has no effect on", monster.name)
                         else:
-                                monster.health = max((monster.health - (spell.power + p_pc.skill + p_pc.mana + p_pc.level)),0)
-                                print (spell.name, "hits", monster.name)
+                                monster.health = max((monster.health - (spell.power + p_pc.mana)),0)
                 p_pc.mana -= ((spell.cost * spell.targets) + spell.power)
-                if spell.cost == 0:
+                if p_pc.mana < (spell.cost * p_pc.atk):
                         print (spell.name, "goes awry.")
                         p_pc.health -= (spell.power + (p_pc.atk * p_pc.mana))
         except (ValueError, AttributeError):

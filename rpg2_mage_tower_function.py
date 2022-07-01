@@ -9,7 +9,7 @@ import rpg2_level_up_function as lvlup_func
 from rpg2_constants import Constants
 C = Constants()
 angel = Pet_NPC("Angel", 1, 2)
-new_spell = Spell_PC("new", 0, 1, None, 0)
+new_spell = Spell_PC("new", 1, 1, None, 1)
 ##functions in the tower
 
 #function that will allow the player to increase their spell's stats
@@ -29,9 +29,14 @@ def upgrade_spell(ib_pc, h_m):
                                 ib_pc.coins -= (C.SPELL_PRICE ** C.INCREASE_EXPONENT)
                                 spel.targets += 1
                         elif choice.upper() == "P" and ib_pc.coins >= (spel.power ** C.INCREASE_EXPONENT):
-                                ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
-                                spel.power += 1
-                                spel.cost += 1
+                                if spel.element == "Dark":
+                                        print ("Evil magic, huh?  Well, I don't judge. ")
+                                        ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
+                                        spel.power += 1
+                                else:
+                                        ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
+                                        spel.power += 1
+                                        spel.cost += 1
                         elif choice.upper() == "C" and ib_pc.coins >= (spel.power ** C.INCREASE_EXPONENT) and spel.cost > C.SPELL_COST:
                                 ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
                                 spel.cost -= 1

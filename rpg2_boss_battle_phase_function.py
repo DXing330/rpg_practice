@@ -103,24 +103,37 @@ def dg_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
                                 
 #special boss actions
 def dg_phase_two_action(m_npc, h_p, b_p):
-        if B.DEMON_GENERAL_HEALTH * 0.2 < m_npc.health <= B.DEMON_GENERAL_HEALTH * 0.5:
+        if B.DEMON_GENERAL_HEALTH * 0.4 < m_npc.health <= B.DEMON_GENERAL_HEALTH * 0.5:
                 print("Even a strong bug is still just a bug. ")
                 print("Let me show you my power. ")
+                if m_npc.atk < B.DEMON_GENERAL_ATK:
+                        m_npc.atk = B.DEMON_GENERAL_ATK
+                        print("You think you can weaken me? ")
                 m_npc.atk += m_npc.skill
                 print("Dark energy swirls around", m_npc.name)
                 hero = party_func.pick_random_healthy_hero(h_p)
                 hero.health -= m_npc.atk
                 print("Evil energy blasts", hero.name)
                 bPhase2 = True
-        elif 0 < m_npc.health <= B.DEMON_GENERAL_HEALTH * 0.2:
+        elif B.DEMON_GENERAL_HEALTH * 0.2 < m_npc.health <= B.DEMON_GENERAL_HEALTH * 0.4:
                 print("Persistent insects! ")
                 hero = party_func.pick_random_healthy_hero(h_p)
-                hero.health -= m_npc.atk
+                hero.health -= (m_npc.atk - hero.defense)
                 print("Evil energy blasts", hero.name)
                 hero = party_func.pick_random_healthy_hero(h_p)
-                hero.health -= m_npc.atk
+                hero.health -= (m_npc.atk - hero.defense)
                 print("Evil energy blasts", hero.name)
                 bPhase2 = True
+        elif 0 < m_npc.health <= B.DEMON_GENERAL_HEALTH * 0.2:
+                if m_npc.health > 1:
+                        print("Wretched fools, you've pushed me to my limits! ")
+                        print("I'll show you my final attack! ")
+                        m_npc.atk += m_npc.health
+                        m_npc.health = 1
+                for x in range(0, len(h_p)):
+                        hero = party_func.pick_random_healthy_hero(h_p)
+                        hero.health -= m_npc.atk
+                        print(m_npc.name, "attacks with the last of his energy! ")
         elif m_npc.health <= 0:
                 print(m_npc.name, "coughs up blood and falls to the ground.")
                 print("You may have beaten me, but my lord will avenge me! ")
