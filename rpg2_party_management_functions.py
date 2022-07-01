@@ -53,7 +53,8 @@ def pick_random_healthy_hero(heroes_party):
 
         except:
                 print ("The heroes have all been defeated.")
-                return None
+                hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
+                return hero
 #function that picks a random hero from the party who has been injured
 def pick_random_healthy_monster(monster_party):
         try:

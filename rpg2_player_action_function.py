@@ -10,81 +10,76 @@ C = Constants()
 ##function where the player makes a choice of what they want to do in battle
 #function that controls what the pet will do during battle
 #need to input the pet and both parties
-#the pet will heal the heroes in the heroes party as long as they are healthy
-#or the pet atk the monsters in the monster party as long as they are healthy
 def pet_action(p_npc, h_p, m_p):
-        #depending on the stage of the pet it will perform more actions
-        #for x in range(0, p_npc.stage, C.PET_ACTION_UP):
-        try:
-                y = random.randint(0,p_npc.stage)
-                if y == 0:
-                        hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
-                        print (p_npc.name, "uses their healing magic on", hero.name)
-                elif y == 1:
-                        monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.health -= p_npc.atk
-                        print (p_npc.name, "uses their attacking magic on", monster.name)
-                elif y == 2:
+        for y in range(0, 2):
+                z = random.randint(0, p_npc.stage)
+                if z == 0:
                         hero = party_func.pick_random_healthy_hero(h_p)
                         hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
                         print (p_npc.name, "uses their healing magic on", hero.name)
                         hero = party_func.pick_random_healthy_hero(h_p)
                         hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
                         print (p_npc.name, "uses their healing magic on", hero.name)
-                elif y == 3:
-                        monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.health -= p_npc.atk
-                        print (p_npc.name, "uses their attacking magic on", monster.name)
-                        monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.health -= p_npc.atk
-                        print (p_npc.name, "uses their attacking magic on", monster.name)
-                elif y == 4:
-                        monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.health -= p_npc.atk
-                        print (p_npc.name, "uses their attacking magic on", monster.name)
+                elif z == 1:
                         monster = party_func.pick_random_healthy_monster(m_p)
                         monster.health -= p_npc.atk
                         print (p_npc.name, "uses their attacking magic on", monster.name)
                         hero = party_func.pick_random_healthy_hero(h_p)
                         hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
                         print (p_npc.name, "uses their healing magic on", hero.name)
+                elif z == 2:
                         hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
-                        print (p_npc.name, "uses their healing magic on", hero.name)
-                elif y == 5:
+                        hero.atk += round((p_npc.atk * C.PET_ATK_BUFF), 0)
+                        hero.defense += round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
+                        print (p_npc.name, "uses their blessing magic on", hero.name)
+                elif z == 3:
+                        monster = party_func.pick_random_healthy_monster(m_p)
+                        monster.atk -= round((p_npc.atk * C.PET_ATK_BUFF), 0)
+                        monster.defense -= round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        print (p_npc.name, "uses their weakening magic on", monster.name)
+                elif z == 4:
+                        hero = party_func.pick_random_healthy_hero(h_p)
+                        hero.atk += round((p_npc.atk * C.PET_ATK_BUFF), 0)
+                        hero.defense += round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
+                        print (p_npc.name, "uses their blessing magic on", hero.name)
+                        hero = party_func.pick_random_healthy_hero(h_p)
+                        hero.atk += round((p_npc.atk * C.PET_ATK_BUFF), 0)
+                        hero.defense += round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
+                        print (p_npc.name, "uses their blessing magic on", hero.name)
+                elif z == 5:
+                        monster = party_func.pick_random_healthy_monster(m_p)
+                        monster.atk -= round((p_npc.atk * C.PET_ATK_BUFF), 0)
+                        monster.defense -= round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        print (p_npc.name, "uses their weakening magic on", monster.name)
+                        monster = party_func.pick_random_healthy_monster(m_p)
+                        monster.atk -= round((p_npc.atk * C.PET_ATK_BUFF), 0)
+                        monster.defense -= round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        print (p_npc.name, "uses their weakening magic on", monster.name)
+                elif z == 6:
                         pet_action(p_npc, h_p, m_p)
-                        pet_action(p_npc, h_p, m_p)
-                elif y == 6:
-                        for hero in h_p:
-                                hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
-                                print (p_npc.name, "heals", hero.name)
-                        for monster in m_p:
-                                monster.health -= p_npc.atk
-                                print (p_npc.name, "attacks", monster.name)
-
-        except:
-                print (p_npc.name, "failed to do anything.")
 
 
 #player attack function
 def player_attack(p_pc, m_npc):
         if p_pc.name == "Warrior" and p_pc.level == C.LEVEL_LIMIT:
-                m_npc.health = max((m_npc.health - p_pc.atk - p_pc.weapon - p_pc.atkbonus),0)
+                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health = max((m_npc.health - p_pc.atk - p_pc.weapon - p_pc.atkbonus),0)
+                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health = max((m_npc.health - p_pc.atk - p_pc.weapon - p_pc.atkbonus),0)
+                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health = max((m_npc.health - p_pc.atk - p_pc.weapon - p_pc.atkbonus),0)
+                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
         elif p_pc.name == "Warrior":
-                m_npc.health = max((m_npc.health - p_pc.atk - p_pc.weapon - p_pc.atkbonus),0)
+                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health = max((m_npc.health - p_pc.atk - p_pc.weapon - p_pc.atkbonus),0)
+                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
         else:
-                m_npc.health = max((m_npc.health - p_pc.atk - p_pc.weapon - p_pc.atkbonus),0)
+                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
 
         

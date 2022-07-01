@@ -12,9 +12,9 @@ def random_scaled_elite_monster(p_pc):
         element = element_list[random.randint(0, len(element_list)-1)]
         name = name_list[random.randint(0, len(name_list)-1)]
         health = random.randint(C.MONSTER_MAX_HP, C.MONSTER_MAX_HP * (p_pc.atk+p_pc.mana))
-        atk = random.randint(C.MONSTER_MAX_ATK, C.MONSTER_MAX_ATK * (p_pc.atk))
-        defense = random.randint(C.MONSTER_MAX_DEF, C.MONSTER_MAX_DEF * p_pc.defense)
-        skill = random.randint(C.MONSTER_MAX_SKILL * C.LEVEL_LIMIT, C.MONSTER_MAX_SKILL * C.LEVEL_LIMIT *(p_pc.skill + 1))
+        atk = random.randint(C.MONSTER_MAX_ATK, C.MONSTER_MAX_ATK + (p_pc.bonusatk + p_pc.bonusdef + p_pc.mana + p_pc.skill))
+        defense = random.randint(C.MONSTER_MAX_DEF, C.MONSTER_MAX_DEF + (p_pc.defense + p_pc.bonusatk + p_pc.bonusdef))
+        skill = random.randint(C.MONSTER_MAX_SKILL, C.MONSTER_MAX_SKILL + p_pc.skill)
         dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT
         random_monster = Monster_NPC("Super Elite " + element + name, health, atk, defense, skill, element, dropchance)
         return random_monster
@@ -27,7 +27,7 @@ def random_elite_monster():
         health = C.MONSTER_MAX_HP
         atk = C.MONSTER_MAX_ATK
         defense = C.MONSTER_MAX_DEF
-        skill = C.MONSTER_MAX_SKILL * C.LEVEL_LIMIT
+        skill = C.MONSTER_MAX_SKILL
         dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT
         random_monster = Monster_NPC("Elite " + element + name, health, atk, defense, skill, element, dropchance)
         return random_monster

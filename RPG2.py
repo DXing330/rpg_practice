@@ -9,7 +9,6 @@ import rpg2_party_management_functions as party_func
 import rpg2_monster_function as monster_func
 import rpg2_battle_phase_function as battle_func
 import rpg2_mage_tower_function as magetower_func
-import rpg2_save_function as save_func
 from rpg2_constants import Constants
 C = Constants()
 
@@ -55,7 +54,7 @@ heroes_bag = ItemBag_PC(1, 1, 1, 10)
 
 while bChoice:
         print ("Would you like to start a new game?  Or input a save?")
-        game = input("NEW GAME, IMPORT SAVE? I/N ")
+        game = input("NEW GAME, SAVE? N/S ")
         if game.upper() == "N":
                 print ("What character would you like to start with?")
                 choice = input("Cleric, Mage, Summoner, Warrior? C/M/S/W")
@@ -84,26 +83,112 @@ while bChoice:
                         bGame = True
                 else:
                         print ("Please make a choice.")
-        if game.upper() == "I":
-                heroes_list, heroes_magic_list, items_bag_obj, pet_obj = save_func.read()
-                heroes_party = heroes_list
-                heroes_magic = heroes_magic_list
-                heroes_bag = items_bag_obj
-                hero_pet = pet_obj
-                hero_one = heroes_party[0]
-                bChoice = False
-                bGame = True
+        if game.upper() == "S":
+                print ("Which character would you like to import? ")
+                choice = input("Cleric, Mage, Summoner, Warrior? C/M/S/W")
+                if choice.upper() == "C":
+                        try:
+                                print ("What are the cleric's stats?")
+                                print ("(name, level, health, maxhealth, atk, defense, skill, mana, atkbonus, defbonus, weapon, armor) ")
+                                name = input("NAME?" )
+                                level = int(input("LEVEL? "))
+                                maxhealth = int(input("MAX HEALTH? "))
+                                atk = int(input("ATK? "))
+                                defense = int(input("DEF? "))
+                                skill = int(input("SKILL? "))
+                                mana = int(input("MANA? "))
+                                atkbonus = int(input("ATKBONUS? "))
+                                defbonus = int(input("DEFBONUS? "))
+                                weapon = int(input("WEAPON? "))
+                                armor = int(input("ARMOR? "))
+                                cleric = Player_PC(name, min(level,C.LEVEL_LIMIT), health, maxhealth, atk, defense,
+                                                   skill, mana, atkbonus, defbonus, weapon, armor)
+                                add_to_party(heroes_party, cleric)
+                                bChoice = False
+                                bGame = True
+                        except (ValueError, AttributeError):
+                                print ("That's not an option. ")
+                if choice.upper() == "M":
+                        try:
+                                print ("What are the mages's stats?")
+                                print ("(name, level, health, maxhealth, atk, defense, skill, mana, atkbonus, defbonus, weapon, armor) ")
+                                name = input("NAME?" )
+                                level = int(input("LEVEL? "))
+                                maxhealth = int(input("MAX HEALTH? "))
+                                atk = int(input("ATK? "))
+                                defense = int(input("DEF? "))
+                                skill = int(input("SKILL? "))
+                                mana = int(input("MANA? "))
+                                atkbonus = int(input("ATKBONUS? "))
+                                defbonus = int(input("DEFBONUS? "))
+                                weapon = int(input("WEAPON? "))
+                                armor = int(input("ARMOR? "))
+                                mage = Player_PC(name, min(level,C.LEVEL_LIMIT), health, maxhealth, atk, defense,
+                                                   skill, mana, atkbonus, defbonus, weapon, armor)
+                                add_to_party(heroes_party, mage)
+                                bChoice = False
+                                bGame = True
+                        except (ValueError, AttributeError):
+                                print ("That's not an option. ")
+                if choice.upper() == "S":
+                        try:
+                                print ("What are the summoner's stats?")
+                                print ("(name, level, health, maxhealth, atk, defense, skill, mana, atkbonus, defbonus, weapon, armor) ")
+                                name = input("NAME?" )
+                                level = int(input("LEVEL? "))
+                                maxhealth = int(input("MAX HEALTH? "))
+                                atk = int(input("ATK? "))
+                                defense = int(input("DEF? "))
+                                skill = int(input("SKILL? "))
+                                mana = int(input("MANA? "))
+                                atkbonus = int(input("ATKBONUS? "))
+                                defbonus = int(input("DEFBONUS? "))
+                                weapon = int(input("WEAPON? "))
+                                armor = int(input("ARMOR? "))
+                                summoner = Player_PC(name, min(level,C.LEVEL_LIMIT), health, maxhealth, atk, defense,
+                                                   skill, mana, atkbonus, defbonus, weapon, armor)
+                                add_to_party(heroes_party, summoner)
+                                print ("What are the summoner's summoned ally's stats? ")
+                                print ("(name, stage, atk)")
+                                pet_name = input("NAME? ")
+                                stage = input("STAGE? ")
+                                pet_atk = input("ATK? ")
+                                hero_pet = Pet_NPC(pet_name, min(stage,C.STAGE_LIMIT), pet_atk)
+                                bChoice = False
+                                bGame = True
+                        except (ValueError, AttributeError):
+                                print ("That's not an option. ")
+                if choice.upper() == "W":
+                        try:
+                                print ("What are the warrior's stats?")
+                                print ("(name, level, health, maxhealth, atk, defense, skill, mana, atkbonus, defbonus, weapon, armor) ")
+                                name = input("NAME?" )
+                                level = int(input("LEVEL? "))
+                                maxhealth = int(input("MAX HEALTH? "))
+                                atk = int(input("ATK? "))
+                                defense = int(input("DEF? "))
+                                skill = int(input("SKILL? "))
+                                mana = int(input("MANA? "))
+                                atkbonus = int(input("ATKBONUS? "))
+                                defbonus = int(input("DEFBONUS? "))
+                                weapon = int(input("WEAPON? "))
+                                armor = int(input("ARMOR? "))
+                                warrior = Player_PC(name, min(level,C.LEVEL_LIMIT), health, maxhealth, atk, defense,
+                                                   skill, mana, atkbonus, defbonus, weapon, armor)
+                                add_to_party(heroes_party, warrior)
+                                bChoice = False
+                                bGame = True
+                        except (ValueError, AttributeError):
+                                print ("That's not an option. ")
+                else:
+                        print ("Please make a choice.")
 
 
 while bGame:
         monster_party = []
-        print("What would you like to do?")
-        print("ATTACK nearby monsters?")
-        print("EXPLORE the dangerous wilds?")
-        print("vist the MAGE TOWER?")
-        print("head back to TOWN?")
-        print("or perhaps you want to rest and RECORD your adventures?")
-        check = input("A/E/M/R/T")
+        check = input("What do you want to do?"
+                           "ATTACK monsters, EXPLORE, go to the MAGE TOWER or find a TOWN?"
+                           "A/E/M/T")
         if check.upper() == "T":
                 #if the hero goes to town call the town function
                 for hero in heroes_party:
@@ -111,49 +196,11 @@ while bGame:
                 town_func.town(hero_one, heroes_bag, heroes_party)
         if check.upper() == "A":
                 #if you want to fight, then create some monsters to fight
-                print("Do you want to fight against the odds? ")
-                print("Are you brave enough to face a horde of monsters? ")
-                choice = input("Y/N ?")
-                if choice.upper() == "Y":
-                        x = random.randint(len(heroes_party), C.MONSTER_PARTY_LIMIT)
-                        for y in range(0, x):
-                                for hero in heroes_party:
-                                        monster = monster_func.random_scaled_monster(hero)
-                                        monster_party.append(monster)
-                        battle_func.battle_phase(heroes_party, monster_party, hero_pet, heroes_bag, heroes_magic)
-                else:
-                        #make the fights equal numbers
-                        for hero in heroes_party:
-                                monster = monster_func.random_scaled_monster(hero)
-                                monster_party.append(monster)
-                        battle_func.battle_phase(heroes_party, monster_party, hero_pet, heroes_bag, heroes_magic)
-        if check.upper() == "E":
-                choice = input("Would you like to travel very far away? Y/N? ")
-                if choice.upper == "Y":
-                        x = random.randint(len(heroes_party), C.MONSTER_PARTY_LIMIT)
-                        for y in range(0, x):
-                                monster = monster_func.random_elite_monster()
-                                monster_party.append(monster)
-                        for hero in heroes_party:
-                                elite_monster = monster_func.random_scaled_elite_monster(hero)
-                                monster_party.append(elite_monster)
-                        battle_func.battle_phase(heroes_party, monster_party, hero_pet, heroes_bag, heroes_magic)
-                else:
-                        for hero in heroes_party:
-                                monster = monster_func.random_scaled_up_monster(hero)
-                                monster_party.append(monster)
-                        battle_func.battle_phase(heroes_party, monster_party, hero_pet, heroes_bag, heroes_magic)
+                #make the fights equal numbers
+                for hero in heroes_party:
+                        monster = monster_func.random_scaled_monster(hero)
+                        monster_party.append(monster)
+                battle_func.battle_phase(heroes_party, monster_party, hero_pet, heroes_bag, heroes_magic)
         if check.upper() == "M":
                 magetower_func.mage_tower(heroes_party, hero_pet, heroes_bag, heroes_magic)
-        if check.upper() == "R":
-                for hero in heroes_party:
-                        print (hero.stats())
-                for spell in heroes_magic:
-                        print (spell.stats())
-                hero_pet.stats()
-                heroes_bag.stats()
-                check =  input("Would you like to keep going after you write or STOP?")
-                save_func.write_to_files(heroes_party, heroes_magic, heroes_bag, hero_pet, "RPG2_")
-                if check.upper() == "S":
-                        bGame = False
-                        break                        
+                

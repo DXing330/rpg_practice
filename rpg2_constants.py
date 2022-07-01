@@ -4,17 +4,28 @@ class Constants:
              #limit to the amount of heroes in the party
              self.PARTY_LIMIT = 3
              #soft limits amount of monsters in the party
-             self.MONSTER_PARTY_LIMIT = 10
+             self.MONSTER_PARTY_LIMIT = 30
              #level limit for heroes
              self.LEVEL_LIMIT = 10
              #base price of leveling up
              self.LEVEL_PRICE = 10
              #exponent to scale the difficulty of increasing levels/stats
              self.INCREASE_EXPONENT = 2
+             #highest price to increase a stats
+             self.STAT_PRICE_LIMIT = 10000
+             #highest price to increase health
+             self.HEALTH_PRICE_LIMIT = 1000
              #level limit for pets
              self.STAGE_LIMIT = 6
              #how often the pet gets more actions
              self.PET_ACTION_UP = 2
+             #pet multipliers
+             #how much the pet buff affects atk
+             self.PET_ATK_BUFF = 0.2
+             #how much the pet buff affects defense
+             self.PET_DEF_BUFF = 0.15
+             #how much the pet buff affects skill
+             self.PET_SKILL_BUFF = 0.1
              #base price for weapons
              self.WEAPON_PRICE = 10
              #base price for armor
@@ -35,9 +46,9 @@ class Constants:
              #potential defense increase per level for basic monster
              self.MONSTER_SCALE_DEF = 2
              #max def for basic monster
-             self.MONSTER_MAX_DEF = 40
+             self.MONSTER_MAX_DEF = 30
              #max skill for basic monster
-             self.MONSTER_MAX_SKILL = 5
+             self.MONSTER_MAX_SKILL = 10
              #minimum stats for basic monster
              self.MONSTER_MIN_HP = 10
              self.MONSTER_MIN_ATK = 5

@@ -56,11 +56,11 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc):
                                         new_h_p.remove(hero)
                         #then give the monster's a turn
                         for monster in new_m_p:
+                                if monster.health <= 0:
+                                        new_m_p.remove(monster)
                                 if monster.health > 0:
                                         hero = party_func.pick_random_healthy_hero(new_h_p)
                                         monster_func.monster_attack(monster, hero)
-                                else:
-                                        new_m_p.remove(monster)
                         #after the monster attacks, check on the heroes again
                         for hero in new_h_p:
                                 if hero.health <= 0:

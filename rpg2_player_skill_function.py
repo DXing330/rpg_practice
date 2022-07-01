@@ -78,6 +78,7 @@ def use_skill(p_pc, h_p, m_p, p_npc):
 
         elif check.upper() == "W":
                 if p_pc.name == "Mage" and p_pc.level == C.LEVEL_LIMIT:
+                        p_pc.health -= (p_pc.mana - p_pc.skill)
                         for x in range(1, len(m_p)):
                                 monster = party_func.pick_random_healthy_monster(m_p)
                                 monster.health -= (p_pc.mana + p_pc.level)
