@@ -11,7 +11,7 @@ C = Constants()
 #function that controls what the pet will do during battle
 #need to input the pet and both parties
 def pet_action(p_npc, h_p, m_p):
-        for y in range(0, 2):
+        for y in range(0, C.PET_ACTION_UP):
                 z = random.randint(0, p_npc.stage)
                 if z == 0:
                         hero = party_func.pick_random_healthy_hero(h_p)
