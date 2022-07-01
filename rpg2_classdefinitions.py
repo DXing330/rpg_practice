@@ -62,9 +62,9 @@ class Pet_NPC:
         def stats(self):
                 print(self.name, self.stage, self.atk)
 class ItemBag_PC:
-        def __init__(self, health, mana, buff, coins):
+        def __init__(self, heal, mana, buff, coins):
                 #potions that restore health
-                self.health = health
+                self.heal = heal
                 #potions that restore mana
                 self.mana = mana
                 #potions that buff stats
@@ -73,10 +73,14 @@ class ItemBag_PC:
                 #ex. potions, weapons, armors, spells, etc.
                 self.coins = coins
         def stats(self):
-                print("Health Potions:", self.health, "Mana Potions:", self.mana,
+                print("Heal Potions:", self.heal, "Mana Potions:", self.mana,
                       "Boost Potions:", self.buff, "COINS:", self.coins)
+        def coins(self):
+                print("COINS:", self.coins)
 class Spell_PC:
-        def __init__(self, power, targets, element, cost):
+        def __init__(self, name, power, targets, element, cost):
+                #name of the spell
+                self.name = name
                 #how strong the spell is
                 #can be increased through training
                 self.power = power
@@ -88,7 +92,7 @@ class Spell_PC:
                 #the mana cost of the spell
                 self.cost = cost
         def stats(self):
-                print ("Power:", self.power, "Targets:", self.targets,
+                print (self.name, "Power:", self.power, "Targets:", self.targets,
                        "Element:", self.element, "Cost:", self.cost)
 
 class Monster_NPC:
@@ -99,8 +103,8 @@ class Monster_NPC:
                 self.defense = defense
                 self.skill = skill
                 self.element = element
-                #probability that the monster drops an item after being defeated
+                #how many coins are dropped after battle
                 self.dropchance = dropchance
         def stats(self):
-                print(self.health, self.atk, self.defense, self.skill, self.element)
+                print(self.name, self.health, self.atk, self.defense, self.skill)
 
