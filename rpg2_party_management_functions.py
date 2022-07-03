@@ -40,21 +40,25 @@ def pick_hero(heroes_party):
         return hero
 #function that picks a random hero from the party with health > 0
 def pick_random_healthy_hero(heroes_party):
-        try:
-                if len(heroes_party) > 1:
-                        x = random.randint(0, len(heroes_party) - 1)
-                        hero = heroes_party[x]
-                        if hero.health <=0:
-                                hero = pick_random_healthy_hero(heroes_party)
+        for hero  in heroes_party:
+                if hero.name == "Defender" and hero.health > 0:
                         return hero
                 else:
-                        hero = heroes_party[0]
-                        return hero
+                        try:
+                                if len(heroes_party) > 1:                                        
+                                        x = random.randint(0, len(heroes_party) - 1)
+                                        hero = heroes_party[x]
+                                        if hero.health <=0:
+                                                hero = pick_random_healthy_hero(heroes_party)
+                                        return hero
+                                else:
+                                        hero = heroes_party[0]
+                                        return hero
 
-        except:
-                print ("The heroes have all been defeated.")
-                hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
-                return hero
+                        except:
+                                print ("The heroes have all been defeated.")
+                                hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
+                                return hero
 #function that picks a random hero from the party who has been injured
 def pick_random_healthy_monster(monster_party):
         try:

@@ -11,15 +11,16 @@ C = Constants()
 #need the hero, heroes_party, monster_party, pet for now
 def use_skill(p_pc, h_p, m_p, p_npc):
         print ("What skill do you want to use? ")
-        print ("Observe enemies? O")
-        print ("Command Summoned Ally? C")
-        print ("Heal Ally? H")
-        print ("Buff? B")
-        print ("Debuff Enemy? D")
+        print ("OBSERVE enemies? O")
+        print ("COMMAND Summoned Ally? C")
+        print ("HEAL Ally? H")
+        print ("BUFF? B")
+        print ("DEBUFF Enemy? D")
+        print ("PROTECT your allies? P")
         print ("Try to go for a SNEAK ATTACK? S")
-        print ("Transmute fresh monster parts into GOLD? T")
+        print ("TRANSMUTE fresh monster parts into gold? T")
         
-        check = input("B/P/O/C/S/H/T")
+        check = input("B/P/O/C/S/H/T/D")
         if check.upper() == "O":
                 if p_pc.name == "Ninja":
                         p_pc.skill += p_pc.level
@@ -66,7 +67,13 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                         print("Nothing happens.")
         elif check.upper() == "B":
                 if p_pc.name == "Ninja":
-                        p_pc.skill = (p_pc.skill * C.BUFF) + p_pc.level
+                        p_pc.skill = round(p_pc.skill * C.BUFF) + p_pc.level
+                elif p_pc.name == "Knight":
+                        p_pc.defense += p_pc.level + p_pc.skill
+                        p_pc.armor = round(p_pc.armor * C.BUFF) + 1
+                elif p_pc.name == "Defender":
+                        p_pc.name = "Knight"
+                        p_pc.defense += p_pc.level + p_pc.skill
                 elif p_pc.name == "Cleric":
                         hero = party_func.pick_hero(h_p)
                         hero.atk += p_pc.mana+p_pc.skill
@@ -92,6 +99,14 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                         p_pc.skill -= min((monster.skill + monster.defense), p_pc.skill)
                 else:
                         print("The enemies stare at you as you try to run behind them. ")
+
+        elif check.upper() == "P":
+                if p_pc.name == "Knight":
+                        p_pc.name == "Defender"
+                        p_pc.armor += 1
+                if p_pc.name == "Defender":
+                        p_pc.armor += 1
+
         elif check.upper() == "J":
                 if p_pc.name == "Cleric" and p_pc.level == C.LEVEL_LIMIT:
                         print("DIVINE JUDGEMENT STRIKES YOUR FOES")
