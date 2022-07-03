@@ -165,8 +165,8 @@ def use_advanced_magic(p_pc, s_pc, m_p):
                                         print ("The magic has no effect on", monster.name)
                         else:
                                 monster.health = max((monster.health - (spell.power + p_pc.mana)),0)
-                p_pc.mana -= ((spell.cost * spell.targets) + spell.power)
-                if p_pc.mana < (spell.cost * p_pc.atk):
+                p_pc.mana -= ((spell.cost * spell.targets) + max((spell.power - p_pc.skill), 0))
+                if p_pc.mana < (spell.cost * spell.targets * p_pc.level):
                         print (spell.name, "goes awry.")
                         p_pc.health -= (spell.power + (p_pc.atk * p_pc.mana))
         except (ValueError, AttributeError):
