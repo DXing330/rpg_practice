@@ -23,7 +23,8 @@ def upgrade_spell(ib_pc, h_m):
                 try:
                         x = int(input("First spell is 1, etc, etc. "))
                         spel = h_m[(x - 1)]
-                        print ("That spell?  Alright, what part do you want to improve? ")
+                        spel.stats
+                        print (spel.name, "?", "Alright, what part do you want to improve? ")
                         choice = input("Power, Targets, Cost? P/T/C? ")
                         if choice.upper() == "T" and spel.targets == 1 and ib_pc.coins >= (C.SPELL_PRICE ** C.INCREASE_EXPONENT):
                                 ib_pc.coins -= (C.SPELL_PRICE ** C.INCREASE_EXPONENT)
