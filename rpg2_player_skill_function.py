@@ -28,6 +28,7 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                         print(p_pc.name, "calls to", p_npc.name)
                         player_func.pet_action(p_npc, h_p, m_p)
                         player_func.pet_action(p_npc, h_p, m_p)
+                        p_pc.health += p_pc.skill + p_pc.level
                 elif p_pc.name == "Summoner":
                         print(p_pc.name, "calls to", p_npc.name)
                         player_func.pet_action(p_npc, h_p, m_p)

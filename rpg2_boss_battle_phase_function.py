@@ -134,6 +134,7 @@ def dg_phase_two_action(m_npc, h_p, b_p):
                         hero = party_func.pick_random_healthy_hero(h_p)
                         hero.health -= m_npc.atk
                         print(m_npc.name, "attacks with the last of his energy! ")
+                bPhase2 = True
         elif m_npc.health <= 0:
                 print(m_npc.name, "coughs up blood and falls to the ground.")
                 print("You may have beaten me, but my lord will avenge me! ")
@@ -202,3 +203,4 @@ def boss_battle_phase(h_p, b_p, p_npc, ib_pc, s_pc):
                 print ("The heroes return victorious. ")
                 print ("The villagers rain praise and thanks upon them. ")
                 ib_pc.coins += B.DEMON_GENERAL_DROPCHANCE
+                ib_pc.dg_trophy += 1

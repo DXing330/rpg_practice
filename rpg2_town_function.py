@@ -1,3 +1,4 @@
+import copy
 import random
 import sys
 sys.path.append(".")
@@ -15,8 +16,8 @@ warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 0, 0, 0, 0, 2, 1)
 #inn function
 def inn(p_pc, ib_pc, h_p):
         print ("Welcome back, what would you like to do? ")
-        check = input("REST/TALK? R/T")
-        if check.upper() == "R":
+        check = input("REGROUP/SLEEP/TALK? R/S/T")
+        if check.upper() == "S":
                 for hero in h_p:
                         hero.stats
                         hero.health = hero.maxhealth
@@ -40,6 +41,18 @@ def inn(p_pc, ib_pc, h_p):
                 elif choice.upper() == "W":
                         party_func.add_to_party(h_p, warrior)
                 inn(p_pc, ib_pc, h_p)
+        elif check.upper() == "R":
+                for hero in h_p:
+                        hero.stats
+                print ("Which hero do you want to act last? ")
+                try:
+                        x = int(input("The first hero is 1, etc. "))
+                        hero = copy.copy(h_p[(x-1)])
+                        h_p.pop((x-1))
+                        h_p.append(hero)
+                except (ValueError, AttributeError):
+                        print("That's not a good plan. ")
+                
         else:
                 print ("Come back soon. ")
 
@@ -91,9 +104,9 @@ def practice_arena(p_pc, ib_pc):
                         p_pc.skill += 1
                         print("You're a skilled guy now. ")
                         practice_arena(p_pc, ib_pc)
-                elif check.upper() == "H" and p_pc.level == C.LEVEL_LIMIT and ib_pc.coins >= min((p_pc.health ** C.INCREASE_EXPONENT), C.HEALTH_PRICE_LIMIT):
-                        ib_pc.coins -= min((p_pc.health ** C.INCREASE_EXPONENT), C.HEALTH_PRICE_LIMIT)
-                        p_pc.health += 1
+                elif check.upper() == "H" and p_pc.level == C.LEVEL_LIMIT and ib_pc.coins >= min((p_pc.maxhealth ** C.INCREASE_EXPONENT), C.HEALTH_PRICE_LIMIT):
+                        ib_pc.coins -= min((p_pc.maxhealth ** C.INCREASE_EXPONENT), C.HEALTH_PRICE_LIMIT)
+                        p_pc.maxhealth += 1
                         print("You're a big guy. ")
                         practice_arena(p_pc, ib_pc)
                 else:
@@ -109,7 +122,7 @@ def potion_store(ib_pc):
                         quantity = int(input("How many do you want? "))
                         if ib_pc.coins >= quantity:
                                 ib_pc.coins -= quantity
-                                ib_pc.health += quantity
+                                ib_pc.heal += quantity
                                 print ("Thank you for your patronage.")
                         else:
                                 print ("You can't afford that.")

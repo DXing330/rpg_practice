@@ -29,34 +29,34 @@ def pet_action(p_npc, h_p, m_p):
                         print (p_npc.name, "uses their healing magic on", hero.name)
                 elif z == 2:
                         hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.atk += round((p_npc.atk * C.PET_ATK_BUFF), 0)
-                        hero.defense += round((p_npc.atk * C.PET_DEF_BUFF), 0)
-                        hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
+                        hero.atk += round(p_npc.atk * C.PET_ATK_BUFF)
+                        hero.defense += round(p_npc.atk * C.PET_DEF_BUFF)
+                        hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF)
                         print (p_npc.name, "uses their blessing magic on", hero.name)
                 elif z == 3:
                         monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.atk -= round((p_npc.atk * C.PET_ATK_BUFF), 0)
-                        monster.defense -= round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF), 0)
+                        monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF), 0)
                         print (p_npc.name, "uses their weakening magic on", monster.name)
                 elif z == 4:
                         hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.atk += round((p_npc.atk * C.PET_ATK_BUFF), 0)
-                        hero.defense += round((p_npc.atk * C.PET_DEF_BUFF), 0)
-                        hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
+                        hero.atk += round(p_npc.atk * C.PET_ATK_BUFF)
+                        hero.defense += round(p_npc.atk * C.PET_DEF_BUFF)
+                        hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF)
                         print (p_npc.name, "uses their blessing magic on", hero.name)
                         hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.atk += round((p_npc.atk * C.PET_ATK_BUFF), 0)
-                        hero.defense += round((p_npc.atk * C.PET_DEF_BUFF), 0)
-                        hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
+                        hero.atk += round(p_npc.atk * C.PET_ATK_BUFF)
+                        hero.defense += round(p_npc.atk * C.PET_DEF_BUFF)
+                        hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF)
                         print (p_npc.name, "uses their blessing magic on", hero.name)
                 elif z == 5:
                         monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.atk -= round((p_npc.atk * C.PET_ATK_BUFF), 0)
-                        monster.defense -= round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF), 0)
+                        monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF), 0)
                         print (p_npc.name, "uses their weakening magic on", monster.name)
                         monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.atk -= round((p_npc.atk * C.PET_ATK_BUFF), 0)
-                        monster.defense -= round((p_npc.atk * C.PET_DEF_BUFF), 0)
+                        monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF), 0)
+                        monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF), 0)
                         print (p_npc.name, "uses their weakening magic on", monster.name)
                 elif z == 6:
                         pet_action(p_npc, h_p, m_p)
@@ -94,11 +94,11 @@ def use_item(p_pc, ib_pc):
         elif check.upper() == "M" and ib_pc.mana >= 1:
                 ib_pc.mana -= 1
                 print("You feel your mana pulse with energy.")
-                p_pc.mana = round((p_pc.mana * C.BUFF), 0)
+                p_pc.mana = round(p_pc.mana * C.BUFF)
         elif check.upper() == "B" and ib_pc.buff >= 1:
                 ib_pc.buff -= 1
                 print("Adrenaline races through your veins.")
-                p_pc.atk = round((p_pc.atk * C.BUFF), 0)
+                p_pc.atk = round(p_pc.atk * C.BUFF)
         else:
                 print ("You can't do that right now.")
                 
@@ -195,7 +195,7 @@ def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
         elif check.upper() == "S":
                 pskill_func.use_skill(p_pc, h_p, m_p, p_npc)
         elif check.upper() == "P" or "":
-                p_pc.health += p_pc.level
+                p_pc.health += p_pc.level + p_pc.skill
                 print("A warm and gentle breeze soothes your soul. ")
                 if p_pc.name == "Cleric":
                         p_pc.mana += 1

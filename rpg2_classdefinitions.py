@@ -62,7 +62,7 @@ class Pet_NPC:
         def stats(self):
                 print(self.name, self.stage, self.atk)
 class ItemBag_PC:
-        def __init__(self, heal, mana, buff, coins):
+        def __init__(self, heal, mana, buff, coins, dg_trophy = 0):
                 #potions that restore health
                 self.heal = heal
                 #potions that restore mana
@@ -72,6 +72,8 @@ class ItemBag_PC:
                 #currency to buy things
                 #ex. potions, weapons, armors, spells, etc.
                 self.coins = coins
+                #trophy gained from defeating a demon general
+                self.dg_trophy = dg_trophy
         def stats(self):
                 print("Heal Potions:", self.heal, "Mana Potions:", self.mana,
                       "Boost Potions:", self.buff, "COINS:", self.coins)

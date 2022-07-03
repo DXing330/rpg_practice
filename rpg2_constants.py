@@ -21,11 +21,11 @@ class Constants:
              self.PET_ACTION_UP = 2
              #pet multipliers
              #how much the pet buff affects atk
-             self.PET_ATK_BUFF = 0.2
+             self.PET_ATK_BUFF = 0.15
              #how much the pet buff affects defense
-             self.PET_DEF_BUFF = 0.15
+             self.PET_DEF_BUFF = 0.1
              #how much the pet buff affects skill
-             self.PET_SKILL_BUFF = 0.1
+             self.PET_SKILL_BUFF = 0.05
              #base price for weapons
              self.WEAPON_PRICE = 10
              #base price for armor
