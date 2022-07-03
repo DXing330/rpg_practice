@@ -11,6 +11,8 @@ class Constants:
              self.LEVEL_PRICE = 10
              #exponent to scale the difficulty of increasing levels/stats
              self.INCREASE_EXPONENT = 2
+             #highest price in a function
+             self.PRICE_LIMIT = 10000
              #highest price to increase a stats
              self.STAT_PRICE_LIMIT = 10000
              #highest price to increase health

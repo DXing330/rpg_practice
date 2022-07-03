@@ -76,16 +76,17 @@ def monster_attack(m_npc, p_pc):
                         y = random.randint(1, 5)
                         if y == 1:
                                 #monster does an attack that ignores defense
-                                p_pc.health -= max(m_npc.atk, 1)
+                                p_pc.health -= max((m_npc.atk - p_pc.armor), 1)
                                 print (m_npc.name, "does a piercing attack against", p_pc.name)
                         elif y == 2:
                                 #monster does a strong attack
-                                p_pc.health -= max(round(((m_npc.atk*C.CRIT) - p_pc.defense - p_pc.defbonus - p_pc.armor),0), 1)
+                                p_pc.health -= max(round((m_npc.atk*C.CRIT) - p_pc.defense - p_pc.defbonus - p_pc.armor), 1)
                                 print (m_npc.name, "does a strong attack against", p_pc.name)
                         elif y == 3:
                                 #monster will buff themselves
-                                m_npc.atk = round(m_npc.atk * C.BUFF, 0) + m_npc.skill
-                                m_npc.defense = round(m_npc.defense * C.BUFF, 0)
+                                m_npc.atk = round(m_npc.atk * C.BUFF) + m_npc.skill
+                                m_npc.defense = round(m_npc.defense * C.BUFF)
+                                m_npc.skill = round(m_npc.skill * C.BUFF)
                                 print (m_npc.name, "gathers energy.")
                         elif y == 4:
                                 #monster will heal themselves

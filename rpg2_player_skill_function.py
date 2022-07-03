@@ -14,12 +14,16 @@ def use_skill(p_pc, h_p, m_p, p_npc):
         print ("Observe enemies? O")
         print ("Command Summoned Ally? C")
         print ("Heal Ally? H")
-        print ("Buff Ally? B")
+        print ("Buff? B")
         print ("Debuff Enemy? D")
+        print ("Try to go for a SNEAK ATTACK? S")
         print ("Transmute fresh monster parts into GOLD? T")
         
-        check = input("B/P/O/C/H/T")
+        check = input("B/P/O/C/S/H/T")
         if check.upper() == "O":
+                if p_pc.name == "Ninja":
+                        p_pc.skill += p_pc.level
+                        print (p_pc.name, "observes the enemies weaknesses. ")
                 for monster in m_p:
                         monster.stats()
                         
@@ -40,11 +44,20 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                         hero = party_func.pick_hero(h_p)
                         hero.health += p_pc.mana+p_pc.skill
                         print (p_pc.name, "heals", hero.name)
+                elif p_pc.name == "Ninja" and p_pc.weapon > 0:
+                        print (p_pc.name, "throws away his weapon and disappears into the shadows.")
+                        p_pc.skill = p_pc.skill * p_pc.weapon
+                        p_pc.health += min(p_pc.skill, (p_pc.maxhealth - p_pc.health))
+                        p_pc.weapon = 0
                 else:
                         print("Nothing happens.")
                         
         elif check.upper() == "D":
-                if p_pc.name == "Cleric":
+                if p_pc.name == "Ninja" and p_pc.skill > monster.skill and p_pc.level == C.LEVEL_LIMIT:
+                        monster = party_func.pick_monster(m_p)
+                        monster.skill = round(monster.skill/C.BUFF)
+                        p_pc.skill -= monster.skill
+                elif p_pc.name == "Cleric":
                         monster = party_func.pick_monster(m_p)
                         monster.atk = max((monster.atk-p_pc.mana-p_pc.skill),0)
                         p_pc.mana -= 1
@@ -52,9 +65,11 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                 else:
                         print("Nothing happens.")
         elif check.upper() == "B":
-                if p_pc.name == "Cleric":
+                if p_pc.name == "Ninja":
+                        p_pc.skill = (p_pc.skill * C.BUFF) + p_pc.level
+                elif p_pc.name == "Cleric":
                         hero = party_func.pick_hero(h_p)
-                        hero.atk = (hero.atk+p_pc.mana+p_pc.skill)
+                        hero.atk += p_pc.mana+p_pc.skill
                         p_pc.mana -= 1
                         print ("Holy light surrounds", hero.name)
                 else:
@@ -68,7 +83,15 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                         print (p_pc.name, "changes some fresh", monster.name, "blood, into GOLD.")
                 else:
                         print("You don't know how to do that. ")
-                        
+
+        elif check.upper() == "S":
+                if p_pc.name == "Ninja":
+                        monster = party_func.pick_monster(m_p)
+                        monster.health -= p_pc.atk + (p_pc.skill * p_pc.weapon)
+                        print (p_pc.name, "appears behind", monster.name, "and strikes.")
+                        p_pc.skill -= min((monster.skill + monster.defense), p_pc.skill)
+                else:
+                        print("The enemies stare at you as you try to run behind them. ")
         elif check.upper() == "J":
                 if p_pc.name == "Cleric" and p_pc.level == C.LEVEL_LIMIT:
                         print("DIVINE JUDGEMENT STRIKES YOUR FOES")

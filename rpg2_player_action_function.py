@@ -71,8 +71,6 @@ def player_attack(p_pc, m_npc):
                 print(p_pc.name, "hits", m_npc.name)
                 m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
-                print(p_pc.name, "hits", m_npc.name)
         elif p_pc.name == "Warrior":
                 m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)

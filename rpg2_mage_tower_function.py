@@ -137,10 +137,10 @@ def summoning_fields(h_p, p_npc, ib_pc):
                 print ("Aww, what a cute little friend you have.")
                 print ("It looks like it can still get a lot stronger.")
                 print ("Do you want us to help you train it?")
-                print ("It'll cost you", (p_npc.atk ** p_npc.stage), "coins.")
+                print ("It'll cost you", min((p_npc.atk ** p_npc.stage), (p_npc.atk * C.PRICE_LIMIT)), "coins.")
                 choice = input("Y/N? ")
-                if choice.upper() == "Y" and ib_pc.coins >= (p_npc.atk ** p_npc.stage):
-                        ib_pc.coins -= (p_npc.atk ** p_npc.stage)
+                if choice.upper() == "Y" and ib_pc.coins >= min((p_npc.atk ** p_npc.stage), (p_npc.atk * C.PRICE_LIMIT)):
+                        ib_pc.coins -= min((p_npc.atk ** p_npc.stage), (p_npc.atk * C.PRICE_LIMIT))
                         lvlup_func.stage_up(p_npc)
                         print ("Whew, channelling spiritual power always tires me out.")
                         print ("Your ally looks much stronger now.")
@@ -149,10 +149,10 @@ def summoning_fields(h_p, p_npc, ib_pc):
         elif p_npc.stage == C.STAGE_LIMIT:
                 print ("That's a mighty strong looking ally you have.")
                 print ("Do you want me to try to strengthen it?")
-                print ("It'll cost you", (p_npc.atk ** C.INCREASE_EXPONENT), "coins.")
+                print ("It'll cost you", min((p_npc.atk ** C.INCREASE_EXPONENT), (p_npc.stage * C.PRICE_LIMIT)), "coins.")
                 choice = input("Y/N? ")
-                if choice.upper() == "Y" and ib_pc.coins >= (p_npc.atk ** C.INCREASE_EXPONENT):
-                        ib_pc.coins -= (p_npc.atk ** C.INCREASE_EXPONENT)
+                if choice.upper() == "Y" and ib_pc.coins >= min((p_npc.atk ** C.INCREASE_EXPONENT), (p_npc.stage * C.PRICE_LIMIT)):
+                        ib_pc.coins -= min((p_npc.atk ** C.INCREASE_EXPONENT), (p_npc.stage * C.PRICE_LIMIT))
                         lvlup_func.pet_atk_up(p_npc)
                 else:
                         print ("Come back when you're ready.")
