@@ -22,4 +22,4 @@ ninja = Player_PC("Ninja", 1, 10, 10, 3, 3, 5, 0, 0, 0, 1)
 #tactican focuses on commanding his party
 tactician = Player_PC("Tactician", 1, 10, 10, 1, 1, 5, 0)
 #knight focuses on armor and defense
-knight = Player_PC("Knight", 20, 20, 4, 4, 0, 0, 0, 0, 0, 2)
+knight = Player_PC("Knight", 1, 20, 20, 3, 4, 0, 0, 0, 0, 0, 2)

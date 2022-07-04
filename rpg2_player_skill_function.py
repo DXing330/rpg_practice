@@ -9,10 +9,10 @@ from rpg2_constants import Constants
 C = Constants()
 #function which controls what skills the player can use
 #need the hero, heroes_party, monster_party, pet for now
-def use_skill(p_pc, h_p, m_p, p_npc):
+def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
         print ("What skill do you want to use? ")
         print ("OBSERVE enemies? O")
-        print ("COMMAND Summoned Ally? C")
+        print ("COMMAND? C")
         print ("HEAL Ally? H")
         print ("BUFF? B")
         print ("DEBUFF Enemy? D")
@@ -25,6 +25,10 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                 if p_pc.name == "Ninja":
                         p_pc.skill += p_pc.level
                         print (p_pc.name, "observes the enemies weaknesses. ")
+                elif p_pc.name == "Tactician":
+                        for hero in h_p:
+                                hero.skill += 1
+                        print (p_pc.name, "estimates the enemies plans. ")
                 for monster in m_p:
                         monster.stats()
                         
@@ -37,8 +41,12 @@ def use_skill(p_pc, h_p, m_p, p_npc):
                 elif p_pc.name == "Summoner":
                         print(p_pc.name, "calls to", p_npc.name)
                         player_func.pet_action(p_npc, h_p, m_p)
+                elif p_pc.name == "Tactician" and p_pc.level == C.LEVEL_LIMIT:
+                        hero = party_func.pick_hero(h_p)
+                        if hero.name != "Tactician":
+                              player_func.player_action(hero, h_p, m_p, ib_pc, s_pc, p_npc)  
                 else:
-                        print(p_npc.name, "is too focused on the battle.")
+                        print("Your allies are too focused on the battle.")
                         
         elif check.upper() == "H":
                 if p_pc.name == "Cleric":
@@ -68,12 +76,18 @@ def use_skill(p_pc, h_p, m_p, p_npc):
         elif check.upper() == "B":
                 if p_pc.name == "Ninja":
                         p_pc.skill = round(p_pc.skill * C.BUFF) + p_pc.level
-                elif p_pc.name == "Knight":
+                        print (p_pc.name, "sharpens their senses. ")
+                elif p_pc.name == "Knight" and p_pc.skill > 0:
                         p_pc.defense += p_pc.level + p_pc.skill
                         p_pc.armor = round(p_pc.armor * C.BUFF) + 1
-                elif p_pc.name == "Defender":
+                        p_skill -= 1
+                        print (p_pc.name, "fortifies their position. ")
+                elif p_pc.name == "Defender" and p_pc.skill > 0:
                         p_pc.name = "Knight"
                         p_pc.defense += p_pc.level + p_pc.skill
+                        p_pc.armor = round(p_pc.armor * C.BUFF) + 1
+                        p_skill -= 1
+                        print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Cleric":
                         hero = party_func.pick_hero(h_p)
                         hero.atk += p_pc.mana+p_pc.skill
@@ -102,10 +116,15 @@ def use_skill(p_pc, h_p, m_p, p_npc):
 
         elif check.upper() == "P":
                 if p_pc.name == "Knight":
-                        p_pc.name == "Defender"
+                        p_pc.name = "Defender"
+                        p_pc.armor = round(p_pc.armor * C.BUFF) + 1
+                        p_pc.skill -= 1
+                        print(p_pc.name, "gets ready to block. ")
+                elif p_pc.name == "Defender":
                         p_pc.armor += 1
-                if p_pc.name == "Defender":
-                        p_pc.armor += 1
+                        print(p_pc.name, "gets ready to block. ")
+                else:
+                        print("Your body fails to shield your allies from view. ")
 
         elif check.upper() == "J":
                 if p_pc.name == "Cleric" and p_pc.level == C.LEVEL_LIMIT:

@@ -2,7 +2,7 @@ class Constants:
      def __init__(self):
              ##constants
              #limit to the amount of heroes in the party
-             self.PARTY_LIMIT = 3
+             self.PARTY_LIMIT = 4
              #soft limits amount of monsters in the party
              self.MONSTER_PARTY_LIMIT = 30
              #level limit for heroes
@@ -22,6 +22,8 @@ class Constants:
              #how often the pet gets more actions
              self.PET_ACTION_UP = 2
              #pet multipliers
+             #how much the pet buff affects maxhealth
+             self.PET_HP_BUFF = 0.2
              #how much the pet buff affects atk
              self.PET_ATK_BUFF = 0.15
              #how much the pet buff affects defense

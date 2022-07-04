@@ -9,45 +9,65 @@ from rpg2_constants import Constants
 C = Constants()
 #function that controls what the pet will do during battle
 #need to input the pet and both parties
-def pet_action(p_npc, h_p, m_p):
-        for y in range(0, 2):
-                z = random.randint(0, p_npc.stage)
-                if z == 0:
-                        hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
-                        print (p_npc.name, "uses their healing magic on", hero.name)
-                        hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
-                        print (p_npc.name, "uses their healing magic on", hero.name)
-                elif z == 1:
-                        monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.health -= p_npc.atk
-                        print (p_npc.name, "uses their attacking magic on", monster.name)
-                        monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.health -= p_npc.atk
-                        print (p_npc.name, "uses their attacking magic on", monster.name)
-                elif z == 2:
-                        hero = party_func.pick_random_healthy_hero(h_p)
-                        hero.atk += p_npc.atk * C.PET_ATK_BUFF
-                        hero.defense += p_npc.atk * C.PET_DEF_BUFF
-                        hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
-                        print (p_npc.name, "uses their blessing magic on", hero.name)
-                elif z == 3:
-                        monster = party_func.pick_random_healthy_monster(m_p)
-                        monster.atk -= p_npc.atk * C.PET_ATK_BUFF
-                        monster.defense -= p_npc.atk * C.PET_DEF_BUFF
-                        print (p_npc.name, "uses their weakening magic on", monster.name)
-                elif z == 4:
-                        for hero in h_p:
-                                hero.atk += p_npc.atk * C.PET_ATK_BUFF
-                                hero.defense += p_npc.atk * C.PET_DEF_BUFF
-                                hero.skill += round((p_npc.atk * C.PET_SKILL_BUFF), 0)
-                                print (p_npc.name, "uses their blessing magic on", hero.name)
-                elif z == 5:
-                        for monster in m_p:
-                                monster = party_func.pick_random_healthy_monster(m_p)
-                                monster.atk -= p_npc.atk * C.PET_ATK_BUFF
-                                monster.defense -= p_npc.atk * C.PET_DEF_BUFF
-                                print (p_npc.name, "uses their weakening magic on", monster.name)
-                elif z == 6:
-                        pet_action(p_npc, h_p, m_p)
+def pet_random_action(p_npc, h_p, m_p):
+        z = random.randint(0, p_npc.stage)
+        if z == 0:
+                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
+                print (p_npc.name, "uses their healing magic on", hero.name)
+                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
+                print (p_npc.name, "uses their healing magic on", hero.name)
+        elif z == 1:
+                monster = party_func.pick_random_healthy_monster(m_p)
+                monster.health -= p_npc.atk
+                print (p_npc.name, "uses their attacking magic on", monster.name)
+                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
+                print (p_npc.name, "uses their healing magic on", hero.name)
+        elif z == 2:
+                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                hero.maxhealth += round(p_npc.atk * C.PET_HP_BUFF)
+                hero.atk += round(p_npc.atk * C.PET_ATK_BUFF)
+                hero.defense += round(p_npc.atk * C.PET_DEF_BUFF)
+                hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF)
+                print (p_npc.name, "uses their blessing magic on", hero.name)
+        elif z == 3:
+                monster = party_func.pick_random_healthy_monster(m_p)
+                monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF), 0)
+                monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF), 0)
+                print (p_npc.name, "uses their weakening magic on", monster.name)
+        elif z == 4:
+                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                hero.maxhealth += round(p_npc.atk * C.PET_HP_BUFF)
+                hero.atk += round(p_npc.atk * C.PET_ATK_BUFF)
+                hero.defense += round(p_npc.atk * C.PET_DEF_BUFF)
+                hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF)
+                print (p_npc.name, "uses their blessing magic on", hero.name)
+                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                hero.maxhealth += round(p_npc.atk * C.PET_HP_BUFF)
+                hero.atk += round(p_npc.atk * C.PET_ATK_BUFF)
+                hero.defense += round(p_npc.atk * C.PET_DEF_BUFF)
+                hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF)
+                print (p_npc.name, "uses their blessing magic on", hero.name)
+        elif z == 5:
+                monster = party_func.pick_random_healthy_monster(m_p)
+                monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF), 0)
+                monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF), 0)
+                print (p_npc.name, "uses their weakening magic on", monster.name)
+                monster = party_func.pick_random_healthy_monster(m_p)
+                monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF), 0)
+                monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF), 0)
+                print (p_npc.name, "uses their weakening magic on", monster.name)
+        elif z == 6:
+                print (p_npc.name, "uses their legendary spell on the battlefield. ")
+                for hero in h_p:
+                        hero.maxhealth += round(p_npc.atk * C.PET_HP_BUFF)
+                        hero.atk += round(p_npc.atk * C.PET_ATK_BUFF)
+                        hero.defense += round(p_npc.atk * C.PET_DEF_BUFF)
+                        hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF)
+                for monster in m_p:
+                        monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF), 0)
+                        monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF), 0)
+                        
+                        

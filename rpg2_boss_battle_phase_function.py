@@ -107,7 +107,7 @@ def dg_phase_two_action(m_npc, h_p, b_p):
                 print("Even a strong bug is still just a bug. ")
                 print("Let me show you my power. ")
                 if m_npc.atk < B.DEMON_GENERAL_ATK:
-                        m_npc.atk = B.DEMON_GENERAL_ATK
+                        m_npc.atk += (B.DEMON_GENERAL_ATK - m_npc.atk)
                         print("You think you can weaken me? ")
                 m_npc.atk += m_npc.skill
                 print("Dark energy swirls around", m_npc.name)

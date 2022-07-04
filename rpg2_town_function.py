@@ -8,10 +8,16 @@ import rpg2_party_management_functions as party_func
 import rpg2_level_up_function as lvlup_func
 from rpg2_constants import Constants
 C = Constants()
+#store the starter characters incase the player recruits them
 summoner = Player_PC("Summoner", 1, 10, 10, 2, 2, 0, 0)
 cleric = Player_PC("Cleric", 1, 10, 10, 1, 2, 0, 5)
 mage = Player_PC("Mage", 1, 10, 10, 2, 2, 0, 5)
 warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 0, 0, 0, 0, 2, 1)
+ninja = Player_PC("Ninja", 1, 10, 10, 3, 3, 5, 0, 0, 0, 1)
+knight = Player_PC("Knight", 1, 20, 20, 3, 4, 0, 0, 0, 0, 0, 2)
+tactician = Player_PC("Tactician", 1, 10, 10, 1, 1, 5, 0)
+
+
 ##functions in the town
 #inn function
 def inn(p_pc, ib_pc, h_p):
@@ -19,7 +25,7 @@ def inn(p_pc, ib_pc, h_p):
         check = input("REGROUP/SLEEP/TALK? R/S/T")
         if check.upper() == "S":
                 for hero in h_p:
-                        hero.stats
+                        hero.stats()
                         hero.health = hero.maxhealth
                 if ib_pc.coins >= len(h_p):
                         ib_pc.coins -= len(h_p)
@@ -31,6 +37,7 @@ def inn(p_pc, ib_pc, h_p):
                 print ("We have a lot of adventurers passing through here.")
                 print ("Lots of them are looking for friends.")
                 print ("If you want, I can try to help you connect with one.")
+                print ("Ninja, Knight, Tactician? N/K/T ")
                 choice = input("Warrior, Mage, Cleric, or Summoner? C/M/S/W? ")
                 if choice.upper() == "C":
                         party_func.add_to_party(h_p, cleric)
@@ -40,18 +47,40 @@ def inn(p_pc, ib_pc, h_p):
                         party_func.add_to_party(h_p, summoner)
                 elif choice.upper() == "W":
                         party_func.add_to_party(h_p, warrior)
+                elif choice.upper() == "K":
+                        party_func.add_to_party(h_p, knight)
+                elif choice.upper() == "N":
+                        party_func.add_to_party(h_p, ninja)
+                elif choice.upper() == "T":
+                        party_func.add_to_party(h_p, tactician)
                 inn(p_pc, ib_pc, h_p)
         elif check.upper() == "R":
-                for hero in h_p:
-                        hero.stats
-                print ("Which hero do you want to act last? ")
-                try:
-                        x = int(input("The first hero is 1, etc. "))
-                        hero = copy.copy(h_p[(x-1)])
-                        h_p.pop((x-1))
-                        h_p.append(hero)
-                except (ValueError, AttributeError):
-                        print("That's not a good plan. ")
+                choice = input("Would you like to reORDER or REMOVE? O/R? ")
+                if choice.upper() == "O":
+                        for player in h_p:
+                                player.stats()
+                        print ("Which hero do you want to act last? ")
+                        try:
+                                x = int(input("The first hero is 1, etc. "))
+                                #make a copy of the hero, then remove them
+                                #then readd them to the party, so that they're last
+                                hero = copy.copy(h_p[(x-1)])
+                                h_p.pop((x-1))
+                                h_p.append(hero)
+                        except (ValueError, AttributeError):
+                                print("That's not a good plan. ")
+                if choice.upper() == "R":
+                        for player in h_p:
+                                player.stats()
+                        print ("Who do you want to send away? ")
+                        print ("You may never see them again. ")
+                        try:
+                                x = int(input("The first hero is 1, etc. "))
+                                #remove the hero from the party
+                                h_p.pop((x-1))
+                        except (ValueError, AttributeError):
+                                print("That's not a good plan. ")
+                inn(p_pc, ib_pc, h_p)
                 
         else:
                 print ("Come back soon. ")
@@ -60,7 +89,7 @@ def inn(p_pc, ib_pc, h_p):
 def practice_arena(p_pc, ib_pc):
         if p_pc == None:
                 return
-        print (p_pc.bstats())
+        p_pc.bstats()
         print ("Welcome to the practice arena, I'm in charge here.")
         print ("Tell me, what do you want to work on? GENERAL TRAINING or SPECIFIC TRAINING? ")
         choice = input("G/S? ")
@@ -75,6 +104,7 @@ def practice_arena(p_pc, ib_pc):
                         ib_pc.coins -= C.LEVEL_PRICE * (p_pc.level ** 2)
                         lvlup_func.level_up(p_pc)
                         print ("Looks like you're a bit stronger now. ")
+                        practice_arena(p_pc, ib_pc)
                 elif check.upper() == "Y" and ib_pc.coins < C.LEVEL_PRICE * (p_pc.level ** C.INCREASE_EXPONENT):
                         print ("Looks you have a small coin bag. ")
                 else:
@@ -156,7 +186,7 @@ def potion_store(ib_pc):
 def equipment_store(p_pc, ib_pc):
         if p_pc == None:
                 return
-        print (p_pc.estats())
+        p_pc.estats()
         print ("Do you want a new armor or new weapon? ")
         check = input("A/W")
         if check.upper() == "A":
