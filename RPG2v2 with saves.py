@@ -10,7 +10,7 @@ import rpg2_monster_function as monster_func
 import rpg2_battle_phase_function as battle_func
 import rpg2_mage_tower_function as magetower_func
 import rpg2_save_function as save_func
-import rpg2_boss_battle_phase_function as boss_func
+import rpg2_dg_boss_battle_phase_function as dgboss_func
 from rpg2_constants import Constants
 C = Constants()
 
@@ -152,7 +152,7 @@ while bGame:
                 if choice.upper() == "Y":
                         print("Oh thank GOD for you all. ")
                         print("The demon general is devastating our lands, please slay him. ")
-                        boss_func.boss_battle_phase(heroes_party, monster_party, hero_pet, heroes_bag, heroes_magic)
+                        dgboss_func.boss_battle_phase(heroes_party, monster_party, hero_pet, heroes_bag, heroes_magic)
                 else:
                         print("Oh no, what ever will we do? ")
         if check.upper() == "M":

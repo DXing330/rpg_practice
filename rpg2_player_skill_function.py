@@ -151,5 +151,5 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 else:
                         print(p_npc.name, "briefly glances at you in confusion.")
         else:
-                use_skill(p_pc, h_p, m_p, p_npc)
+                use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc)
                         

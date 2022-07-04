@@ -41,7 +41,7 @@ def random_scaled_up_monster(p_pc):
         atk = random.randint(C.MONSTER_SCALE_ATK * p_pc.level, C.MONSTER_MAX_ATK)
         defense = random.randint(C.MONSTER_SCALE_DEF * p_pc.level, C.MONSTER_MAX_DEF)
         skill = random.randint(p_pc.level, C.MONSTER_MAX_SKILL * p_pc.level)
-        dropchance = C.MONSTER_MAX_DROPCHANCE * p_pc.level
+        dropchance = C.MONSTER_MAX_DROPCHANCE * p_pc.level * p_pc.skill
         random_monster = Monster_NPC(element + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function which creates a monster that scales to the player's level
