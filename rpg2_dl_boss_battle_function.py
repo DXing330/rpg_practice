@@ -208,27 +208,3 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
                 print ("The villagers rain praise and thanks upon them. ")
                 ib_pc.coins += B.DEMON_LORD_DROPCHANCE
                 ib_pc.dl_trophy += 1
-
-
-
-
-heroes_party = []
-heroes_magic = []
-heroes_bag = ItemBag_PC(10, 10, 10, 100)
-fireball = Spell_PC("Fireball", 3, 2, "Fire", 1)
-rainstorm = Spell_PC("Rainstorm", 2, 2, "Water", 1)
-earthspike = Spell_PC("Earthspike", 3, 1, "Earth", 1)
-mage = Player_PC("Mage", 10, 10000, 10000, 20, 2000, 0, 50)
-warrior = Player_PC("Warrior", 10, 150, 150, 50, 30, 20, 0, 20, 20, 2, 1)
-cleric = Player_PC("Cleric", 10, 100, 100, 30, 20, 20, 30, 20, 20)
-summoner = Player_PC("Summoner", 1, 10, 10, 2, 2, 0, 0)
-ninja = Player_PC("Ninja", 10, 100, 100, 30, 30, 50, 0, 20, 20, 3)
-knight = Player_PC("Knight", 10, 200, 200, 40, 40, 20, 0, 20, 20, 0, 2)
-heroes_pet = Pet_NPC("Angel", 6, 64)
-heroes_magic.append(fireball)
-heroes_magic.append(rainstorm)
-heroes_magic.append(earthspike)
-heroes_party.append(cleric)
-heroes_party.append(warrior)
-heroes_party.append(knight)
-boss_battle(heroes_party, boss_party, heroes_pet, heroes_bag, heroes_magic)

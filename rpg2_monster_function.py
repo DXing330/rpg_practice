@@ -16,7 +16,7 @@ def random_scaled_elite_monster(p_pc):
         defense = random.randint(C.MONSTER_MAX_DEF, C.MONSTER_MAX_DEF + (p_pc.defense + p_pc.bonusatk + p_pc.bonusdef))
         skill = random.randint(C.MONSTER_MAX_SKILL, C.MONSTER_MAX_SKILL + p_pc.skill)
         dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT
-        random_monster = Monster_NPC("Super Elite " + element + name, health, atk, defense, skill, element, dropchance)
+        random_monster = Monster_NPC("Super Elite " + element + " " + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function which create a strong monster
 def random_elite_monster():
@@ -29,7 +29,7 @@ def random_elite_monster():
         defense = C.MONSTER_MAX_DEF
         skill = C.MONSTER_MAX_SKILL
         dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT
-        random_monster = Monster_NPC("Elite " + element + name, health, atk, defense, skill, element, dropchance)
+        random_monster = Monster_NPC("Elite " + element + " " + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function which creates a monster
 def random_scaled_up_monster(p_pc):
@@ -42,7 +42,7 @@ def random_scaled_up_monster(p_pc):
         defense = random.randint(C.MONSTER_SCALE_DEF * p_pc.level, C.MONSTER_MAX_DEF)
         skill = random.randint(p_pc.level, C.MONSTER_MAX_SKILL * p_pc.level)
         dropchance = C.MONSTER_MAX_DROPCHANCE * p_pc.level * p_pc.skill
-        random_monster = Monster_NPC(element + name, health, atk, defense, skill, element, dropchance)
+        random_monster = Monster_NPC(element + " " + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function which creates a monster that scales to the player's level
 def random_scaled_monster(p_pc):
@@ -55,7 +55,7 @@ def random_scaled_monster(p_pc):
         defense = random.randint(C.MONSTER_MIN_DEF, C.MONSTER_SCALE_DEF * p_pc.level)
         skill = random.randint(p_pc.level, C.MONSTER_MAX_SKILL + p_pc.level)
         dropchance = random.randint(0, C.MONSTER_MAX_DROPCHANCE * p_pc.level)
-        random_monster = Monster_NPC(element + name, health, atk, defense, skill, element, dropchance)
+        random_monster = Monster_NPC(element + " " + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function where the monster performs an action
 def monster_attack(m_npc, p_pc):

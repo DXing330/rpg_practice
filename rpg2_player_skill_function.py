@@ -110,7 +110,7 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         monster = party_func.pick_monster(m_p)
                         monster.health -= p_pc.atk + (p_pc.skill * p_pc.weapon)
                         print (p_pc.name, "appears behind", monster.name, "and strikes.")
-                        p_pc.skill -= min((monster.skill + monster.defense), p_pc.skill)
+                        p_pc.skill -= max((monster.skill + monster.defense), p_pc.skill)
                 else:
                         print("The enemies stare at you as you try to run behind them. ")
 
