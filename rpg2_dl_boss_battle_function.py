@@ -10,7 +10,7 @@ import rpg2_party_management_functions as party_func
 from rpg2_boss_constants import BOSS_CONSTANTS
 B = BOSS_CONSTANTS()
 
-Demon_Lord = Monster_NPC("Demon Lord", B.DEMON_LORD_HEALTH, B.DEMON_LORD_ATK,
+D_L = Monster_NPC("Demon Lord", B.DEMON_LORD_HEALTH, B.DEMON_LORD_ATK,
                             B.DEMON_LORD_DEFENSE, B.DEMON_LORD_SKILL, "Dark",
                             B.DEMON_LORD_DROPCHANCE)
 #make a party with the demon LORD for the player's to fight
@@ -174,6 +174,7 @@ def dl_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
 def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
         #make a copy of the heroes party and the monster's party
         b_p = []
+        Demon_Lord = copy.copy(D_L)
         b_p.append(Demon_Lord)
         new_h_p = []
         for hero in h_p:

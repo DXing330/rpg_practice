@@ -11,7 +11,7 @@ C = Constants()
 from rpg2_boss_constants import BOSS_CONSTANTS
 B = BOSS_CONSTANTS()
 #this is the boss
-Golden_Slime = Monster_NPC("Golden Slime", B.GOLDEN_SLIME_HEALTH, B.GOLDEN_SLIME_ATK,
+G_S = Monster_NPC("Golden Slime", B.GOLDEN_SLIME_HEALTH, B.GOLDEN_SLIME_ATK,
                            B.GOLDEN_SLIME_DEFENSE, B.GOLDEN_SLIME_SKILL, "Water",
                            B.GOLDEN_SLIME_DROPCHANCE)
 b_p = []
@@ -147,6 +147,7 @@ def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
 def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
         #make a copies of the party as usual
         b_p = []
+        Golden_Slime = copy.copy(G_S)
         b_p.append(Golden_Slime)
         new_h_p = []
         for hero in h_p:
