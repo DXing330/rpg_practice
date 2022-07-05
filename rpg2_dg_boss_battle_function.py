@@ -13,9 +13,9 @@ B = BOSS_CONSTANTS()
 D_G = Monster_NPC("Demon General", B.DEMON_GENERAL_HEALTH, B.DEMON_GENERAL_ATK,
                             B.DEMON_GENERAL_DEFENSE, B.DEMON_GENERAL_SKILL, "Dark",
                             B.DEMON_GENERAL_DROPCHANCE)
+Demon_General = copy.copy(D_G)
 #make a party with the demon general for the player's to fight
 boss_party = []
-boss_party.append(Demon_General)
 #special boss actions
 def dg_phase_one_action(monster, h_p, b_p):
         if monster.health >= B.DEMON_GENERAL_HEALTH * 0.9:

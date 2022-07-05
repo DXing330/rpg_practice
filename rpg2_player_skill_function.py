@@ -18,9 +18,8 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
         print ("DEBUFF Enemy? D")
         print ("PROTECT your allies? P")
         print ("Try to go for a SNEAK ATTACK? S")
-        print ("TRANSMUTE fresh monster parts into gold? T")
         
-        check = input("B/P/O/C/S/H/T/D")
+        check = input("B/P/O/C/S/H/D")
         if check.upper() == "O":
                 if p_pc.name == "Ninja":
                         p_pc.skill += p_pc.level
@@ -33,11 +32,12 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         monster.stats()
                         
         elif check.upper() == "C":
-                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT:
+                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.skill > 0:
                         print(p_pc.name, "calls to", p_npc.name)
                         player_func.pet_action(p_npc, h_p, m_p)
                         player_func.pet_action(p_npc, h_p, m_p)
-                        p_pc.health += p_pc.skill + p_pc.level
+                        p_pc.health += min((p_pc.skill + p_pc.level), (p_pc.maxhealth - p_pc.health))
+                        p_pc.skill -= 1
                 elif p_pc.name == "Summoner":
                         print(p_pc.name, "calls to", p_npc.name)
                         player_func.pet_action(p_npc, h_p, m_p)
@@ -55,55 +55,53 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         print (p_pc.name, "heals", hero.name)
                 elif p_pc.name == "Ninja" and p_pc.weapon > 0:
                         print (p_pc.name, "throws away his weapon and disappears into the shadows.")
-                        p_pc.skill = p_pc.skill * p_pc.weapon
                         p_pc.health += min(p_pc.skill, (p_pc.maxhealth - p_pc.health))
-                        p_pc.weapon = 0
+                        p_pc.skill = 0
                 else:
                         print("Nothing happens.")
                         
         elif check.upper() == "D":
-                if p_pc.name == "Ninja" and p_pc.skill > monster.skill and p_pc.level == C.LEVEL_LIMIT:
+                if p_pc.name == "Ninja" and p_pc.level == C.LEVEL_LIMIT:
                         monster = party_func.pick_monster(m_p)
-                        monster.skill = round(monster.skill/C.BUFF)
-                        p_pc.skill -= monster.skill
+                        if p_pc.skill > monster.skill:
+                                monster.skill = round(monster.skill/C.BUFF)
+                                p_pc.skill -= monster.skill
+                                print (p_pc.name, "out-skills", monster.name)
+                                p_pc.mana -= 1
+                        else:
+                                print (monster.name, "out-skills", p_pc.name)
                 elif p_pc.name == "Cleric":
                         monster = party_func.pick_monster(m_p)
                         monster.atk = max((monster.atk-p_pc.mana-p_pc.skill),0)
                         p_pc.mana -= 1
+                        p_pc.skill -= 1
                         print ("Holy strands wrap around", monster.name)
                 else:
                         print("Nothing happens.")
         elif check.upper() == "B":
                 if p_pc.name == "Ninja":
-                        p_pc.skill = round(p_pc.skill * C.BUFF) + p_pc.level
+                        p_pc.skill = round(p_pc.skill * C.BUFF)
                         print (p_pc.name, "sharpens their senses. ")
+                        p_pc.mana -= 1
                 elif p_pc.name == "Knight" and p_pc.skill > 0:
-                        p_pc.defense += p_pc.level + p_pc.skill
-                        p_pc.armor = round(p_pc.armor * C.BUFF) + 1
-                        p_skill -= 1
+                        p_pc.defense += p_pc.level + max(p_pc.skill, 1)
+                        p_pc.armor += max(p_pc.skill, 1) 
+                        p_pc.skill -= 1
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Defender" and p_pc.skill > 0:
-                        p_pc.name = "Knight"
-                        p_pc.defense += p_pc.level + p_pc.skill
-                        p_pc.armor = round(p_pc.armor * C.BUFF) + 1
-                        p_skill -= 1
+                        p_pc.defense += max(p_pc.skill, 1)
+                        p_pc.armor += 1
+                        p_pc.skill -= 1
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Cleric":
                         hero = party_func.pick_hero(h_p)
                         hero.atk += p_pc.mana+p_pc.skill
                         p_pc.mana -= 1
+                        p_pc.skill -= 1
                         print ("Holy light surrounds", hero.name)
                 else:
                         print("Nothing happens.")
                         
-        elif check.upper() == "T":
-                if p_pc.name == "Mage" and p_pc.mana > 0:
-                        monster = party_func.pick_monster(m_p)
-                        monster.dropchance += p_pc.level+p_pc.skill
-                        p_pc.mana -= 1
-                        print (p_pc.name, "changes some fresh", monster.name, "blood, into GOLD.")
-                else:
-                        print("You don't know how to do that. ")
 
         elif check.upper() == "S":
                 if p_pc.name == "Ninja":
@@ -118,7 +116,7 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 if p_pc.name == "Knight":
                         p_pc.name = "Defender"
                         p_pc.armor = round(p_pc.armor * C.BUFF) + 1
-                        p_pc.skill -= 1
+                        p_pc.skill -= min(1, p_pc.skill)
                         print(p_pc.name, "gets ready to block. ")
                 elif p_pc.name == "Defender":
                         p_pc.armor += 1
@@ -131,6 +129,7 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         print("DIVINE JUDGEMENT STRIKES YOUR FOES")
                         for monster in m_p:
                                 monster.health -= (p_pc.mana + p_pc.skill + p_pc.level)
+                        p_pc.mana -= len(m_p)
                 else:
                         print("The heavens ignore your call.")
 
@@ -144,10 +143,11 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 else:
                         print("Nothing happened. ")
         elif check.upper() == "L":
-                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT:
+                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.skill > 0:
                         print(p_npc.name, "is empowered by your call.")
-                        for x in range(1, len(m_p)):
+                        for x in range(0, len(m_p)):
                                 player_func.pet_action(p_npc, h_p, m_p)
+                        p_pc.skill -= len(m_p)
                 else:
                         print(p_npc.name, "briefly glances at you in confusion.")
         else:

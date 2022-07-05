@@ -15,7 +15,7 @@ def random_scaled_elite_monster(p_pc):
         atk = random.randint(C.MONSTER_MAX_ATK, C.MONSTER_MAX_ATK + (p_pc.bonusatk + p_pc.bonusdef + p_pc.mana + p_pc.skill))
         defense = random.randint(C.MONSTER_MAX_DEF, C.MONSTER_MAX_DEF + (p_pc.defense + p_pc.bonusatk + p_pc.bonusdef))
         skill = random.randint(C.MONSTER_MAX_SKILL, C.MONSTER_MAX_SKILL + p_pc.skill)
-        dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT
+        dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT * (p_pc.skill + p_pc.level)
         random_monster = Monster_NPC("Super Elite " + element + " " + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function which create a strong monster
@@ -62,7 +62,8 @@ def monster_attack(m_npc, p_pc):
         if p_pc == None:
                 print (m_npc.name, "roars with confidence.")
         else:
-                x = random.randint(0, (p_pc.level+p_pc.skill))
+                #randomly pick the monster's actions
+                x = random.randint(0, max((p_pc.level+p_pc.skill), 1))
                 if x >= m_npc.skill:
                         y = random.randint(0, m_npc.skill+m_npc.atk)
                         if y > p_pc.skill:

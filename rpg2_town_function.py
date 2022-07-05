@@ -90,6 +90,7 @@ def practice_arena(p_pc, ib_pc):
         if p_pc == None:
                 return
         p_pc.bstats()
+        ib_pc.stats()
         print ("Welcome to the practice arena, I'm in charge here.")
         print ("Tell me, what do you want to work on? GENERAL TRAINING or SPECIFIC TRAINING? ")
         choice = input("G/S? ")
@@ -187,6 +188,7 @@ def equipment_store(p_pc, ib_pc):
         if p_pc == None:
                 return
         p_pc.estats()
+        ib_pc.stats()
         print ("Do you want a new armor or new weapon? ")
         check = input("A/W")
         if check.upper() == "A":
@@ -196,6 +198,7 @@ def equipment_store(p_pc, ib_pc):
                                 ib_pc.coins -= (C.ARMOR_PRICE ** quality)
                                 p_pc.armor = quality
                         else:
+                                print ("It costs, ", (C.ARMOR_PRICE ** quality))
                                 print ("You can't afford that.")
                 except ValueError:
                         print ("Don't waste my time.")
@@ -206,6 +209,7 @@ def equipment_store(p_pc, ib_pc):
                                 ib_pc.coins -= (C.WEAPON_PRICE ** quality)
                                 p_pc.weapon = quality
                         else:
+                                print ("It costs, ", (C.WEAPON_PRICE ** quality))
                                 print ("You can't afford that.")
                 except ValueError:
                         print ("Don't waste my time.")

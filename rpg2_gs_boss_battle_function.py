@@ -14,6 +14,7 @@ B = BOSS_CONSTANTS()
 G_S = Monster_NPC("Golden Slime", B.GOLDEN_SLIME_HEALTH, B.GOLDEN_SLIME_ATK,
                            B.GOLDEN_SLIME_DEFENSE, B.GOLDEN_SLIME_SKILL, "Water",
                            B.GOLDEN_SLIME_DROPCHANCE)
+Golden_Slime = copy.copy(G_S)
 b_p = []
 #smaller slime monster maker
 def baby_slime_spawn():
@@ -73,13 +74,15 @@ def gs_phase_one_action(m_npc, h_p, b_p):
 def gs_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
         bPhase1 = True
         while bPhase1:
+                for mon in b_p:
+                        if mon.name == "Golden Slime" and mon.dropchance <= 0:
+                                bPhase1 = False
+                        elif mon.name == "Golden Slime" and mon.health <= B.GOLDEN_SLIME_HEALTH/2:
+                                bPhase1 = False
                 if len(h_p) == 0:
                         print ("The heroes have been routed and flee back to town.")
                         bPhase1 = False
-                elif Golden_Slime.dropchance <= 0:
-                        bPhase1 = False
-                elif Golden_Slime.health <= B.GOLDEN_SLIME_HEALTH/2:
-                        bPhase1 = False
+
                 else:
                         for hero in h_p:
                                 if hero.health > 0:
@@ -116,13 +119,15 @@ def gs_phase_two_action(m_npc, h_p, b_p):
 def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
         bPhase2 = True
         while bPhase2:
+                for mon in b_p:
+                        if mon.name == "Golden Slime" and mon.dropchance <= 0:
+                                bPhase2 = False
+                        elif mon.name == "Golden Slime" and mon.health <= 0:
+                                bPhase2 = False
                 if len(h_p) == 0:
                         print ("The heroes have been routed and flee back to town.")
                         bPhase2 = False
-                elif Golden_Slime.dropchance <= 0:
-                        bPhase2 = False
-                elif Golden_Slime.health <= 0:
-                        bPhase2 = False
+
                 else:
                         for hero in h_p:
                                 if hero.health > 0:
@@ -158,35 +163,39 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
         bBattle = True
         while bBattle:
                 #check if the battle continues
+                for mon in new_b_p:
+                        if mon.name == "Golden Slime" and mon.dropchance <= 0:
+                                print("The Golden Slime has escaped. ")
+                                print("The heroes return emptyhanded and covered in slime. ")
+                                print("The local economy never recovers from the massive influx of gold. ")
+                                bBattle = False
+                        elif mon.name == "Golden Slime" and mon.dropchance >= B.GOLDEN_SLIME_DROPCHANCE/2:
+                                print("The Golden Slime has been defeated. ")
+                                print("The hero's make it out like kings. ")
+                                print("They heroically take the gold far away from this small village.")
+                                print("The local economy is saved. ")
+                                bBattle = False
+                                ib_pc.coins += mon.dropchance
+                                ib_pc.gs_trophy += 1
+                        elif mon.name == "Golden Slime" and mon.dropchance < B.GOLDEN_SLIME_DROPCHANCE/2:
+                                print("The Golden Slime has been defeated. ")
+                                print("The hero's make it out like bandits. ")
+                                print("Sadly, the slime split enough to potentially reform. ")
+                                print("The locals always fear another massive influx of gold. ")
+                                bBattle = False
+                                ib_pc.coins += mon.dropchance
                 if len(new_h_p) == 0:
                         print ("The heroes have been routed and flee back to town.")
                         bBattle = False
-                elif Golden_Slime.dropchance <= 0:
-                        print("The Golden Slime has escaped. ")
-                        print("The heroes return emptyhanded and covered in slime. ")
-                        print("The local economy never recovers from the massive influx of gold. ")
-                        bBattle = False
-                elif Golden_Slime.health <= 0 and Golden_Slime.dropchance >= B.GOLDEN_SLIME_DROPCHANCE/2:
-                        print("The Golden Slime has been defeated. ")
-                        print("The hero's make it out like kings. ")
-                        print("They heroically take the gold far away from this small village.")
-                        print("The local economy is saved. ")
-                        bBattle = False
-                        ib_pc.coins += Golden_Slime.dropchance
-                        ib_pc.gs_trophy += 1
-                elif Golden_Slime.health <= 0 and Golden_Slime.dropchance < B.GOLDEN_SLIME_DROPCHANCE/2:
-                        print("The Golden Slime has been defeated. ")
-                        print("The hero's make it out like bandits. ")
-                        print("Sadly, the slime split enough to potentially reform. ")
-                        print("The locals always fear another massive influx of gold. ")
-                        bBattle = False
-                        ib_pc.coins += Golden_Slime.dropchance
+
                 else:
-                        if Golden_Slime.health >= B.GOLDEN_SLIME_HEALTH/2:
-                                print("Glug, glurp, splish! ")
-                                gs_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
-                        elif Golden_Slime.health <= B.GOLDEN_SLIME_HEALTH/2:
-                                print("Glurgh, Splash, Sploosh! ")
-                                gs_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
+                        for mon in new_b_p:
+                                if mon.name == "Golden Slime" and mon.health >= B.GOLDEN_SLIME_HEALTH/2:
+                                        print("Glug, glurp, splish! ")
+                                        gs_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
+                                elif mon.name == "Golden Slime" and mon.health < B.GOLDEN_SLIME_HEALTH/2:
+                                        print("Glurgh, Splash, Sploosh! ")
+                                        gs_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
+
                                 
 

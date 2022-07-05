@@ -48,7 +48,7 @@ class Player_PC:
                 print ("WEAPON ATK:", self.weapon, "ARMOR DEF:", self.armor)
         #bonus stats
         def bstats(self):
-                print ("SKILL:", self.skill, "MANA:", self.mana,
+                print ("MAX HEALTH:", self.maxhealth, "SKILL:", self.skill, "MANA:", self.mana,
                        "BONUS ATK:", self.atkbonus, "BONUS DEF:", self.defbonus)
 class Pet_NPC:
         def __init__(self, name, stage, atk):

@@ -13,16 +13,24 @@ B = BOSS_CONSTANTS()
 D_L = Monster_NPC("Demon Lord", B.DEMON_LORD_HEALTH, B.DEMON_LORD_ATK,
                             B.DEMON_LORD_DEFENSE, B.DEMON_LORD_SKILL, "Dark",
                             B.DEMON_LORD_DROPCHANCE)
+
 #make a party with the demon LORD for the player's to fight
 boss_party = []
-boss_party.append(Demon_Lord)
 #special boss actions
 def dl_phase_one_action(monster, h_p, b_p):
         if monster.health >= B.DEMON_LORD_HEALTH * 0.9:
-                print("*Yawns*")
-                print("Guards, wake me up if anything interesting happens. ")
-                monster.defense += 1
-                monster.atk += 1
+                if len(b_p) > 1:
+                        print("*Yawns*")
+                        print("Guards, wake me up if anything interesting happens. ")
+                        monster.defense += 1
+                        monster.atk += 1
+                if len(b_p) == 1:
+                        print("You made quick work of them, I suppose. ")
+                        print("You'll have to do better than that though to get my attention. ")
+                        for hero in h_p:
+                               mon = monster_func.random_elite_monster()
+                               print(mon.name, "appears from the shadows.")
+                               b_p.append(mon)
         elif B.DEMON_LORD_HEALTH * 0.7 <= monster.health <= B.DEMON_LORD_HEALTH * 0.9:
                 if len(b_p) > 1:
                         print("Hmmm, so you're not as weak as the rest. ")
@@ -70,15 +78,17 @@ def dl_phase_one_action(monster, h_p, b_p):
 def dl_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
         bPhase1 = True
         while bPhase1:
+                for mon in b_p:
+                        if mon.name == "Demon Lord" and mon.health <= 0:
+                                bPhase1 = False
+                        elif mon.name == "Demon Lord" and mon.health < B.DEMON_LORD_HEALTH/2:
+                                print ("Hmm, my blood. ")
+                                bPhase1 = False
                 if len(h_p) == 0:
                         print ("Boring. ")
                         print ("Come back after you've trained another ten years. ")
                         bPhase1 = False
-                elif Demon_Lord.health <= 0:
-                        bPhase1 = False
-                elif Demon_Lord.health < B.DEMON_LORD_HEALTH/2:
-                        print ("Hmm, my blood. ")
-                        bPhase1 = False
+
                 else:
                         for hero in h_p:
                                 if hero.health > 0:
@@ -147,15 +157,17 @@ def dl_phase_two_action(m_npc, h_p, b_p):
 def dl_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
         bPhase2 = True
         while bPhase2:
+                for mon in b_p:
+                        if mon.name == "Demon Lord" and mon.health <= 0:
+                                print("You may have beaten me, but there will be another. ")
+                                print("A thousand generals will fight for my seat! ")
+                                print("I only wish I could live to see it. ")
+                                bPhase2 = False
                 if len(h_p) == 0:
                         print ("Come back anytime.")
                         print ("I'll be waiting. ")
                         bPhase2 = False
-                elif Demon_Lord.health <= 0:
-                        print("You may have beaten me, but there will be another. ")
-                        print("A thousand generals will fight for my seat! ")
-                        print("I only wish I could live to see it. ")
-                        bPhase2 = False
+
                 else:
                         for hero in h_p:
                                 if hero.health > 0:
@@ -185,25 +197,28 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
         bBattle = True
         while bBattle:
                 #check to see if the battle continues
+                for mon in new_b_p:
+                        if mon.name == "Demon Lord" and mon.health <= 0:
+                                print ("The Demonic leader has been defeated. ")
+                                print ("The people can breathe a sigh of relief...for now. ")
+                                bBattle = False
                 if len(new_h_p) == 0:
                         print ("The heroes have been routed and flee back to town.")
                         bBattle = False
-                elif Demon_Lord.health <= 0:
-                        print ("The Demonic leader has been defeated. ")
-                        print ("The people can breathe a sigh of relief...for now. ")
-                        bBattle = False
+
                 else:
-                        if Demon_Lord.health >= B.DEMON_LORD_HEALTH/2:
-                                print("Ugh, heroes. I'm bored just looking at you. ")
-                                print("Guards, get rid of them. ")
-                                for hero in h_p:
-                                        mon = monster_func.random_elite_monster()
-                                        new_b_p.append(mon)
-                                        print (mon.name, "descends from beside the throne. ")
-                                dl_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
-                        elif Demon_Lord.health < B.DEMON_LORD_HEALTH/2:
-                                print("Amazing, you're strong enough to make me bleed! ")
-                                dl_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
+                        for mon in new_b_p:
+                                if mon.name == "Demon Lord" and mon.health >= B.DEMON_LORD_HEALTH/2:
+                                        print("Ugh, heroes. I'm bored just looking at you. ")
+                                        print("Guards, get rid of them. ")
+                                        for hero in h_p:
+                                                mon = monster_func.random_elite_monster()
+                                                new_b_p.append(mon)
+                                                print (mon.name, "descends from beside the throne. ")
+                                        dl_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
+                                elif mon.name == "Demon Lord" and mon.health < B.DEMON_LORD_HEALTH/2:
+                                        print("Amazing, you're strong enough to make me bleed! ")
+                                        dl_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
         if not bBattle and len(new_h_p) > 0:
                 print ("The heroes return victorious. ")
                 print ("The villagers rain praise and thanks upon them. ")

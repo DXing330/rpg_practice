@@ -5,6 +5,9 @@ from rpg2_classdefinitions import Player_PC
 #warrior is someone who focuses more on physical attacks than magical ones
 #p = Player_PC(name, level, health, maxhealth, atk, defense, skill, mana,
 #               atkbonus, defbonus, weapon, armor)
+#hero does it all, the party leader
+#there is only one hero in the party
+hero = Player_PC("Hero", 1, 15, 15, 5, 4, 5, 5, 0, 0, 2, 2)
 #warrior focuses on high output single target damage
 warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 0, 0, 0, 0, 2, 1)
 #mage focuses more on aoe damage
