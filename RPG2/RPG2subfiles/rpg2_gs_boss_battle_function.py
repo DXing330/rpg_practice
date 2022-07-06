@@ -49,19 +49,19 @@ def gs_slime_action(m_npc, h_p, m_p):
         elif x == 3:
                 print(m_npc.name, "bounces and wiggles around. ")
 #phase one actions
-def gs_phase_one_action(m_npc, h_p, b_p):
+def gs_phase_one_action(m_npc, h_p, b_p, ib_pc):
         #if the players wait too long to set up then the slime will bounce
-        if m_npc.health >= B.G_S_H * 0.9 and m_npc.skill >= B.G_S_EXECUTE_TIMER:
+        if m_npc.health >= B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.9 and m_npc.skill >= B.G_S_EXECUTE_TIMER:
                 for hero in h_p:
                         hero.health -= m_npc.dropchance + m_npc.health
                 print(m_npc.name, "bounces! ")
                 print("The wave of gold consumes everything nearby. ")
         #every turn the slime remains about 90% hp its timer increases
-        elif m_npc.health >= B.G_S_H * 0.9:
+        elif m_npc.health >= B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.9:
                 m_npc.skill += 1
                 print(m_npc.name, "seems to wiggle. ")
         #otherwise the slime will spawn other slimes
-        elif B.G_S_H * 0.5 <= m_npc.health < B.G_S_H * 0.9:
+        elif B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.5 <= m_npc.health < B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.9:
                 mon = slime_spawn()
                 b_p.append(mon)
                 m_npc.dropchance -= B.G_S_DC_DOWN
@@ -75,7 +75,7 @@ def gs_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
                 for mon in b_p:
                         if mon.name == "Golden Slime" and mon.dropchance <= 0:
                                 bPhase1 = False
-                        elif mon.name == "Golden Slime" and mon.health <= B.GOLDEN_SLIME_HEALTH/2:
+                        elif mon.name == "Golden Slime" and mon.health <= (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2:
                                 bPhase1 = False
                 if len(h_p) == 0:
                         print ("The heroes have been routed and flee back to town.")
@@ -97,21 +97,24 @@ def gs_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
                                         b_p.remove(monster)
                         for monster in b_p:
                                 if monster.name == "Golden Slime":
-                                        gs_phase_one_action(monster, h_p, b_p)
+                                        gs_phase_one_action(monster, h_p, b_p, ib_pc)
                                 elif monster.health > 0:
                                         gs_slime_action(monster, h_p, b_p)
                                 elif monster.health <= 0:
                                         b_p.remove(monster)
 #phase two actions
 def gs_phase_two_action(m_npc, h_p, b_p):
-        m_npc.dropchance -= B.G_S_DC_DOWN
-        m_npc.health -= B.G_S_DC_DOWN
-        mon = baby_slime_spawn()
-        b_p.append(mon)
-        print(mon.name, "splits off from", m_npc.name)
-        mon = baby_slime_spawn()
-        b_p.append(mon)
-        print(mon.name, "splits off from", m_npc.name)
+        if m_npc.health > 0:
+                m_npc.dropchance -= B.G_S_DC_DOWN
+                m_npc.health -= B.G_S_DC_DOWN
+                mon = baby_slime_spawn()
+                b_p.append(mon)
+                print(mon.name, "splits off from", m_npc.name)
+                mon = baby_slime_spawn()
+                b_p.append(mon)
+                print(mon.name, "splits off from", m_npc.name)
+        else:
+                print ("The golden slime begins to deflate. ")
         
 #phase two
 def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
@@ -139,11 +142,11 @@ def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
                                 if monster.health <= 0 and monster.name != "Golden Slime":
                                         b_p.remove(monster)
                         for monster in b_p:
-                                if monster.name == "Golden Slime":
+                                if monster.name == "Golden Slime" and monster.health > 0:
                                         gs_phase_two_action(monster, h_p, b_p)
                                 elif monster.health > 0:
                                         gs_slime_action(monster, h_p, b_p)
-                                elif monster.health <= 0:
+                                elif monster.health <= 0 and monster.name != "Golden Slime":
                                         b_p.remove(monster)
 #phases will change according to boss hp
 #this battle is a dps rush, aiming to kill the slime before it can split too much                                               
@@ -151,6 +154,8 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
         #make a copies of the party as usual
         b_p = []
         Golden_Slime = copy.copy(G_S)
+        #buff the enemy depending on how many times you beat it
+        Golden_Slime.health = round(Golden_Slime.health * (C.BUFF ** ib_pc.gs_trophy))
         b_p.append(Golden_Slime)
         new_h_p = []
         for hero in h_p:
@@ -188,10 +193,10 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
 
                 else:
                         for mon in new_b_p:
-                                if mon.name == "Golden Slime" and mon.health >= B.GOLDEN_SLIME_HEALTH/2:
+                                if mon.name == "Golden Slime" and mon.health >= (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2:
                                         print("Glug, glurp, splish! ")
                                         gs_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
-                                elif mon.name == "Golden Slime" and mon.health < B.GOLDEN_SLIME_HEALTH/2:
+                                elif mon.name == "Golden Slime" and mon.health < (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2 and mon.health > 0:
                                         print("Glurgh, Splash, Sploosh! ")
                                         gs_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
 

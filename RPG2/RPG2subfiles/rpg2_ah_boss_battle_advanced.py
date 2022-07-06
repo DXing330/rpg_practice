@@ -17,7 +17,7 @@ A_H = Monster_NPC("Acid Hydra", B.A_H_HEALTH, B.A_H_ATK,
 b_p = []
 #hydra head monster maker
 def hydra_head_spawn():
-        monster = Monster_NPC("Hydra Head", C.MONSTER_MAX_HP/2, 1, 1, 1, "Water", 0)
+        monster = Monster_NPC("Hydra Head", C.MONSTER_MAX_HP, 1, 1, 1, "Water", 0)
         return monster
 
 #hydra head action
@@ -32,16 +32,16 @@ def ah_head_action(m_npc, h_p, b_p):
                         print (m_npc.name, "bites", hero.name)
                 else:
                         m_npc.atk += m_npc.skill
-                        m_npc.skill += 1
+                        m_npc.skill += m_npc.skill
                         print (m_npc.name, "coats its fangs with poison. ")
         elif x == 1:
                 m_npc.atk += m_npc.skill
-                m_npc.skill += 1
+                m_npc.skill += m_npc.skill
                 print (m_npc.name, "coats its fangs with poison. ")
         elif x == 2:
                 for hero in h_p:
-                        hero.health -= round(m_npc.health/2)
-                        m_npc.health = round(m_npc.health/2)
+                        hero.health -= C.MONSTER_MAX_HP/2
+                m_npc.health -= C.MONSTER_MAX_HP/2
                 print (m_npc.name, "bites itself and sprays its acidic blood on the heroes. ")
         
 #phase one actions
@@ -65,12 +65,11 @@ def ah_phase_one_action(m_npc, h_p, b_p):
                                 hero.health -= hero.get_poison()
                                 hero.skill -= hero.get_poison()
                                 print (m_npc.name, "curses the acid to blur the vision of", hero.name)
-        m_npc.dropchance = m_npc.dropchance/4
-        m_npc.skill += 1
-        if len(b_p) <= len(h_p):
-                mon = hydra_head_spawn()
-                b_p.append(mon)
-                print (m_npc.name, "creates another", mon.name)
+        m_npc.dropchance += m_npc.dropchance/4
+        m_npc.skill += len(h_p)
+        mon = hydra_head_spawn()
+        b_p.append(mon)
+        print (m_npc.name, "creates another", mon.name)
 
 
 #phase one
@@ -126,13 +125,13 @@ def ah_phase_two_action(m_npc, h_p, b_p):
                                 hero.skill -= hero.get_poison()
                                 print (m_npc.name, "corrupts the acid on", hero.name)
                         elif hero.get_poison() <= 0:
-                                hero.update_poison(m_npc.skill)
+                                hero.update_poison(m_npc.atk)
                                 print (m_npc.name, "sprays acid on", hero.name)
                 #the hydra also buffs itself
                 m_npc.dropchance += m_npc.dropchance/4
                 m_npc.atk += m_npc.skill
                 m_npc.defense += m_npc.skill
-                m_npc.skill += 1
+                m_npc.skill += len(h_p)
                 bPhase2 = True
         elif m_npc.health > 0 and len(b_p) == 1:
                 m_npc.atk += m_npc.skill
@@ -157,8 +156,8 @@ def ah_phase_two_action(m_npc, h_p, b_p):
                 print (m_npc.name, "eats it's other heads and heals itself. ")
                 bPhase2 = True
         elif m_npc.health <= 0 and len(b_p) == 1:
-                m_npc.health += m_npc.skill
-                m_npc.skill = 0
+                m_npc.health += m_npc.skill * m_npc.atk
+                m_npc.atk = 1
                 if m_npc.health > 0:
                         print (m_npc.name, "manages to hang onto life by a thread. ")
                         bPhase2 = True
@@ -187,7 +186,6 @@ def ah_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
                         player_func.pet_action(p_npc, h_p, b_p)
                         for monster in b_p:
                                 if monster.health <= 0 and monster.name != "Acid Hydra":
-                                        #if you cut off a head, two more grow
                                         b_p.remove(monster)
                                         mon = hydra_head_spawn()
                                         b_p.append(mon)

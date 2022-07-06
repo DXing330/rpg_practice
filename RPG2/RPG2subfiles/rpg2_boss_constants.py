@@ -26,9 +26,10 @@ class BOSS_CONSTANTS:
                 self.GOLDEN_SLIME_DROPCHANCE = 1000000
                 self.G_S_EXECUTE_TIMER = 20
                 self.G_S_DC_DOWN = 1000
-                self.ACID_HYDRA_HEALTH = 10000
-                self.A_H_HEALTH = 10000
+                self.ACID_HYDRA_HEALTH = 5000
+                self.A_H_HEALTH = 5000
                 self.A_H_ATK = 1
                 self.A_H_DEF = 1
                 self.A_H_SKL = 1
                 self.A_H_DC = 1
+                self.ADVANCED_SPAWN = 10

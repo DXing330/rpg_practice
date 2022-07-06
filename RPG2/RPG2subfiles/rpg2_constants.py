@@ -12,11 +12,11 @@ class Constants:
              #exponent to scale the difficulty of increasing levels/stats
              self.INCREASE_EXPONENT = 2
              #highest price in a function
-             self.PRICE_LIMIT = 10000
+             self.PRICE_LIMIT = 1000000
              #highest price to increase a stats
-             self.STAT_PRICE_LIMIT = 10000
+             self.STAT_PRICE_LIMIT = 100000
              #highest price to increase health
-             self.HEALTH_PRICE_LIMIT = 1000
+             self.HEALTH_PRICE_LIMIT = 10000
              #level limit for pets
              self.STAGE_LIMIT = 6
              #how often the pet gets more actions

@@ -20,7 +20,7 @@ def pet_random_action(p_npc, h_p, m_p):
                 print (p_npc.name, "uses their healing magic on", hero.name)
         elif z == 1:
                 monster = party_func.pick_random_healthy_monster(m_p)
-                monster.health -= p_npc.atk
+                monster.health -= max((p_npc.atk - monster.defense), 1)
                 print (p_npc.name, "uses their attacking magic on", monster.name)
                 hero = party_func.pet_pick_random_healthy_hero(h_p)
                 hero.health = min((hero.health + p_npc.atk), hero.maxhealth)

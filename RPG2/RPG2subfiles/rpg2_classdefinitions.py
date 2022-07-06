@@ -9,7 +9,8 @@ class Player_PC:
         def __init__(self, name, level, health, maxhealth,
                      atk, defense, skill, mana,
                      atkbonus = 0, defbonus = 0, 
-                     weapon = 0, armor = 0):
+                     weapon = 0, armor = 0,
+                     poison = 0):
                 #player's name, usually represented by their class
                 self.name = name
                 #player's level, will increase through quests
@@ -39,7 +40,7 @@ class Player_PC:
                 self.armor = armor
                 #status effects that can be modified by the monsters or player skills
                 #self.statusObj = Statuses_NPC(0)
-                self.poison = 0
+                self.poison = poison
 
         def update_poison(self, poison):
                 #self.statusObj.poison += poison
@@ -56,6 +57,8 @@ class Player_PC:
                       self.skill, self.mana,
                       self.atkbonus, self.defbonus, 
                       self.weapon, self.armor)
+                if self.poison > 0:
+                        print ("POISON:", self.poison)
         def sstats(self):
                 print (self.level, self.maxhealth, self.atk, self.defense)
         #equipment stats
@@ -77,7 +80,9 @@ class Pet_NPC:
         def stats(self):
                 print(self.name, self.stage, self.atk)
 class ItemBag_PC:
-        def __init__(self, heal, mana, buff, coins, dg_trophy = 0, gs_trophy = 0, dl_trophy = 0):
+        def __init__(self, heal, mana, buff, coins,
+                     dg_trophy = 0, gs_trophy = 0,
+                     dl_trophy = 0, ah_trophy = 0):
                 #potions that restore health
                 self.heal = heal
                 #potions that restore mana
@@ -91,12 +96,13 @@ class ItemBag_PC:
                 self.dg_trophy = dg_trophy
                 self.gs_trophy = gs_trophy
                 self.dl_trophy = dl_trophy
+                self.ah_trophy = ah_trophy
         def stats(self):
                 print("Heal Potions:", self.heal, "Mana Potions:", self.mana,
                       "Boost Potions:", self.buff, "COINS:", self.coins)
         def trophycase(self):
                 print("Demon General Trophies:", self.dg_trophy, "Golden Slime Trophies:", self.gs_trophy,
-                      "Demon Lord Trophies:", self.dl_trophy)
+                      "Demon Lord Trophies:", self.dl_trophy, "Acid Hydra Trophies:", self.ah_trophy)
 class Spell_PC:
         def __init__(self, name, power, targets, element, cost):
                 #name of the spell

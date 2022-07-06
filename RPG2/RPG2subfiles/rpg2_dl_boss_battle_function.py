@@ -7,6 +7,8 @@ from rpg2_classdefinitions import (Player_PC, Monster_NPC, Pet_NPC,
 import rpg2_monster_function as monster_func
 import rpg2_player_action_function as player_func
 import rpg2_party_management_functions as party_func
+from rpg2_constants import Constants
+C = Constants()
 from rpg2_boss_constants import BOSS_CONSTANTS
 B = BOSS_CONSTANTS()
 
@@ -17,8 +19,8 @@ D_L = Monster_NPC("Demon Lord", B.DEMON_LORD_HEALTH, B.DEMON_LORD_ATK,
 #make a party with the demon LORD for the player's to fight
 boss_party = []
 #special boss actions
-def dl_phase_one_action(monster, h_p, b_p):
-        if monster.health >= B.DEMON_LORD_HEALTH * 0.9:
+def dl_phase_one_action(monster, h_p, b_p, ib_pc):
+        if monster.health >= (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.9:
                 if len(b_p) > 1:
                         print("*Yawns*")
                         print("Guards, wake me up if anything interesting happens. ")
@@ -31,7 +33,7 @@ def dl_phase_one_action(monster, h_p, b_p):
                                mon = monster_func.random_elite_monster()
                                print(mon.name, "appears from the shadows.")
                                b_p.append(mon)
-        elif B.DEMON_LORD_HEALTH * 0.7 <= monster.health <= B.DEMON_LORD_HEALTH * 0.9:
+        elif (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.7 <= monster.health <= (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.9:
                 if len(b_p) > 1:
                         print("Hmmm, so you're not as weak as the rest. ")
                         print("Guards, show them the strength of the demon army! ")
@@ -46,7 +48,7 @@ def dl_phase_one_action(monster, h_p, b_p):
                                mon = monster_func.random_elite_monster()
                                print(mon.name, "appears from the shadows.")
                                b_p.append(mon)
-        elif B.DEMON_LORD_HEALTH * 0.5 <= monster.health < B.DEMON_LORD_HEALTH * 0.7:
+        elif (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.5 <= monster.health < (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.7:
                 if len(b_p) > 1:
                         print("Fight hard my guards. ")
                         print("Let me see the enemies potential. ")
@@ -60,7 +62,7 @@ def dl_phase_one_action(monster, h_p, b_p):
                                mon = monster_func.random_elite_monster()
                                print(mon.name, "rushes in from the hallways.")
                                b_p.append(mon)
-        elif monster.health < B.DEMON_LORD_HEALTH * 0.5:
+        elif monster.health < (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.5:
                 print("I want to enjoy this. ")
                 for mon in b_p:
                         if mon.name != "Demon Lord":
@@ -81,7 +83,7 @@ def dl_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
                 for mon in b_p:
                         if mon.name == "Demon Lord" and mon.health <= 0:
                                 bPhase1 = False
-                        elif mon.name == "Demon Lord" and mon.health < B.DEMON_LORD_HEALTH/2:
+                        elif mon.name == "Demon Lord" and mon.health < (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy))/2:
                                 print ("Hmm, my blood. ")
                                 bPhase1 = False
                 if len(h_p) == 0:
@@ -99,15 +101,15 @@ def dl_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
                                         h_p.remove(hero)
                         player_func.pet_action(p_npc, h_p, b_p)
                         for monster in b_p:
-                                if monster.health <= 0:
+                                if monster.health <= 0 and monster.name != "Demon Lord":
                                         b_p.remove(monster)
                         for monster in b_p:
                                 if monster.name == "Demon Lord":
-                                        dl_phase_one_action(monster, h_p, b_p)
+                                        dl_phase_one_action(monster, h_p, b_p, ib_pc)
                                 elif monster.health > 0:
                                         hero = party_func.pick_random_healthy_hero(h_p)
                                         monster_func.monster_attack(monster, hero)
-                                elif monster.health <= 0:
+                                elif monster.health <= 0 and monster.name != "Demon Lord":
                                         b_p.remove(monster)
                         for hero in h_p:
                                 if hero.health <= 0:
@@ -115,8 +117,8 @@ def dl_phase_one(h_p, b_p, p_npc, ib_pc, s_pc):
                                         
                                 
 #special boss actions
-def dl_phase_two_action(m_npc, h_p, b_p):
-        if B.DEMON_LORD_HEALTH * 0.4 < m_npc.health <= B.DEMON_LORD_HEALTH * 0.5:
+def dl_phase_two_action(monster, h_p, b_p, ib_pc):
+        if (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.4 < m_npc.health <= (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.5:
                 print("Come! You've piqued my interest! ")
                 print("Now let me be a good host. ")
                 if m_npc.atk < B.DEMON_LORD_ATK:
@@ -132,7 +134,7 @@ def dl_phase_two_action(m_npc, h_p, b_p):
                 hero = party_func.pick_random_healthy_hero(h_p)
                 hero.health -= max((m_npc.atk - max(hero.armor, hero.skill)), m_npc.skill)
                 print("Evil energy blasts", hero.name)
-        elif B.DEMON_LORD_HEALTH * 0.1 < m_npc.health <= B.DEMON_LORD_HEALTH * 0.4:
+        elif (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.1 < m_npc.health <= (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.4:
                 print("So you can keep up so far? ")
                 print("Excellent, let's pick up the pace! ")
                 m_npc.skill += len(h_p)
@@ -141,7 +143,7 @@ def dl_phase_two_action(m_npc, h_p, b_p):
                 for hero in h_p:
                         hero.health -= max((m_npc.atk - max(hero.armor, hero.skill)), m_npc.skill)
                         print("Evil energy blasts", hero.name)
-        elif 0 < m_npc.health <= B.DEMON_LORD_HEALTH * 0.1:
+        elif 0 < m_npc.health <= (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy)) * 0.1:
                 if m_npc.health > 1:
                         print("You've done great, now let's see if you can finish it! ")
                         print("I'll show you my final attack! ")
@@ -178,7 +180,7 @@ def dl_phase_two(h_p, b_p, p_npc, ib_pc, s_pc):
                         player_func.pet_action(p_npc, h_p, b_p)
                         for monster in b_p:
                                 if monster.name == "Demon Lord":
-                                        dl_phase_two_action(monster, h_p, b_p)
+                                        dl_phase_two_action(monster, h_p, b_p, ib_pc)
                                 elif monster.name != "Demon Lord":
                                         b_p.remove(monster)
 #phases will change according to boss hp
@@ -186,6 +188,7 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
         #make a copy of the heroes party and the monster's party
         b_p = []
         Demon_Lord = copy.copy(D_L)
+        Demon_Lord.health = round(Demon_Lord.health * (C.BUFF ** ib_pc.dl_trophy))
         b_p.append(Demon_Lord)
         new_h_p = []
         for hero in h_p:
@@ -207,7 +210,7 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
 
                 else:
                         for mon in new_b_p:
-                                if mon.name == "Demon Lord" and mon.health >= B.DEMON_LORD_HEALTH/2:
+                                if mon.name == "Demon Lord" and mon.health >= (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy))/2:
                                         print("Ugh, heroes. I'm bored just looking at you. ")
                                         print("Guards, get rid of them. ")
                                         for hero in h_p:
@@ -215,7 +218,7 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
                                                 new_b_p.append(mon)
                                                 print (mon.name, "descends from beside the throne. ")
                                         dl_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
-                                elif mon.name == "Demon Lord" and mon.health < B.DEMON_LORD_HEALTH/2:
+                                elif mon.name == "Demon Lord" and mon.health < (B.DEMON_LORD_HEALTH * (C.BUFF ** ib_pc.dl_trophy))/2:
                                         print("Amazing, you're strong enough to make me bleed! ")
                                         dl_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
         if not bBattle and len(new_h_p) > 0:

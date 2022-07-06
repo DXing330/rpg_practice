@@ -24,7 +24,7 @@ def pet_action(p_npc, h_p, m_p):
                 elif hero.name == "Golem":
                         if hero.atk > 0:
                                 monster = party_func.pick_random_healthy_monster(m_p)
-                                monster.health -= p_npc.atk
+                                monster.health -= max((p_npc.atk - monster.defense), 1)
                                 print (p_npc.name, "uses their attacking magic on", monster.name)
                         elif hero.skill > 0:
                                 hero = party_func.pet_pick_random_healthy_hero(h_p)
@@ -78,13 +78,15 @@ def use_item(p_pc, ib_pc):
         print ("What item do you want to use? ")
         check = input("Heal, Mana, Boosts? H/M/B ")
         if check.upper() == "H" and ib_pc.heal >= 1:
+                #health potions restore health and decrease poison
                 ib_pc.heal -= 1
                 print("You feel the pain recede.")
                 p_pc.health = min(p_pc.maxhealth, (p_pc.health + (p_pc.maxhealth/2)))
+                p_pc.poison -= min(p_pc.level, p_pc.poison)
         elif check.upper() == "M" and ib_pc.mana >= 1:
                 ib_pc.mana -= 1
                 print("You feel your mana pulse with energy.")
-                p_pc.mana = round(p_pc.mana * C.BUFF)
+                p_pc.mana += p_pc.level
         elif check.upper() == "B" and ib_pc.buff >= 1:
                 ib_pc.buff -= 1
                 print("Adrenaline races through your veins.")
@@ -181,6 +183,7 @@ def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 if p_pc.name == "Cleric":
                         p_pc.mana += 1
                         p_pc.defense += 1
+                        p_pc.poison -= max(p_pc.level, p_pc.poison)
                         print("Holy light envelops you. ")
         else:
                 player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc)

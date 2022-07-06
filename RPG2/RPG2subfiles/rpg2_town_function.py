@@ -106,9 +106,7 @@ def practice_arena(p_pc, ib_pc):
         p_pc.bstats()
         ib_pc.stats()
         print ("Welcome to the practice arena, I'm in charge here.")
-        print ("Tell me, what do you want to work on? GENERAL TRAINING or SPECIFIC TRAINING? ")
-        choice = input("G/S? ")
-        if choice.upper() == "G" and p_pc.level < C.LEVEL_LIMIT:
+        if p_pc.level < C.LEVEL_LIMIT:
                 print ("Looks like you have a lot to work on.")
                 print ("Let's start with some basic training.")
                 print ("It will be extremely painful.")
@@ -124,7 +122,7 @@ def practice_arena(p_pc, ib_pc):
                         print ("Looks you have a small coin bag. ")
                 else:
                         print ("Come back when you're ready. ")
-        if choice.upper() == "S":
+        elif p_pc.level == C.LEVEL_LIMIT:
                 print ("You look like a powerful guy. ")
                 print ("What would you like to train? ")
                 print ("Attack, Defense, Health, Mana or Skill? ")
@@ -154,8 +152,10 @@ def practice_arena(p_pc, ib_pc):
                         p_pc.maxhealth += 1
                         print("You're a big guy. ")
                         practice_arena(p_pc, ib_pc)
-                else:
+                elif check.upper() == "L":
                         print ("Come back soon. ")
+                else:
+                        practice_arena(p_pc, ib_pc)
                         
 #potion store function
 def potion_store(ib_pc):

@@ -92,13 +92,18 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 if p_pc.name == "Cleric":
                         hero = party_func.pick_hero(h_p)
                         hero.health += max(p_pc.mana+p_pc.skill+p_pc.level, 1)
+                        hero.poison -= min(p_pc.skill+p_pc.level, hero.poison)
                         print (p_pc.name, "heals", hero.name)
                 elif p_pc.name == "Ninja" and p_pc.weapon > 0:
                         print (p_pc.name, "throws away his weapon and disappears into the shadows.")
                         p_pc.health += min(p_pc.skill, (p_pc.maxhealth - p_pc.health))
                         p_pc.skill = 0
                 else:
-                        print("Nothing happens.")
+                        hero = party_func.pick_hero(h_p)
+                        x = hero.poison
+                        hero.poison -= min(p_pc.skill, hero.poison)
+                        p_pc.skill -= x
+                        print (p_pc.name, " tries to heal", hero.name)
                         
         elif check.upper() == "D":
                 if p_pc.name == "Ninja" and p_pc.level == C.LEVEL_LIMIT:
@@ -169,7 +174,7 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         print("DIVINE JUDGEMENT STRIKES YOUR FOES")
                         for monster in m_p:
                                 monster.health -= (p_pc.mana + p_pc.skill + p_pc.level)
-                        p_pc.mana -= len(m_p)
+                        p_pc.mana = round(p_pc.mana/(C.BUFF ** len(m_p)))
                 else:
                         print("The heavens ignore your call.")
 
@@ -183,11 +188,12 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 else:
                         print("Nothing happened. ")
         elif check.upper() == "L":
-                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.skill > 0:
+                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.mana > 0 and p_pc.skill > 0:
                         print(p_npc.name, "is empowered by your call.")
                         for x in range(0, len(m_p)):
                                 player_func.pet_action(p_npc, h_p, m_p)
                         p_pc.skill -= len(m_p)
+                        p_pc.mana -= len(m_p)
                 else:
                         print(p_npc.name, "briefly glances at you in confusion.")
         else:

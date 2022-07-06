@@ -125,6 +125,7 @@ def library(ib_pc, h_m):
 #function that will allow the pet to be trained and evolved
 def summoning_fields(h_p, p_npc, ib_pc):
         p_npc.stats()
+        ib_pc.stats()
         if p_npc.atk == 0:
                 print ("Looks like you need to summon a new ally.")
                 for hero in h_p:
@@ -154,6 +155,7 @@ def summoning_fields(h_p, p_npc, ib_pc):
                 if choice.upper() == "Y" and ib_pc.coins >= min((p_npc.atk ** C.INCREASE_EXPONENT), (p_npc.stage * C.PRICE_LIMIT)):
                         ib_pc.coins -= min((p_npc.atk ** C.INCREASE_EXPONENT), (p_npc.stage * C.PRICE_LIMIT))
                         lvlup_func.pet_atk_up(p_npc)
+                        summoning_fields(h_p, p_npc, ib_pc)
                 else:
                         print ("Come back when you're ready.")
                         
