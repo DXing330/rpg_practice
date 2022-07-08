@@ -14,9 +14,9 @@ class Constants:
              #highest price in a function
              self.PRICE_LIMIT = 1000000
              #highest price to increase a stats
-             self.STAT_PRICE_LIMIT = 100000
+             self.STAT_PRICE_LIMIT = 1000000
              #highest price to increase health
-             self.HEALTH_PRICE_LIMIT = 10000
+             self.HEALTH_PRICE_LIMIT = 100000
              #level limit for pets
              self.STAGE_LIMIT = 6
              #how often the pet gets more actions

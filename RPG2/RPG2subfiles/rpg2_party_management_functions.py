@@ -70,12 +70,35 @@ def pet_pick_random_healthy_hero(heroes_party):
                 if len(heroes_party) > 1:                                        
                         x = random.randint(0, len(heroes_party) - 1)
                         hero = heroes_party[x]
+                        #don't pick golems
                         if hero.health <=0 or hero.name == "Golem":
                                 hero = pet_pick_random_healthy_hero(heroes_party)
                         return hero
                 else:
                         hero = heroes_party[0]
                         if hero.name != "Golem":
+                                return hero
+                        else:
+                                hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
+                                return hero
+
+        except:
+                print ("The heroes have all been defeated.")
+                hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
+                return hero
+def pet_pick_random_injured_hero(heroes_party):
+        hero = None
+        try:
+                if len(heroes_party) > 1:                                        
+                        x = random.randint(0, len(heroes_party) - 1)
+                        hero = heroes_party[x]
+                        #only pick heroes, not golems, heros need to be injured but still conscious
+                        if hero.health <=0 or hero.name == "Golem" or hero.health >= hero.maxhealth:
+                                hero = pet_pick_random_healthy_hero(heroes_party)
+                        return hero
+                else:
+                        hero = heroes_party[0]
+                        if hero.name != "Golem" and hero.health > 0:
                                 return hero
                         else:
                                 hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)

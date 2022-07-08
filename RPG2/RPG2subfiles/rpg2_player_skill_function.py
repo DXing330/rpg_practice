@@ -84,7 +84,8 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         p_pc.skill -= 1
                         hero = party_func.pick_hero(h_p)
                         if hero.name != "Tactician":
-                              player_func.player_action(hero, h_p, m_p, ib_pc, s_pc, p_npc)
+                                hero.stats()
+                                player_func.player_action(hero, h_p, m_p, ib_pc, s_pc, p_npc)
                 else:
                         print("Your allies are too focused on the battle.")
                         
@@ -99,10 +100,14 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         p_pc.health += min(p_pc.skill, (p_pc.maxhealth - p_pc.health))
                         p_pc.skill = 0
                 else:
-                        hero = party_func.pick_hero(h_p)
-                        x = hero.poison
-                        hero.poison -= min(p_pc.skill, hero.poison)
-                        p_pc.skill -= x
+                        if p_pc.skill >= p_pc.level:
+                                hero = party_func.pick_hero(h_p)
+                                x = hero.poison
+                                hero.poison -= min(p_pc.level, x)
+                                p_pc.skill -= p_pc.level
+                        else:
+                                hero = party_func.pick_hero(h_p)
+                                hero.poison = hero.poison * C.BUFF
                         print (p_pc.name, " tries to heal", hero.name)
                         
         elif check.upper() == "D":

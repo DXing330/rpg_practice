@@ -82,7 +82,8 @@ class Pet_NPC:
 class ItemBag_PC:
         def __init__(self, heal, mana, buff, coins,
                      dg_trophy = 0, gs_trophy = 0,
-                     dl_trophy = 0, ah_trophy = 0):
+                     dl_trophy = 0, ah_trophy = 0,
+                     sq_trophy = 0, ip_trophy = 0):
                 #potions that restore health
                 self.heal = heal
                 #potions that restore mana
@@ -97,12 +98,16 @@ class ItemBag_PC:
                 self.gs_trophy = gs_trophy
                 self.dl_trophy = dl_trophy
                 self.ah_trophy = ah_trophy
+                self.sq_trophy = sq_trophy
+                self.ip_trophy = ip_trophy
         def stats(self):
                 print("Heal Potions:", self.heal, "Mana Potions:", self.mana,
                       "Boost Potions:", self.buff, "COINS:", self.coins)
         def trophycase(self):
                 print("Demon General Trophies:", self.dg_trophy, "Golden Slime Trophies:", self.gs_trophy,
-                      "Demon Lord Trophies:", self.dl_trophy, "Acid Hydra Trophies:", self.ah_trophy)
+                      "Demon Lord Trophies:", self.dl_trophy, "Acid Hydra Trophies:", self.ah_trophy,
+                      "Succubus Queen Trophies:", self.sq_trophy, "Cryo Phoenix Trophies:",
+                      self.ip_trophy)
 class Spell_PC:
         def __init__(self, name, power, targets, element, cost):
                 #name of the spell

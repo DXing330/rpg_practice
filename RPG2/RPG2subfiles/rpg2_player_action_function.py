@@ -34,7 +34,7 @@ def pet_action(p_npc, h_p, m_p):
                                 hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF / p_npc.stage)
                                 print (p_npc.name, "uses their blessing magic on", hero.name)
                         elif hero.defense > 0:
-                                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                                hero = party_func.pet_pick_random_injured_hero(h_p)
                                 hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
                                 print (p_npc.name, "uses their healing magic on", hero.name)
                         elif hero.mana > 0:

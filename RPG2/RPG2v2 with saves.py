@@ -2,6 +2,7 @@ import json
 import random
 import sys
 sys.path.append("./RPG2subfiles")
+sys.path.append("./RPG2subfiles/bossbattles")
 from rpg2_classdefinitions import (Player_PC, Pet_NPC, ItemBag_PC,
                                    Spell_PC, Monster_NPC)
 import rpg2_town_function as town_func
