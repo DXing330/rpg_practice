@@ -62,6 +62,36 @@ def read_spell_objects(sFileNm):
         pp.stats()
     return load_spell_list
 
+#this function will read a list of spells from the given filename, etc.
+def read_weapon_objects(sFileNm):
+    load_weapon_list = []
+    jsonFile = open(sFileNm, "r")
+    #you know you are loading a list, lst
+    lst = json.load(jsonFile)
+    for e in lst:
+        #you know this list contains only one type of Spell object
+        p = Weapon_PC(**e)
+        load_weapon_list.append(p)
+    print("Weapons from json file ", sFileNm)
+    for pp in load_spell_list:
+        pp.stats()
+    return load_weapon_list
+
+#this function will read a list of spells from the given filename, etc.
+def read_armor_objects(sFileNm):
+    load_armor_list = []
+    jsonFile = open(sFileNm, "r")
+    #you know you are loading a list, lst
+    lst = json.load(jsonFile)
+    for e in lst:
+        #you know this list contains only one type of Spell object
+        p = Armor_PC(**e)
+        load_armor_list.append(p)
+    print("Armors from json file ", sFileNm)
+    for pp in load_armor_list:
+        pp.stats()
+    return load_armor_list
+
 #the input will be the file names storing each of those things
 def read_from_files(heroes, spells, items, ally):
     heroes_list = read_hero_objects(heroes)
@@ -74,6 +104,21 @@ def read_from_files(heroes, spells, items, ally):
     pet_obj = Pet_NPC(**aly)
 
     return heroes_list, heroes_magic_list, items_bag_obj, pet_obj
+
+#the input will be the file names storing each of those things
+'''def read_from_files(heroes, spells, items, ally, weapons, armor):
+    heroes_list = read_hero_objects(heroes)
+    heroes_magic_list = read_spell_objects(spells)
+    jsonFile = open(items, "r")
+    items_bag = json.load(jsonFile)
+    items_bag_obj = ItemBag_PC(**items_bag)
+    jsonFile = open(ally, "r")
+    aly = json.load(jsonFile)
+    pet_obj = Pet_NPC(**aly)
+    heroes_weapon_list = read_weapon_objects(weapons)
+    heroes_armor_list = read_armor_objects(armor)
+
+    return heroes_list, heroes_magic_list, items_bag_obj, pet_obj, heroes_weapons, heroes_armor'''
 
 #function that will read lists
 #this function knows the file names that are being saved

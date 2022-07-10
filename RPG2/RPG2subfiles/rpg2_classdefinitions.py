@@ -140,4 +140,23 @@ class Monster_NPC:
                 print(self.name, self.health, self.atk, self.defense, self.skill)
 
 
+class Weapon_PC:
+        def __init__(self, name, effect, strength, atk):
+                self.name = name
+                self.effect = effect
+                self.strength = strength
+                self.atk = atk
+        def stats(self):
+                print("Owner:", self.name, "Effect:", self.effect,
+                      "Power:", self.strength, "Attack:", self.atk)
+
+class Armor_PC:
+        def __init__(self, name, effect, strength, defense):
+                self.name = name
+                self.effect = effect
+                self.strength = strength
+                self.defense = defense
+        def stats(self):
+                print("Owner:", self.name, "Effect:", self.effect,
+                      "Power:", self.strength, "Defense:", self.defense)
 
