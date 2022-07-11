@@ -12,7 +12,105 @@ C = Constants()
 angel = Pet_NPC("Angel", 1, 2)
 new_spell = Spell_PC("new", 1, 1, None, 1)
 ##functions in the tower
-
+#function that will allow the player to change the element of their equipment
+#also will allow for basic effects
+def equipment_enchanter(ib_pc, h_w, h_a):
+        print ("This is the enchanting pools. ")
+        print ("What would you like us to work on? ")
+        print ("And if you're done then LEAVE. ")
+        choice = input("WEAPONS or ARMOR? W/A? ")
+        if choice.upper() == "W" and ib_pc.coins >= C.ENCHANT_PRICE:
+                #list the equipments and then have the player pick one to change
+                for wpn in h_w:
+                        wpn.stats()
+                weapon = party_func.pick_hero(h_w)
+                weapon.stats()
+                #check which part of the equipment should be changed
+                print ("Do you want an ELEMENT or an eFFECT enchantment? ")
+                check = input("E/F? ")
+                #if the weapon doesn't have an element then they can pick a basic element
+                if check.upper() == "E" and weapon.element == "None":
+                        ib_pc.coins -= C.ENCHANT_PRICE
+                        print ("What element of spell do you want?",
+                       "Fire, Water, Earth, Air or Dark?")
+                        elmnt = input("F/W/E/A/D? ")
+                        if elmnt.upper() == "F":
+                                weapon.element = "Fire"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "W":
+                                weapon.element = "Water"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "E":
+                                weapon.element = "Earth"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "A":
+                                weapon.element = "Air"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "D":
+                                weapon.element = "Dark"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        else:
+                                print ("Don't waste our time. ")
+                elif check.upper() == "F" and weapon.effect == "Attack":
+                        ib_pc.coins -= C.ENCHANT_PRICE
+                        print ("what effect do you want? ")
+                        print ("Lifesteal or Poison?")
+                        efct = input("L/P? ")
+                        if efct.upper() == "L":
+                                weapon.effect = "Lifesteal"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif efct.upper() == "P":
+                                weapon.effect = "Poison"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        else:
+                                print ("Don't waste our time. ")
+                else:
+                        print ("Don't waste our time. ")
+        elif choice.upper() == "A" and ib_pc.coins >= C.ENCHANT_PRICE:
+                for amr in h_a:
+                        amr.stats()
+                armor = party_func.pick_hero(h_a)
+                armor.stats()
+                print ("Do you want an ELEMENT or an eFFECT enchantment? ")
+                check = input("E/F? ")
+                if check.upper() == "E" and armor.element == "None":
+                        ib_pc.coins -= C.ENCHANT_PRICE
+                        print ("What element of spell do you want?",
+                       "Fire, Water, Earth, Air or Dark?")
+                        elmnt = input("F/W/E/A/D? ")
+                        if elmnt.upper() == "F":
+                                armor.element = "Fire"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "W":
+                                armor.element = "Water"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "E":
+                                armor.element = "Earth"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "A":
+                                armor.element = "Air"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif elmnt.upper() == "D":
+                                armor.element = "Dark"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        else:
+                                print ("Don't waste our time. ")
+                elif check.upper() == "F" and armor.effect == "Block":
+                        ib_pc.coins -= C.ENCHANT_PRICE
+                        print ("what effect do you want? ")
+                        print ("Thorns or Absorb?")
+                        efct = input("A/T? ")
+                        if efct.upper() == "T":
+                                armor.effect = "Thorns"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif efct.upper() == "A":
+                                armor.effect = "Absorb"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        else:
+                                print ("Don't waste our time. ")
+                else:
+                        print ("Don't waste our time. ")
+                        
 #function that will allow the player to increase their spell's stats
 def upgrade_spell(ib_pc, h_m):
         ib_pc.stats()
@@ -21,32 +119,28 @@ def upgrade_spell(ib_pc, h_m):
         check = input("TRAIN or LEAVE? T/L ")
         if check.upper() == "T":
                 print ("Alright, which spell should I help you practice? ")
-                try:
-                        x = int(input("First spell is 1, etc, etc. "))
-                        spel = h_m[(x - 1)]
-                        spel.stats
-                        print (spel.name, "?", "Alright, what part do you want to improve? ")
-                        choice = input("Power, Targets, Cost? P/T/C? ")
-                        if choice.upper() == "T" and spel.targets == 1 and ib_pc.coins >= (C.SPELL_PRICE ** C.INCREASE_EXPONENT):
-                                ib_pc.coins -= (C.SPELL_PRICE ** C.INCREASE_EXPONENT)
-                                spel.targets += 1
-                        elif choice.upper() == "P" and ib_pc.coins >= (spel.power ** C.INCREASE_EXPONENT):
-                                if spel.element == "Dark":
-                                        print ("Evil magic, huh?  Well, I don't judge. ")
-                                        ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
-                                        spel.power += 1
-                                else:
-                                        ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
-                                        spel.power += 1
-                                        spel.cost += 1
-                        elif choice.upper() == "C" and ib_pc.coins >= (spel.power ** C.INCREASE_EXPONENT) and spel.cost > C.SPELL_COST:
+                spel = party_func.pick_hero(h_m)
+                spel.stats
+                print (spel.name, "?", "Alright, what part do you want to improve? ")
+                choice = input("Power, Targets, Cost? P/T/C? ")
+                if choice.upper() == "T" and spel.targets == 1 and ib_pc.coins >= (C.SPELL_PRICE ** C.INCREASE_EXPONENT):
+                        ib_pc.coins -= (C.SPELL_PRICE ** C.INCREASE_EXPONENT)
+                        spel.targets += 1
+                elif choice.upper() == "P" and ib_pc.coins >= (spel.power ** C.INCREASE_EXPONENT):
+                        if spel.element == "Dark":
+                                print ("Evil magic, huh?  Well, I don't judge. ")
                                 ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
-                                spel.cost -= 1
+                                spel.power += 1
                         else:
-                                print ("Don't waste my time if you're not prepared. ")
-                        upgrade_spell(ib_pc, h_m)
-                except (ValueError, AttributeError):
+                                ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
+                                spel.power += 1
+                                spel.cost += 1
+                elif choice.upper() == "C" and ib_pc.coins >= (spel.power ** C.INCREASE_EXPONENT) and spel.cost > C.SPELL_COST:
+                        ib_pc.coins -= (spel.power ** C.INCREASE_EXPONENT)
+                        spel.cost -= 1
+                else:
                         print ("Don't waste my time if you're not prepared. ")
+                upgrade_spell(ib_pc, h_m)
         if check.upper() == "L":
                 print ("Come back when you're prepared. ")
 
@@ -98,14 +192,10 @@ def adjust_magic_names(h_m):
         for spell in h_m:
                 spell.stats()
         print ("Which spell do you want to rename? ")
-        try:
-                x = int(input("The first spell is number 1, etc. "))
-                rename = h_m[(x - 1)]
-                new_name = input("What would you like to rename that spell to? ")
-                rename.name = new_name
-        except (ValueError, AttributeError):
-                print ("That's not a valid choice. ")
-                adjust_magic_names(h_m)
+        rename = party_func.pick_hero(h_m)
+        new_name = input("What would you like to rename that spell to? ")
+        rename.name = new_name
+
 
         
 #function that will allow the player to learn new spells or edit spell names
@@ -194,8 +284,8 @@ def mage_tower(h_p, p_npc, ib_pc, h_m, h_w, h_a):
                 library(ib_pc, h_m)
         elif choice.upper() == "T":
                 upgrade_spell(ib_pc, h_m)
-        #elif choice.upper() == "E":
-         #       equipment_enchanter(ib_pc, h_w, h_a)
+        elif choice.upper() == "E":
+                equipment_enchanter(ib_pc, h_w, h_a)
         elif choice.upper() == "D":
                 print ("Good luck saving the world. ")
         else:

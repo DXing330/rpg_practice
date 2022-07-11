@@ -1,1 +1,1 @@
-[{"name": "Hero", "level": 1, "health": 15, "maxhealth": 15, "atk": 5, "defense": 4, "skill": 5, "mana": 5, "atkbonus": 0, "defbonus": 0, "poison": 0}]
+[{"name": "Hero", "level": 10, "health": 150.0, "maxhealth": 150.0, "atk": 50.0, "defense": 40.0, "skill": 20.0, "mana": 20.0, "atkbonus": 3, "defbonus": 3, "poison": 0}, {"name": "Summoner", "level": 5, "health": 29, "maxhealth": 50.0, "atk": 10.0, "defense": 10.0, "skill": 10.0, "mana": 10.0, "atkbonus": 0, "defbonus": 0, "poison": 0}]

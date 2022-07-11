@@ -8,6 +8,7 @@ import rpg2_party_management_functions as party_func
 import rpg2_player_skill_function as pskill_func
 import rpg2_pet_action_function as pet_func
 import rpg2_element_function as element_func
+import rpg2_equipment_effect_function as ee_func
 from rpg2_constants import Constants
 C = Constants()
 ##function where the player makes a choice of what they want to do in battle
@@ -22,6 +23,7 @@ def pet_action(p_npc, h_p, m_p):
                         hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
                         hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
                         hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
+                        hero.poison -= min(p_npc.stage, hero.poison)
                         print (p_npc.name, "uses their blessing magic on", hero.name)                        
                 elif hero.name == "Golem":
                         if hero.atk > 0:
@@ -37,6 +39,7 @@ def pet_action(p_npc, h_p, m_p):
                                 print (p_npc.name, "uses their blessing magic on", hero.name)
                         elif hero.defense > 0:
                                 hero = party_func.pet_pick_random_injured_hero(h_p)
+                                hero.poison -= min(p_npc.stage, hero.poison)
                                 hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
                                 print (p_npc.name, "uses their healing magic on", hero.name)
                         elif hero.mana > 0:
@@ -51,12 +54,13 @@ def pet_action(p_npc, h_p, m_p):
 
 
 #player attack function
-def player_attack(p_pc, m_npc, h_w):
+def player_attack(p_pc, m_npc, h_w, h_p, m_p):
         weapon = Weapon_PC("None", "None", "None", 0, "None", 0)
         for wpn in h_w:
                 if wpn.user == p_pc.name:
                         weapon = wpn
-        new_atk = element_func.check_element_player_attack(p_pc, m_npc, weapon)
+        new_pa = ee_func.weapon_effect(m_npc, p_pc, weapon, h_p, m_p)
+        new_atk = element_func.check_element_player_attack(p_pc, new_pa, m_npc, weapon)
         #warrior hits more often
         if p_pc.name == "Warrior" and p_pc.level == C.LEVEL_LIMIT:
                 m_npc.health -= max((new_atk - m_npc.defense),1)
@@ -106,51 +110,47 @@ def use_item(p_pc, ib_pc):
 #needs the players, spells and monsters
 def use_magic_attack(p_pc, s_pc, ib_pc, m_p):
         ib_pc.stats()
-        for spell in s_pc:
-                spell.stats()
-        try:
-                s = int(input("Which spell do you want to use?"
-                              "The first spell is number 1, etc."))
-                spell = s_pc[(s - 1)]
-                if spell.targets > 1:
-                        for monster in m_p:
-                                new_spell_power = element_func.check_element_spell(spell, monster)
-                                monster.health -= min(new_spell_power + p_pc.mana, monster.health)
-                elif spell.targets == 1:
-                        monster = party_func.pick_monster(m_p)
+        for spel in s_pc:
+                spel.stats()
+        spell = party_func.pick_hero(s_pc)
+        if spell.targets > 1:
+                for monster in m_p:
                         new_spell_power = element_func.check_element_spell(spell, monster)
                         monster.health -= min(new_spell_power + p_pc.mana, monster.health)
-                ib_pc.coins -= ((spell.cost * spell.targets) + spell.power)
-                p_pc.mana -= ((spell.cost * spell.targets) + spell.power)
-                if ib_pc.coins < 0 or p_pc.mana < (spell.cost * p_pc.atk):
-                        print (spell.name, "goes awry.")
-                        p_pc.health -= (spell.cost + (spell.power * p_pc.atk))
-                        p_pc.stats()
-                        ib_pc.coins = max(ib_pc.coins, 0)
-        except (ValueError, AttributeError):
-                print ("The magic fails.")
+                        print (spell.name, "hits", monster.name)
+        elif spell.targets == 1:
+                monster = party_func.pick_monster(m_p)
+                new_spell_power = element_func.check_element_spell(spell, monster)
+                monster.health -= min(new_spell_power + p_pc.mana, monster.health)
+                print (spell.name, "hits", monster.name)
+        ib_pc.coins -= ((spell.cost * spell.targets) + spell.power)
+        p_pc.mana -= ((spell.cost * spell.targets) + spell.power)
+        if ib_pc.coins < 0 or p_pc.mana < spell.cost:
+                print (spell.name, "goes awry.")
+                p_pc.health -= (spell.cost + (spell.power * p_pc.atk))
+                p_pc.stats()
+                ib_pc.coins = max(ib_pc.coins, 0)
 #advanced magic is reserved for max level mages
 def use_advanced_magic(p_pc, s_pc, m_p):
-        for spell in s_pc:
-                spell.stats()
-        try:
-                s = int(input("Which spell do you want to use?"
-                              "The first spell is number 1, etc."))
-                spell = s_pc[(s - 1)]
-                if spell.targets > 1:
-                        for monster in m_p:
-                                new_spell_power = element_func.check_element_spell(spell, monster)
-                                monster.health -= min(new_spell_power + p_pc.mana, monster.health)
-                elif spell.targets == 1:
-                        monster = party_func.pick_monster(m_p)
+        for spel in s_pc:
+                spel.stats()
+        spell = party_func.pick_hero(s_pc)
+        if spell.targets > 1:
+                for monster in m_p:
                         new_spell_power = element_func.check_element_spell(spell, monster)
                         monster.health -= min(new_spell_power + p_pc.mana, monster.health)
-                p_pc.mana -= ((spell.cost * spell.targets) + max((spell.power - p_pc.skill), 0))
-                if p_pc.mana < (spell.cost * spell.targets * p_pc.level):
-                        print (spell.name, "goes awry.")
-                        p_pc.health -= (spell.power + (p_pc.atk * p_pc.mana))
-        except (ValueError, AttributeError):
-                use_advanced_magic(p_pc, s_pc, m_p)
+                        print (spell.name, "hits", monster.name)
+        elif spell.targets == 1:
+                monster = party_func.pick_monster(m_p)
+                new_spell_power = element_func.check_element_spell(spell, monster)
+                monster.health -= min(new_spell_power + p_pc.mana, monster.health)
+                print (spell.name, "hits", monster.name)
+
+        p_pc.mana -= ((spell.cost * spell.targets) + max((spell.power - p_pc.skill), 0))
+        if p_pc.mana < (spell.cost * spell.targets * p_pc.level):
+                print (spell.name, "goes awry.")
+                p_pc.health -= (spell.power + (p_pc.atk * p_pc.mana))
+
 #need the player, pet, monsters, itembag and spells
 #player makes a choice about what to do
 def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
@@ -158,17 +158,17 @@ def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
         check = input("Attack, Item, Magic, Skill or Pray? P/A/I/M/S")
         if check.upper() == "A" and len(m_p) > 1:
                 monster = party_func.pick_monster(m_p)
-                player_attack(p_pc, monster, h_w)
+                player_attack(p_pc, monster, h_w, h_p, m_p)
         elif check.upper() == "A" and len(m_p) == 1:
                 for monster in m_p:
-                        player_attack(p_pc, monster, h_w)
+                        player_attack(p_pc, monster, h_w, h_p, m_p)
         elif check.upper() == "I":
                 ib_pc.stats()
                 use_item(p_pc, ib_pc)
         elif check.upper() == "M":
-                if p_pc.name == "Mage" and p_pc.level == C.LEVEL_LIMIT:
+                if p_pc.name == "Mage" and p_pc.level == C.LEVEL_LIMIT and len(s_pc) > 0:
                         use_advanced_magic(p_pc, s_pc, m_p)
-                elif p_pc.mana > 0:
+                elif p_pc.mana > 0 and len(s_pc) > 0:
                         use_magic_attack(p_pc, s_pc, ib_pc, m_p)
                 else:
                         print ("You can't do that.")

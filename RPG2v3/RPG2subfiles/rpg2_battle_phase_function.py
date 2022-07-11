@@ -71,7 +71,7 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                         new_m_p.remove(monster)
                                 if monster.health > 0:
                                         hero = party_func.pick_random_healthy_hero(new_h_p)
-                                        monster_func.monster_attack(monster, hero, h_a)
+                                        monster_func.monster_attack(monster, hero, new_h_a, new_h_p, new_m_p)
                         #after the monster attacks, check on the heroes again
                         for hero in new_h_p:
                                 if hero.health <= 0:
@@ -79,5 +79,17 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 
         #if the battle is over and you win then find out how many coins you get
         if not bBattle and len(new_h_p) > 0:
+                #adjust the hp of the heroes after battles
+                for hero in h_p:
+                        check = None
+                        for heero in new_h_p:
+                                if hero.name == heero.name:
+                                        check = heero
+                        #if there is no matching hero then the hero's health goes to zero
+                        if check == None:
+                                hero.health = 0
+                        #if there is a matching hero then the hero's health becomes equal
+                        elif check != None:
+                                hero.health = min(check.health, hero.maxhealth)
                 drop_step(ib_pc, m_p)
 

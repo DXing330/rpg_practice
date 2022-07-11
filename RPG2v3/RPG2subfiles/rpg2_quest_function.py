@@ -29,7 +29,7 @@ def quest_difficulty(ib_pc):
 #dgboss_func.boss_battle_phase(heroes_party, monster_party,
 #                              hero_pet, heroes_bag, heroes_magic)
 #function that picks a boss for the heroes to fight
-def quest(h_p, m_p, p_npc, ib_pc, s_pc):
+def quest(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
         print("Are you heroes? ")
         print("Thank GOD for you all. ")
         print("You have to help! ")
@@ -43,7 +43,7 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                         if choice.upper() == "F":
                                 print("You approach the castle. ")
                                 dlboss_func.boss_battle(h_p, m_p, p_npc,
-                                                              ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                         else:
                                 print("Oh no, what ever will we do? ")
                 else:
@@ -52,7 +52,7 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                         if choice.upper() == "F":
                                 print("You approach the castle. ")
                                 dgboss_func.boss_battle(h_p, m_p, p_npc,
-                                                              ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                         else:
                                 print("Oh no, what ever will we do? ")
 
@@ -63,7 +63,7 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                         choice = input("FIGHT  or RUN? F/R? ")
                         if choice.upper() == "F":
                                 agsboss_func.boss_battle(h_p, m_p, p_npc,
-                                                              ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                         else:
                                 print("Oh no, what ever will we do? ")
                 else:
@@ -71,7 +71,7 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                         choice = input("FIGHT  or RUN? F/R? ")
                         if choice.upper() == "F":
                                 gsboss_func.boss_battle(h_p, m_p, p_npc,
-                                                              ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                         else:
                                 print("Oh no, what ever will we do? ")
         elif x == 2:
@@ -82,7 +82,7 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                         if choice.upper() == "F":
                                 print ("You enter the swamp. ")
                                 aahboss_func.boss_battle(h_p, m_p, p_npc,
-                                                              ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                         else:
                                 print("Oh no, what ever will we do? ")
                 else:
@@ -91,7 +91,7 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                         if choice.upper() == "F":
                                 print ("You enter the swamp. ")
                                 ahboss_func.boss_battle(h_p, m_p, p_npc,
-                                                              ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                         else:
                                 print("Oh no, what ever will we do? ")
         elif x == 3:
@@ -110,7 +110,7 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                 if choice.upper() == "F":
                         print("You approach the castle. ")
                         sqboss_func.boss_battle(h_p, m_p, p_npc,
-                                                      ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                 else:
                         print("Oh no, what ever will we do? ")
                         
@@ -122,15 +122,15 @@ def quest(h_p, m_p, p_npc, ib_pc, s_pc):
                         if choice.upper() == "F":
                                 print ("You go up the mountain. ")
                                 aipboss_func.boss_battle(h_p, m_p, p_npc,
-                                                              ib_pc, s_pc)
+                                                        ib_pc, s_pc, h_w, h_a)
                         else:
                                 print("Oh no, what ever will we do? ")
-
-                print("A white bird is freezing everything! ")
-                choice = input("FIGHT  or RUN? F/R? ")
-                if choice.upper() == "F":
-                        print ("You go up the mountain. ")
-                        ipboss_func.boss_battle(h_p, m_p, p_npc,
-                                                      ib_pc, s_pc)
-                else:
-                        print("Oh no, what ever will we do? ")
+                elif y < B.ADVANCED_SPAWN:
+                        print("A white bird is freezing everything! ")
+                        choice = input("FIGHT  or RUN? F/R? ")
+                        if choice.upper() == "F":
+                                print ("You go up the mountain. ")
+                                ipboss_func.boss_battle(h_p, m_p, p_npc,
+                                                        ib_pc, s_pc, h_w, h_a)
+                        else:
+                                print("Oh no, what ever will we do? ")

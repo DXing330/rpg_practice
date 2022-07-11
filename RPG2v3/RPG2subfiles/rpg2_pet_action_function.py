@@ -13,9 +13,11 @@ def pet_random_action(p_npc, h_p, m_p):
         z = random.randint(0, p_npc.stage)
         if z == 0:
                 hero = party_func.pet_pick_random_injured_hero(h_p)
+                hero.poison -= min(p_npc.stage, hero.poison)
                 hero.health = min((hero.health + round(p_npc.atk ** C.PET_HP_BUFF)), hero.maxhealth)
                 print (p_npc.name, "uses their healing magic on", hero.name)
                 hero = party_func.pet_pick_random_injured_hero(h_p)
+                hero.poison -= min(p_npc.stage, hero.poison)
                 hero.health = min((hero.health + round(p_npc.atk ** C.PET_HP_BUFF)), hero.maxhealth)
                 print (p_npc.name, "uses their healing magic on", hero.name)
         elif z == 1:
@@ -23,6 +25,7 @@ def pet_random_action(p_npc, h_p, m_p):
                 monster.health -= max((p_npc.atk - monster.defense), 1)
                 print (p_npc.name, "uses their attacking magic on", monster.name)
                 hero = party_func.pet_pick_random_injured_hero(h_p)
+                hero.poison -= min(p_npc.stage, hero.poison)
                 hero.health = min((hero.health + round(p_npc.atk ** C.PET_HP_BUFF)), hero.maxhealth)
                 print (p_npc.name, "uses their healing magic on", hero.name)
         elif z == 2:
@@ -63,6 +66,7 @@ def pet_random_action(p_npc, h_p, m_p):
                 print (p_npc.name, "uses their legendary spell on the battlefield. ")
                 for hero in h_p:
                         if hero.name != "Golem":
+                                hero.poison -= min(p_npc.stage, hero.poison)
                                 hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
                                 hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
                                 hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)

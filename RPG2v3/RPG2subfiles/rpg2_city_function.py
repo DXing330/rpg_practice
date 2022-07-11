@@ -10,20 +10,24 @@ import rpg2_level_up_function as lvlup_func
 from rpg2_constants import Constants
 C = Constants()
 #store the starter characters incase the player recruits them
-summoner = Player_PC("Summoner", 1, 10, 10, 2, 2, 0, 0)
-cleric = Player_PC("Cleric", 1, 10, 10, 1, 2, 0, 5)
-mage = Player_PC("Mage", 1, 10, 10, 2, 2, 0, 5)
-warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 0, 0)
+summoner = Player_PC("Summoner", 1, 10, 10, 2, 2, 2, 2)
+cleric = Player_PC("Cleric", 1, 10, 10, 3, 3, 2, 5)
+mage = Player_PC("Mage", 1, 10, 10, 2, 2, 5, 5)
+warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 2, 0)
 ninja = Player_PC("Ninja", 1, 10, 10, 3, 3, 5, 0)
-knight = Player_PC("Knight", 1, 20, 20, 3, 4, 0, 0)
+knight = Player_PC("Knight", 1, 20, 20, 3, 4, 2, 0)
 tactician = Player_PC("Tactician", 1, 10, 10, 1, 1, 5, 0)
 
 
 ##functions in the town
 #inn function
-def inn(ib_pc, h_p):
+def inn(ib_pc, h_p, h_w, h_a):
         print ("Welcome back, what would you like to do? ")
-        check = input("REGROUP/SLEEP/TALK? R/S/T")
+        print ("We always have space for weary heroes to SLEEP. ")
+        print ("Feel free to use our dining area to TALK.")
+        print ("Or you can rent a room for more PRIVACY. ")
+        print ("If you're done with everything then go OUT and save the world. ")
+        check = input("PRIVATE ROOM/SLEEP/TALK? P/S/T")
         if check.upper() == "S":
                 for hero in h_p:
                         hero.stats()
@@ -34,6 +38,7 @@ def inn(ib_pc, h_p):
                 elif ib_pc.coins < len(h_p):
                         print ("I'll put it on your tab I guess. ")
                         print ("If you save the world then I'll wipe your tab. ")
+                inn(ib_pc, h_p, h_w, h_a)
         elif check.upper() == "T":
                 print ("We have a lot of adventurers passing through here.")
                 print ("Lots of them are looking for friends.")
@@ -75,46 +80,96 @@ def inn(ib_pc, h_p):
                                 party_func.add_to_party(h_p, hero)
                         else:
                                 print("Looks like you already have a tactician on your team. ")
-                inn(ib_pc, h_p)
-        elif check.upper() == "R":
-                choice = input("Would you like to reORDER or REMOVE? O/R? ")
-                if choice.upper() == "O":
-                        for player in h_p:
-                                player.stats()
-                        print ("Which hero do you want to act last? ")
-                        try:
-                                x = int(input("The first hero is 1, etc. "))
-                                #make a copy of the hero, then remove them
-                                #then readd them to the party, so that they're last
-                                hero = copy.copy(h_p[(x-1)])
-                                h_p.pop((x-1))
-                                h_p.append(hero)
-                        except (ValueError, AttributeError):
-                                print("That's not a good plan. ")
-                if choice.upper() == "R":
-                        for player in h_p:
-                                player.stats()
-                        print ("Who do you want to send away? ")
-                        print ("You may never see them again. ")
-                        try:
-                                x = int(input("The first hero is 1, etc. "))
-                                hero = h_p[(x - 1)]
-                                if hero.name == "Hero":
-                                        print ("Are you sure you want to kick out the Hero? ")
-                                        coyce = input("Y/N? ")
-                                        if coyce.upper() == "Y":
-                                                h_p.pop((x-1))
-                                        else:
-                                                inn(ib_pc, h_p)
-                                else:
-                                        #remove the hero from the party
+                inn(ib_pc, h_p, h_w, h_a)
+        elif check.upper() == "P":
+                print("Would you like to adjust your PARTY or your EQUIPMENT? ")
+                chck = input("P/E? ")
+                if chck.upper() == "P":
+                        choice = input("Would you like to reORDER or REMOVE? O/R? ")
+                        if choice.upper() == "O":
+                                for player in h_p:
+                                        player.stats()
+                                print ("Which hero do you want to act last? ")
+                                try:
+                                        x = int(input("The first hero is 1, etc. "))
+                                        #make a copy of the hero, then remove them
+                                        #then readd them to the party, so that they're last
+                                        hero = copy.copy(h_p[(x-1)])
                                         h_p.pop((x-1))
-                        except (ValueError, AttributeError):
-                                print("That's not a good plan. ")
-                inn(ib_pc, h_p)
+                                        h_p.append(hero)
+                                except (ValueError, AttributeError):
+                                        print("That's not a good plan. ")
+                        if choice.upper() == "R" and len(h_p) > 1:
+                                for player in h_p:
+                                        player.stats()
+                                print ("Who do you want to send away? ")
+                                print ("You may never see them again. ")
+                                try:
+                                        x = int(input("The first hero is 1, etc. "))
+                                        hero = h_p[(x - 1)]
+                                        if hero.name == "Hero":
+                                                print ("Are you sure you want to kick out the Hero? ")
+                                                coyce = input("Y/N? ")
+                                                if coyce.upper() == "Y":
+                                                        h_p.pop((x-1))
+                                                else:
+                                                        inn(ib_pc, h_p, h_w, h_a)
+                                        else:
+                                                #remove the hero from the party
+                                                h_p.pop((x-1))
+                                except (ValueError, AttributeError):
+                                        print("That's not a good plan. ")
+                elif chck.upper() == "E":
+                        print ("Do you want to adjust WEAPONS or ARMOR? ")
+                        choice = input("A/W? ")
+                        if choice.upper() == "A":
+                                for amr in h_a:
+                                        amr.stats()
+                                try:
+                                        print ("Which armor do you want to reassign? ")
+                                        x = int(input("The first one is 1, etc. "))
+                                        armor = h_a[(x - 1)]
+                                        armor.user = "None"
+                                        print ("Which hero do you want to give it to? ")
+                                        y = int(input("The first one is 1, etc. "))
+                                        hero = h_p[(x - 1)]
+                                        armr = None
+                                        for amr in h_a:
+                                                if amr.user == hero.name:
+                                                        armr = amr
+                                        if armr == None:
+                                                armor.user = hero.name
+                                        else:
+                                                print (hero.name, "already has an armor. ")
+                                except (ValueError, AttributeError):
+                                        print("That's not a good plan. ")
+                        if choice.upper() == "W":
+                                for wpn in h_a:
+                                        wpn.stats()
+                                try:
+                                        print ("Which weapon do you want to reassign? ")
+                                        x = int(input("The first one is 1, etc. "))
+                                        weapon = h_a[(x - 1)]
+                                        weapon.user = "None"
+                                        print ("Which hero do you want to give it to? ")
+                                        y = int(input("The first one is 1, etc. "))
+                                        hero = h_p[(x - 1)]
+                                        weapn = None
+                                        for wpn in h_a:
+                                                if wpn.user == hero.name:
+                                                        weapn = amr
+                                        if weapn == None:
+                                                weapon.user = hero.name
+                                        else:
+                                                print (hero.name, "already has a weapon. ")
+                                except (ValueError, AttributeError):
+                                        print("That's not a good plan. ")
+                inn(ib_pc, h_p, h_w, h_a)
                 
-        else:
+        elif check.upper() == "O":
                 print ("Come back soon. ")
+        else:
+               inn(ib_pc, h_p, h_w, h_a) 
 
 #practice arena function
 def practice_arena(p_pc, ib_pc):
@@ -144,28 +199,28 @@ def practice_arena(p_pc, ib_pc):
                 print ("What would you like to train? ")
                 print ("Attack, Defense, Health, Mana or Skill? ")
                 check = input("A/D/H/M/S ")
-                if check.upper() == "A" and ib_pc.coins >= min(C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT):
-                        ib_pc.coins -= min(C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT)
+                if check.upper() == "A" and ib_pc.coins >= C.LEVEL_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT):
+                        ib_pc.coins -= C.LEVEL_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT)
                         p_pc.atkbonus += 1
                         print("You're a big guy. ")
                         practice_arena(p_pc, ib_pc)
-                elif check.upper() == "D" and ib_pc.coins >= min(C.LEVEL_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT):
-                        ib_pc.coins -= min(C.LEVEL_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT)
+                elif check.upper() == "D" and ib_pc.coins >= C.STAT_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT):
+                        ib_pc.coins -= C.STAT_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT)
                         p_pc.defbonus += 1
                         print("You're a thick guy now. ")
                         practice_arena(p_pc, ib_pc)
-                elif check.upper() == "M" and p_pc.level == C.LEVEL_LIMIT and ib_pc.coins >= min(C.LEVEL_PRICE * (p_pc.mana ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT):
-                        ib_pc.coins -= min(C.LEVEL_PRICE * (p_pc.mana ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT)
+                elif check.upper() == "M" and ib_pc.coins >= C.STAT_PRICE * (p_pc.mana ** C.INCREASE_EXPONENT):
+                        ib_pc.coins -= C.STAT_PRICE * (p_pc.mana ** C.INCREASE_EXPONENT)
                         p_pc.mana += 1
                         print("You don't look any different. ")
                         practice_arena(p_pc, ib_pc)
-                elif check.upper() == "S" and ib_pc.coins >= min(C.LEVEL_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT):
-                        ib_pc.coins -= min(C.LEVEL_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT), C.STAT_PRICE_LIMIT)
+                elif check.upper() == "S" and ib_pc.coins >= C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT):
+                        ib_pc.coins -= C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT)
                         p_pc.skill += 1
                         print("You're a skilled guy now. ")
                         practice_arena(p_pc, ib_pc)
-                elif check.upper() == "H" and p_pc.level == C.LEVEL_LIMIT and ib_pc.coins >= min((p_pc.maxhealth ** C.INCREASE_EXPONENT), C.HEALTH_PRICE_LIMIT):
-                        ib_pc.coins -= min((p_pc.maxhealth ** C.INCREASE_EXPONENT), C.HEALTH_PRICE_LIMIT)
+                elif check.upper() == "H" and ib_pc.coins >= p_pc.maxhealth ** C.INCREASE_EXPONENT:
+                        ib_pc.coins -= p_pc.maxhealth ** C.INCREASE_EXPONENT
                         p_pc.maxhealth += 1
                         print("You're a big guy. ")
                         practice_arena(p_pc, ib_pc)
@@ -273,7 +328,7 @@ def equipment_store(ib_pc, h_w, h_a):
                         upgrade = input("Effect Strength/ATK? A/S? ")
                         if upgrade.upper() == "A" and ib_pc.coins >= C.WEAPON_PRICE * (weapon.atk ** C.INCREASE_EXPONENT):
                                 ib_pc.coins -= C.WEAPON_PRICE * (weapon.atk ** C.INCREASE_EXPONENT)
-                                weapon.defense += 1
+                                weapon.atk += 1
                                 print ("It looks a bit more deadly now. ")
                                 equipment_store(ib_pc, h_w, h_a)
                         elif upgrade.upper() == "S" and ib_pc.coins >= C.WEAPON_PRICE * (weapon.strength ** C.INCREASE_EXPONENT):
@@ -299,7 +354,7 @@ def city(ib_pc, h_p, h_w, h_a, a_i):
         if check.upper() == "L":
                 print ("Thanks for stopping by.")
         elif check.upper() == "I":
-                inn(ib_pc, h_p)
+                inn(ib_pc, h_p, h_w, h_a)
         elif check.upper() == "P":
                 print ("Who wants more training?")
                 pp_pc = party_func.pick_hero(h_p)

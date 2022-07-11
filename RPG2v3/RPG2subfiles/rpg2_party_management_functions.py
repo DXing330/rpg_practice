@@ -27,17 +27,20 @@ def remove_from_party(heroes_party):
 #function that will pick a hero from the party
 def pick_hero(heroes_party):
         hero = None
-        try:
-                number = int(input("Which one?"
-                                       "(First one is number 1, etc.)"))
-                if 0 < number <= len(heroes_party):
-                        hero = heroes_party[(number - 1)]
-                else:
+        if len(heroes_party) > 1:
+                try:
+                        number = int(input("Which one?"
+                                               "(First one is number 1, etc.)"))
+                        if 0 < number <= len(heroes_party):
+                                hero = heroes_party[(number - 1)]
+                        else:
+                                print ("That's not a real choice.")
+                                hero = pick_hero(heroes_party)
+                except (ValueError, AttributeError):
                         print ("That's not a real choice.")
                         hero = pick_hero(heroes_party)
-        except (ValueError, AttributeError):
-                print ("That's not a real choice.")
-                hero = pick_hero(heroes_party)
+        elif len(heroes_party) == 1:
+                hero = heroes_party[0]
         return hero
 #function that picks a random hero from the party with health > 0
 def pick_random_healthy_hero(heroes_party):

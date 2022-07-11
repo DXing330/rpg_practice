@@ -42,8 +42,9 @@ def add_to_party(heroes_party, p_pc):
 ##classes that the player can control
 #p = Player_PC(name, level, health, maxhealth, atk, defense, skill, mana,
 #               atkbonus, defbonus, weapon, armor)
-hero = Player_PC("Hero", 1, 15, 15, 5, 4, 5, 5)
+hero = Player_PC("Hero", 1, 15, 15, 5, 4, 2, 2)
 hero_sword = Weapon_PC("LS", "Hero", "Attack", 1, "Light", 1)
+hero_armor = Armor_PC("LA", "Hero", "Block", 1, "Light", 1)
 #pet
 hero_pet = Pet_NPC("Nothing", 1, 0)
 heroes_bag = ItemBag_PC(1, 1, 1, 50)
@@ -56,6 +57,7 @@ while bChoice:
         if game.upper() == "N":
                 add_to_party(heroes_party, hero)
                 heroes_weapons.append(hero_sword)
+                heroes_armor.append(hero_armor)
                 bChoice = False
                 bGame = True
 
@@ -89,7 +91,7 @@ while bGame:
                                heroes_weapons, heroes_armor,
                                a_items)
         if check.upper() == "A":
-                #if you want to fight, then create some monsters to fight
+                '''#if you want to fight, then create some monsters to fight
                 print("Do you want to fight against the odds? ")
                 print("Are you brave enough to face a horde of monsters? ")
                 choice = input("Y/N ?")
@@ -102,14 +104,14 @@ while bGame:
                         battle_func.battle_phase(heroes_party, monster_party,
                                                  hero_pet, heroes_bag, heroes_magic,
                                                  heroes_weapons, heroes_armor)
-                else:
+                else:'''
                         #make the fights equal numbers
-                        for hero in heroes_party:
-                                monster = monster_func.random_scaled_monster(hero)
-                                monster_party.append(monster)
-                        battle_func.battle_phase(heroes_party, monster_party,
-                                                 hero_pet, heroes_bag, heroes_magic,
-                                                 heroes_weapons, heroes_armor)
+                for hero in heroes_party:
+                        monster = monster_func.random_scaled_monster(hero)
+                        monster_party.append(monster)
+                battle_func.battle_phase(heroes_party, monster_party,
+                                         hero_pet, heroes_bag, heroes_magic,
+                                         heroes_weapons, heroes_armor)
         if check.upper() == "L":
                 print ("Travelers?! You look strong. Please, can you help us? ")
                 quest_func.quest(heroes_party, monster_party,

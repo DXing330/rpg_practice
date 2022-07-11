@@ -17,7 +17,7 @@ def random_scaled_elite_monster(p_pc):
         atk = random.randint(C.MONSTER_MAX_ATK, C.MONSTER_MAX_ATK + (p_pc.atkbonus + p_pc.defbonus + p_pc.mana + p_pc.skill))
         defense = random.randint(C.MONSTER_MAX_DEF, C.MONSTER_MAX_DEF + (p_pc.defense + p_pc.atkbonus + p_pc.defbonus))
         skill = random.randint(C.MONSTER_MAX_SKILL, C.MONSTER_MAX_SKILL + p_pc.skill)
-        dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT * p_pc.skill * p_pc.level
+        dropchance = C.MONSTER_MAX_DROPCHANCE * C.LEVEL_LIMIT * p_pc.skill
         random_monster = Monster_NPC("Super Elite " + element + " " + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function which create a strong monster
@@ -56,19 +56,19 @@ def random_scaled_monster(p_pc):
         atk = random.randint(C.MONSTER_MIN_ATK, C.MONSTER_SCALE_ATK * p_pc.level)
         defense = random.randint(C.MONSTER_MIN_DEF, C.MONSTER_SCALE_DEF * p_pc.level)
         skill = random.randint(p_pc.level, C.MONSTER_MAX_SKILL + p_pc.level)
-        dropchance = random.randint(0, C.MONSTER_MAX_DROPCHANCE * p_pc.level)
+        dropchance = random.randint(C.MONSTER_MAX_DROPCHANCE, C.MONSTER_MAX_DROPCHANCE * p_pc.level)
         random_monster = Monster_NPC(element + " " + name, health, atk, defense, skill, element, dropchance)
         return random_monster
 #function where the monster performs an action
-def monster_attack(m_npc, p_pc, h_a):
+def monster_attack(m_npc, p_pc, h_a, h_p, m_p):
         #check if the hero has any special armor
         armor = Armor_PC("None", "None", "None", 0, "None", 0)
         for amr in h_a:
-                if amr.name == p_pc.name:
+                if amr.user == p_pc.name:
                         armor = amr
         #check if the armor has any effect
-        new_atk = ee_func.armor_effect(m_npc, p_pc, armor)
-        new_m_npc_atk = element_func.check_element_monster_attack(m_npc, armor)
+        new_atk = ee_func.armor_effect(m_npc, p_pc, armor, h_p, m_p)
+        new_m_npc_atk = element_func.check_element_monster_attack(m_npc, new_atk, armor)
         if p_pc == None:
                 print (m_npc.name, "roars with confidence.")
         else:

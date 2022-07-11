@@ -69,7 +69,7 @@ class Pet_NPC:
                 #affects the power of pet actions
                 self.atk = atk
         def stats(self):
-                print(self.name, self.stage, self.atk)
+                print(self.name, ", STAGE:", self.stage, ", ATK:", self.atk)
 class ItemBag_PC:
         def __init__(self, heal, mana, buff, coins,
                      dg_trophy = 0, gs_trophy = 0,
@@ -118,7 +118,7 @@ class Spell_PC:
                        "Element:", self.element, "Cost:", self.cost)
 
 class Monster_NPC:
-        def __init__(self, name, health, atk, defense, skill, element, dropchance):
+        def __init__(self, name, health, atk, defense, skill, element, dropchance, poison = 0):
                 self.name = name
                 self.health = health
                 self.atk = atk
@@ -127,8 +127,11 @@ class Monster_NPC:
                 self.element = element
                 #how many coins are dropped after battle
                 self.dropchance = dropchance
+                self.poison = poison
         def stats(self):
                 print(self.name, self.health, self.atk, self.defense, self.skill)
+                if self.poison > 0:
+                        print ("POISON:", self.poison)
 
 
 class Weapon_PC:
@@ -146,9 +149,9 @@ class Weapon_PC:
                 #how much atk the weapon will give
                 self.atk = atk
         def stats(self):
-                print("Name:", self.name, "Owner:", self.user, "Effect:", self.effect,
-                      "Power:", self.strength, "Element:", self.element, 
-                      "Attack:", self.atk)
+                print("Name:", self.name, ", Owner:", self.user, ", Effect:", self.effect,
+                      ", Power:", self.strength, ", Element:", self.element, 
+                      ", Attack:", self.atk)
 
 class Armor_PC:
         def __init__(self, name, user, effect, strength, element, defense):
@@ -160,12 +163,13 @@ class Armor_PC:
                 self.effect = effect
                 #how strong the effect will be
                 self.strength = strength
+                self.element = element
                 #how much defense the armor will give
                 self.defense = defense
         def stats(self):
-                print("Name:", self.name, "Owner:", self.user, "Effect:", self.effect,
-                      "Power:", self.strength, "Element:", self.element, 
-                      "Defense:", self.defense)
+                print("Name:", self.name, ", Owner:", self.user, ", Effect:", self.effect,
+                      ", Power:", self.strength, ", Element:", self.element, 
+                      ", Defense:", self.defense)
 #used during quests
 class QuestItems_NPC:
         def __init__(self, package = 0, vpackage = 0):

@@ -9,6 +9,8 @@ class Constants:
              self.LEVEL_LIMIT = 10
              #base price of leveling up
              self.LEVEL_PRICE = 10
+             #price of increasing skill, mana, and defense
+             self.STAT_PRICE = 20
              #exponent to scale the difficulty of increasing levels/stats
              self.INCREASE_EXPONENT = 2
              self.DECREASE_EXPONENT = 0.5
@@ -75,5 +77,9 @@ class Constants:
              self.SPELL_PRICE = 10
              #minimum cost to cast a spell
              self.SPELL_COST = 1
+             #base price for enchanting
+             self.ENCHANT_COST = 100
+             #death weapon effect atk bonus
+             self.DEATH_ATK = 9999999
 
 C = Constants()

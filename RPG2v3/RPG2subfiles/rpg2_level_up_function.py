@@ -13,6 +13,7 @@ def level_up(p_pc):
                 p_pc.atk += (p_pc.atk/(p_pc.level - 1))
                 p_pc.defense += (p_pc.defense/(p_pc.level - 1))
                 p_pc.maxhealth += (p_pc.maxhealth/(p_pc.level - 1))
+                p_pc.skill += (p_pc.skill/(p_pc.level - 1))
                 p_pc.mana += (p_pc.mana/(p_pc.level - 1))
         #if the player is already max level then nothing happens
         elif p_pc.level == C.LEVEL_LIMIT:
