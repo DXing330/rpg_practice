@@ -28,8 +28,8 @@ def pet_random_action(p_npc, h_p, m_p):
         elif z == 2:
                 hero = party_func.pet_pick_random_healthy_hero(h_p)
                 hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
-                hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
-                hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                 hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                 print (p_npc.name, "uses their blessing magic on", hero.name)
         elif z == 3:
@@ -40,14 +40,14 @@ def pet_random_action(p_npc, h_p, m_p):
         elif z == 4:
                 hero = party_func.pet_pick_random_healthy_hero(h_p)
                 hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
-                hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
-                hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                 hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                 print (p_npc.name, "uses their blessing magic on", hero.name)
                 hero = party_func.pet_pick_random_healthy_hero(h_p)
                 hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
-                hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
-                hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                 hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                 print (p_npc.name, "uses their blessing magic on", hero.name)
         elif z == 5:
@@ -64,8 +64,8 @@ def pet_random_action(p_npc, h_p, m_p):
                 for hero in h_p:
                         if hero.name != "Golem":
                                 hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
-                                hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
-                                hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                                hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                                hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                                 hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                                 hero.health = min(hero.health + round(p_npc.atk ** C.PET_HP_BUFF), hero.maxhealth)
                 for monster in m_p:

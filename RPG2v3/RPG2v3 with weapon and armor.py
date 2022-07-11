@@ -65,6 +65,7 @@ while bChoice:
                 heroes_magic = heroes_magic_list
                 heroes_bag = items_bag_obj
                 hero_pet = pet_obj
+                hero_pet.stats()
                 heroes_weapons = weapons
                 heroes_armor = armor
                 q_items = quest
@@ -116,7 +117,8 @@ while bGame:
                                  heroes_weapons, heroes_armor)
         if check.upper() == "M":
                 magetower_func.mage_tower(heroes_party, hero_pet,
-                                          heroes_bag, heroes_magic)
+                                          heroes_bag, heroes_magic,
+                                          heroes_weapons, heroes_armor)
         if check.upper() == "R":
                 save_func.write_to_files(heroes_party, heroes_magic,
                                          heroes_bag, hero_pet,

@@ -3,7 +3,8 @@ import random
 import sys
 sys.path.append(".")
 from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
-                                   ItemBag_PC, Spell_PC)
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
 import rpg2_party_management_functions as party_func
 import rpg2_level_up_function as lvlup_func
 from rpg2_constants import Constants

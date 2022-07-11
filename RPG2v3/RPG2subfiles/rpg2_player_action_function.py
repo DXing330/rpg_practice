@@ -2,10 +2,12 @@ import random
 import sys
 sys.path.append(".")
 from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
-                                   ItemBag_PC, Spell_PC)
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
 import rpg2_party_management_functions as party_func
 import rpg2_player_skill_function as pskill_func
 import rpg2_pet_action_function as pet_func
+import rpg2_element_function as element_func
 from rpg2_constants import Constants
 C = Constants()
 ##function where the player makes a choice of what they want to do in battle
@@ -16,10 +18,10 @@ def pet_action(p_npc, h_p, m_p):
                 if hero.name == "Summoner":
                         pet_func.pet_random_action(p_npc, h_p, m_p)
                 elif hero.name == "Hero":
-                        hero.maxhealth += round(p_npc.atk * C.PET_HP_BUFF / p_npc.stage)
-                        hero.atk += round(p_npc.atk * C.PET_ATK_BUFF / p_npc.stage)
-                        hero.defense += round(p_npc.atk * C.PET_DEF_BUFF / p_npc.stage)
-                        hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF / p_npc.stage)
+                        hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
+                        hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
+                        hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                        hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                         print (p_npc.name, "uses their blessing magic on", hero.name)                        
                 elif hero.name == "Golem":
                         if hero.atk > 0:
@@ -28,10 +30,10 @@ def pet_action(p_npc, h_p, m_p):
                                 print (p_npc.name, "uses their attacking magic on", monster.name)
                         elif hero.skill > 0:
                                 hero = party_func.pet_pick_random_healthy_hero(h_p)
-                                hero.maxhealth += round(p_npc.atk * C.PET_HP_BUFF / p_npc.stage)
-                                hero.atk += round(p_npc.atk * C.PET_ATK_BUFF / p_npc.stage)
-                                hero.defense += round(p_npc.atk * C.PET_DEF_BUFF / p_npc.stage)
-                                hero.skill += round(p_npc.atk * C.PET_SKILL_BUFF / p_npc.stage)
+                                hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
+                                hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
+                                hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                                hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                                 print (p_npc.name, "uses their blessing magic on", hero.name)
                         elif hero.defense > 0:
                                 hero = party_func.pet_pick_random_injured_hero(h_p)
@@ -39,8 +41,8 @@ def pet_action(p_npc, h_p, m_p):
                                 print (p_npc.name, "uses their healing magic on", hero.name)
                         elif hero.mana > 0:
                                 monster = party_func.pick_random_healthy_monster(m_p)
-                                monster.atk = max(monster.atk - round(p_npc.atk * C.PET_ATK_BUFF / p_npc.stage), 0)
-                                monster.defense = max(monster.defense - round(p_npc.atk * C.PET_DEF_BUFF / p_npc.stage), 0)
+                                monster.atk = max(monster.atk - round(p_npc.atk ** C.PET_ATK_BUFF), 0)
+                                monster.defense = max(monster.defense - round(p_npc.atk ** C.PET_DEF_BUFF), 0)
                                 print (p_npc.name, "uses their weakening magic on", monster.name)
                 else:
                         x = random.randint(0, C.PET_ACTION_UP * len(h_p) * len(m_p))
@@ -49,27 +51,32 @@ def pet_action(p_npc, h_p, m_p):
 
 
 #player attack function
-def player_attack(p_pc, m_npc):
+def player_attack(p_pc, m_npc, h_w):
+        weapon = Weapon_PC("None", "None", "None", 0, "None", 0)
+        for wpn in h_w:
+                if wpn.user == p_pc.name:
+                        weapon = wpn
+        new_atk = element_func.check_element_player_attack(p_pc, m_npc, weapon)
         #warrior hits more often
         if p_pc.name == "Warrior" and p_pc.level == C.LEVEL_LIMIT:
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
+                m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
+                m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
+                m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
         elif p_pc.name == "Warrior" or p_pc.name == "Hero":
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
+                m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
+                m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
         #if defender attacks then they can no longer block incoming attacks
         elif p_pc.name == "Defender":
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus + p_pc.armor + p_pc.defense - m_npc.defense),1)
+                m_npc.health -= max((new_atk + p_pc.armor + p_pc.defense - m_npc.defense),1)
                 p_pc.name = "Knight"
                 print (p_pc.name, "bashes", m_npc.name, "with their shield. ")
         else:
-                m_npc.health -= max((p_pc.atk + p_pc.weapon + p_pc.atkbonus - m_npc.defense),1)
+                m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
 
         
@@ -107,17 +114,12 @@ def use_magic_attack(p_pc, s_pc, ib_pc, m_p):
                 spell = s_pc[(s - 1)]
                 if spell.targets > 1:
                         for monster in m_p:
-                                if monster.element == spell.element:
-                                        print ("The magic has no effect on", monster.name)
-                                else:
-                                        monster.health = max((monster.health - (spell.power + p_pc.mana)),0)
-                                        print (spell.name, "hits", monster.name)
-                if spell.targets == 1:
+                                new_spell_power = element_func.check_element_spell(spell, monster)
+                                monster.health -= min(new_spell_power + p_pc.mana, monster.health)
+                elif spell.targets == 1:
                         monster = party_func.pick_monster(m_p)
-                        if monster.element == spell.element:
-                                        print ("The magic has no effect on", monster.name)
-                        else:
-                                monster.health = max((monster.health - (spell.power + p_pc.mana)),0)
+                        new_spell_power = element_func.check_element_spell(spell, monster)
+                        monster.health -= min(new_spell_power + p_pc.mana, monster.health)
                 ib_pc.coins -= ((spell.cost * spell.targets) + spell.power)
                 p_pc.mana -= ((spell.cost * spell.targets) + spell.power)
                 if ib_pc.coins < 0 or p_pc.mana < (spell.cost * p_pc.atk):
@@ -137,17 +139,12 @@ def use_advanced_magic(p_pc, s_pc, m_p):
                 spell = s_pc[(s - 1)]
                 if spell.targets > 1:
                         for monster in m_p:
-                                if monster.element == spell.element:
-                                        print ("The magic has no effect on", monster.name)
-                                else:
-                                        monster.health = max((monster.health - (spell.power + p_pc.mana)),0)
-                                        print (spell.name, "hits", monster.name)
-                if spell.targets == 1:
+                                new_spell_power = element_func.check_element_spell(spell, monster)
+                                monster.health -= min(new_spell_power + p_pc.mana, monster.health)
+                elif spell.targets == 1:
                         monster = party_func.pick_monster(m_p)
-                        if monster.element == spell.element:
-                                        print ("The magic has no effect on", monster.name)
-                        else:
-                                monster.health = max((monster.health - (spell.power + p_pc.mana)),0)
+                        new_spell_power = element_func.check_element_spell(spell, monster)
+                        monster.health -= min(new_spell_power + p_pc.mana, monster.health)
                 p_pc.mana -= ((spell.cost * spell.targets) + max((spell.power - p_pc.skill), 0))
                 if p_pc.mana < (spell.cost * spell.targets * p_pc.level):
                         print (spell.name, "goes awry.")
@@ -156,15 +153,15 @@ def use_advanced_magic(p_pc, s_pc, m_p):
                 use_advanced_magic(p_pc, s_pc, m_p)
 #need the player, pet, monsters, itembag and spells
 #player makes a choice about what to do
-def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
+def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
         print ("What do you do?")
         check = input("Attack, Item, Magic, Skill or Pray? P/A/I/M/S")
         if check.upper() == "A" and len(m_p) > 1:
                 monster = party_func.pick_monster(m_p)
-                player_attack(p_pc, monster)
+                player_attack(p_pc, monster, h_w)
         elif check.upper() == "A" and len(m_p) == 1:
                 for monster in m_p:
-                        player_attack(p_pc, monster)
+                        player_attack(p_pc, monster, h_w)
         elif check.upper() == "I":
                 ib_pc.stats()
                 use_item(p_pc, ib_pc)
@@ -176,14 +173,14 @@ def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 else:
                         print ("You can't do that.")
         elif check.upper() == "S":
-                pskill_func.use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc)
-        elif check.upper() == "P" or "":
+                pskill_func.use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a)
+        elif check.upper() == "P":
                 p_pc.health += p_pc.level + p_pc.skill
                 print("A warm and gentle breeze soothes your soul. ")
                 if p_pc.name == "Cleric":
                         p_pc.mana += 1
                         p_pc.defense += 1
-                        p_pc.poison -= max(p_pc.level, p_pc.poison)
+                        p_pc.poison -= min(p_pc.level, p_pc.poison)
                         print("Holy light envelops you. ")
         else:
-                player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc)
+                player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a)

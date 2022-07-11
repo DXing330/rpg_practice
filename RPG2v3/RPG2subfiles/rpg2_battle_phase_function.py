@@ -2,7 +2,9 @@ import random
 import copy
 import sys
 sys.path.append(".")
-from rpg2_classdefinitions import (Player_PC, Monster_NPC, Pet_NPC, ItemBag_PC)
+from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
 import rpg2_monster_function_elements as monster_func
 import rpg2_player_action_function as player_func
 import rpg2_party_management_functions as party_func
@@ -18,12 +20,20 @@ def drop_step(ib_pc, m_p):
         while len(m_p) > 0:
                 m_p.pop(0)
 #function that controls the basic battle_phase
-def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc):
+def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
         #make a copy of the heroes party and the monster's party
         new_h_p = []
+        new_h_w = []
+        new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for wpn in h_w:
+                copy_weapon = copy.copy(wpn)
+                new_h_w.append(copy_weapon)
+        for amr in h_a:
+                copy_armor = copy.copy(amr)
+                new_h_a.append(copy_armor)
         new_m_p = list(m_p)
         #boolean to loop the battle phase until it finishes
         bBattle = True
@@ -41,7 +51,8 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc):
                                 if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, new_h_p, new_m_p,
-                                                                  ib_pc, s_pc, p_npc)
+                                                                  ib_pc, s_pc, p_npc,
+                                                                  new_h_w, new_h_a)
                                 elif hero.health <= 0:
                                         new_h_p.remove(hero)
                         #then give the pet a turn
@@ -60,7 +71,7 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc):
                                         new_m_p.remove(monster)
                                 if monster.health > 0:
                                         hero = party_func.pick_random_healthy_hero(new_h_p)
-                                        monster_func.monster_attack(monster, hero)
+                                        monster_func.monster_attack(monster, hero, h_a)
                         #after the monster attacks, check on the heroes again
                         for hero in new_h_p:
                                 if hero.health <= 0:

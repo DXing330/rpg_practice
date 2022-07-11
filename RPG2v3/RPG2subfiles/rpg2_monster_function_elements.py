@@ -1,8 +1,10 @@
 import random
 import sys
 sys.path.append(".")
-from rpg2_classdefinitions import (Player_PC, Monster_NPC)
+from rpg2_classdefinitions import (Player_PC, Monster_NPC, Armor_PC)
 from rpg2_constants import Constants
+import rpg2_element_function as element_func
+import rpg2_equipment_effect_function as ee_func
 C = Constants()
 
 #function which creates a strong scaled monster
@@ -60,9 +62,13 @@ def random_scaled_monster(p_pc):
 #function where the monster performs an action
 def monster_attack(m_npc, p_pc, h_a):
         #check if the hero has any special armor
+        armor = Armor_PC("None", "None", "None", 0, "None", 0)
         for amr in h_a:
                 if amr.name == p_pc.name:
                         armor = amr
+        #check if the armor has any effect
+        new_atk = ee_func.armor_effect(m_npc, p_pc, armor)
+        new_m_npc_atk = element_func.check_element_monster_attack(m_npc, armor)
         if p_pc == None:
                 print (m_npc.name, "roars with confidence.")
         else:
@@ -73,8 +79,7 @@ def monster_attack(m_npc, p_pc, h_a):
                         if y > p_pc.skill ** C.DECREASE_EXPONENT:
                         #monster will do a normal attack
                                 #check if the armor affects the battle
-                                new_m_npc_atk = element_func.check_element_monster_attack_step(m_npc, p_pc, armor)
-                                p_pc.health -= max((new_m_npc_atk - p_pc.defense - p_pc.defbonus - p_pc.armor), 1)
+                                p_pc.health -= max((new_m_npc_atk - p_pc.defense - p_pc.defbonus), 1)
                                 print (m_npc.name, "attacks", p_pc.name)
                         elif y <= p_pc.skill ** C.DECREASE_EXPONENT:
                                 print (m_npc.name, "misses", p_pc.name)
@@ -83,13 +88,11 @@ def monster_attack(m_npc, p_pc, h_a):
                         y = random.randint(1, 5)
                         if y == 1:
                                 #monster does an attack that ignores defense
-                                new_m_npc_atk = element_func.check_element_monster_attack_step(m_npc, p_pc, armor)
-                                p_pc.health -= max((new_m_npc_atk - p_pc.armor), 1)
+                                p_pc.health -= max((new_m_npc_atk), 1)
                                 print (m_npc.name, "does a piercing attack against", p_pc.name)
                         elif y == 2:
                                 #monster does a strong attack
-                                new_m_npc_atk = element_func.check_element_monster_attack_step(m_npc, p_pc, armor)
-                                p_pc.health -= max(round((new_m_npc_atk*C.CRIT) - p_pc.defense - p_pc.defbonus - p_pc.armor), 1)
+                                p_pc.health -= max(round((new_m_npc_atk*C.CRIT) - p_pc.defense - p_pc.defbonus), 1)
                                 print (m_npc.name, "does a strong attack against", p_pc.name)
                         elif y == 3:
                                 #monster will buff themselves
@@ -103,7 +106,6 @@ def monster_attack(m_npc, p_pc, h_a):
                                 print (m_npc.name, "seems to regenerate.")
                         elif y == 5:
                                 #monster will do a double swing
-                                new_m_npc_atk = element_func.check_element_monster_attack_step(m_npc, p_pc, armor)
-                                p_pc.health -= max((new_m_npc_atk - p_pc.defense - p_pc.defbonus - p_pc.armor), 1)
-                                p_pc.health -= max((new_m_npc_atk - p_pc.defense - p_pc.defbonus - p_pc.armor), 1)
+                                p_pc.health -= max((new_m_npc_atk - p_pc.defense - p_pc.defbonus), 1)
+                                p_pc.health -= max((new_m_npc_atk - p_pc.defense - p_pc.defbonus), 1)
                                 print (m_npc.name, "rapidly attacks", p_pc.name)

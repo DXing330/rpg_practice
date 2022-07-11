@@ -1,7 +1,8 @@
 import random
 import sys
 from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
-                                   ItemBag_PC, Spell_PC)
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
 from rpg2_constants import Constants
 C = Constants()
 #function that adds a hero to the hero party list

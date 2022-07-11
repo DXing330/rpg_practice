@@ -3,7 +3,8 @@ import random
 import sys
 sys.path.append(".")
 from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
-                                   ItemBag_PC, Spell_PC)
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
 import rpg2_party_management_functions as party_func
 import rpg2_level_up_function as lvlup_func
 from rpg2_constants import Constants
@@ -179,12 +180,13 @@ def summoning_fields(h_p, p_npc, ib_pc):
                         print ("You need a summoner's magic to make your ally stronger. ")
                         
 #UI function where the player chooses what to do
-def mage_tower(h_p, p_npc, ib_pc, h_m):
+def mage_tower(h_p, p_npc, ib_pc, h_m, h_w, h_a):
         print ("Oh, adventurers. Welcome. What do you need? ")
         print ("Would you like to visit our LIBRARY?")
         print ("Or perhaps you want to hire a TUTOR to help you strengthen your magic?")
         print ("If you have a SUMMONED ALLY we can train it as well.")
-        print ("If you're done with everything here then the EXIT is right there.")
+        print ("We also have an ENCHANTER if you have some equipment. ")
+        print ("If you're done with everything here then the DOOR is right there.")
         choice = input("L/E/S/T?")
         if choice.upper() == "S":
                 summoning_fields(h_p, p_npc, ib_pc)
@@ -192,7 +194,9 @@ def mage_tower(h_p, p_npc, ib_pc, h_m):
                 library(ib_pc, h_m)
         elif choice.upper() == "T":
                 upgrade_spell(ib_pc, h_m)
-        elif choice.upper() == "E":
+        #elif choice.upper() == "E":
+         #       equipment_enchanter(ib_pc, h_w, h_a)
+        elif choice.upper() == "D":
                 print ("Good luck saving the world. ")
         else:
                 mage_tower(h_p, p_npc, ib_pc, h_m)

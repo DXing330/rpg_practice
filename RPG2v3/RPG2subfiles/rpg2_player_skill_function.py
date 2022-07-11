@@ -3,14 +3,15 @@ import copy
 import sys
 sys.path.append(".")
 from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
-                                   ItemBag_PC, Spell_PC)
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
 import rpg2_player_action_function as player_func
 import rpg2_party_management_functions as party_func
 from rpg2_constants import Constants
 C = Constants()
 #function which controls what skills the player can use
 #need the hero, heroes_party, monster_party, pet for now
-def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
+def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
         
         print ("What skill do you want to use? ")
         print ("OBSERVE enemies? O")
@@ -89,7 +90,7 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                         hero = party_func.pick_hero(h_p)
                         if hero.name != "Tactician":
                                 hero.stats()
-                                player_func.player_action(hero, h_p, m_p, ib_pc, s_pc, p_npc)
+                                player_func.player_action(hero, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a)
                 else:
                         print("Your allies are too focused on the battle.")
                         
@@ -132,47 +133,59 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 else:
                         print("Nothing happens.")
         elif check.upper() == "B":
+                armor = Armor_PC("None", "None", "None", 0, "None", 0)
+                for amr in h_a:
+                        if amr.user == p_pc.name:
+                                armor = amr
                 if p_pc.name == "Ninja" and p_pc.mana > 0:
                         p_pc.skill = round(p_pc.skill * C.BUFF)
                         print (p_pc.name, "sharpens their senses. ")
                         p_pc.mana -= 1
                 elif p_pc.name == "Knight" and p_pc.skill > 0:
-                        p_pc.defense += p_pc.level
-                        p_pc.armor += p_pc.level 
+                        p_pc.defbonus += p_pc.level
+                        armor.defense += p_pc.level
+                        armor.effect += 1
                         p_pc.skill -= 1
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Defender" and p_pc.skill > 0:
-                        p_pc.defense += p_pc.level
-                        p_pc.armor += p_pc.level
+                        p_pc.defbonus += p_pc.level
+                        armor.defense += p_pc.level
+                        armor.effect += 1
                         p_pc.skill -= 1
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Cleric" and p_pc.mana > 0 and p_pc.skill > 0:
                         hero = party_func.pick_hero(h_p)
-                        hero.atk += p_pc.mana+p_pc.skill
+                        hero.atkbonus += p_pc.mana+p_pc.skill
                         p_pc.mana -= 1
                         p_pc.skill -= 1
                         print ("Holy light surrounds", hero.name)
                 else:
                         print("Nothing happens.")
                         
-
         elif check.upper() == "S":
+                weapon = Weapon_PC("None", "None", "None", 0, "None", 0)
+                for wpn in h_w:
+                        if wpn.user == p_pc.name:
+                                weapon = wpn
                 if p_pc.name == "Ninja":
                         monster = party_func.pick_monster(m_p)
-                        monster.health -= p_pc.atk + (p_pc.skill * p_pc.weapon)
+                        monster.health -= p_pc.atk + (p_pc.skill * wpn.atk)
                         print (p_pc.name, "appears behind", monster.name, "and strikes.")
                         p_pc.skill -= max((monster.skill + monster.defense), p_pc.skill)
                 else:
                         print("The enemies stare at you as you try to run behind them. ")
 
         elif check.upper() == "P":
+                armor = Armor_PC("None", "None", "None", 0, "None", 0)
+                for amr in h_a:
+                        if amr.user == p_pc.name:
+                                armor = amr
                 if p_pc.name == "Knight":
                         p_pc.name = "Defender"
-                        p_pc.armor = round(p_pc.armor * C.BUFF) + 1
-                        p_pc.skill -= min(1, p_pc.skill)
+                        p_pc.defbonus += 1
                         print(p_pc.name, "gets ready to block. ")
                 elif p_pc.name == "Defender":
-                        p_pc.armor += 1
+                        p_pc.defbonus += 1
                         print(p_pc.name, "gets ready to block. ")
                 else:
                         print("Your body fails to shield your allies from view. ")
@@ -205,6 +218,6 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc):
                 else:
                         print(p_npc.name, "briefly glances at you in confusion.")
         else:
-                use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc)
+                use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a)
                 
 
