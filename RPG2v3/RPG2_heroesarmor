@@ -1,0 +1,1 @@
+[{"name": "LA", "user": "Hero", "effect": "Block", "strength": 2, "element": "Light", "defense": 2}, {"name": "Armor", "user": "Summoner", "effect": "Block", "strength": 1, "element": "Dark", "defense": 1}, {"name": "Armor", "user": "None", "effect": "Block", "strength": 1, "element": "Water", "defense": 2}]
