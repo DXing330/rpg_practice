@@ -72,8 +72,10 @@ def pet_random_action(p_npc, h_p, m_p):
                                 hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                                 hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                                 hero.health = min(hero.health + round(p_npc.atk ** C.PET_HP_BUFF), hero.maxhealth)
+                                
                 for monster in m_p:
                         monster.atk = max(monster.atk - round(p_npc.atk ** C.PET_ATK_BUFF), 0)
                         monster.defense = max(monster.defense - round(p_npc.atk ** C.PET_DEF_BUFF), 0)
-                        
+                        monster.atk = max(monster.atk - round(p_npc.atk ** C.PET_ATK_BUFF), 0)
+                        monster.defense = max(monster.defense - round(p_npc.atk ** C.PET_DEF_BUFF), 0)
                         

@@ -33,13 +33,13 @@ class BOSS_CONSTANTS:
                 self.A_H_SKL = 1
                 self.A_H_DC = 0.5
                 self.A_H_DC_UP = 1.2
-                self.ADVANCED_SPAWN = 10
+                self.ADVANCED_SPAWN = 5
                 #succubus queen
                 self.S_Q_HEALTH = 5000
                 self.S_Q_ATK = 100
                 self.S_Q_DEF = 50
-                self.S_Q_SKL = 15
-                self.S_Q_DC = 50000
+                self.S_Q_SKL = 10
+                self.S_Q_DC = 30000
                 #when the sq enrages
                 self.S_Q_HPBP = 0.25
                 #ice phoenix

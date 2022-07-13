@@ -7,12 +7,14 @@ import rpg2_element_function as element_func
 import rpg2_equipment_effect_function as ee_func
 import rpg2_party_management_functions as party_func
 import rpg2_monster_effect_function as me_func
+from rpg2_constant_lists import List_Constants
+L = List_Constants()
 C = Constants()
 
 #function which creates a strong scaled monster
 def random_scaled_elite_monster(p_pc):
-        element_list = list(C.ELEMENTS_LIST)
-        name_list = list(C.MONSTER_NAMES_LIST)
+        element_list = list(L.ELEMENTS_LIST)
+        name_list = list(L.MONSTER_NAMES_LIST)
         element = element_list[random.randint(0, len(element_list)-1)]
         name = name_list[random.randint(0, len(name_list)-1)]
         health = random.randint(C.MONSTER_MAX_HP, C.MONSTER_MAX_HP * (p_pc.level + p_pc.atk))
@@ -24,8 +26,8 @@ def random_scaled_elite_monster(p_pc):
         return random_monster
 #function which create a strong monster
 def random_elite_monster():
-        element_list = list(C.ELEMENTS_LIST)
-        name_list = list(C.MONSTER_NAMES_LIST)
+        element_list = list(L.ELEMENTS_LIST)
+        name_list = list(L.MONSTER_NAMES_LIST)
         element = element_list[random.randint(0, len(element_list)-1)]
         name = name_list[random.randint(0, len(name_list)-1)]
         health = C.MONSTER_MAX_HP
@@ -37,8 +39,8 @@ def random_elite_monster():
         return random_monster
 #function which creates a monster
 def random_scaled_up_monster(p_pc):
-        element_list = list(C.ELEMENTS_LIST)
-        name_list = list(C.MONSTER_NAMES_LIST)
+        element_list = list(L.ELEMENTS_LIST)
+        name_list = list(L.MONSTER_NAMES_LIST)
         element = element_list[random.randint(0, len(element_list)-1)]
         name = name_list[random.randint(0, len(name_list)-1)]
         health = random.randint(C.MONSTER_SCALE_HP * p_pc.level, C.MONSTER_MAX_HP)
@@ -50,8 +52,8 @@ def random_scaled_up_monster(p_pc):
         return random_monster
 #function which creates a monster that scales to the player's level
 def random_scaled_monster(p_pc):
-        element_list = list(C.ELEMENTS_LIST)
-        name_list = list(C.MONSTER_NAMES_LIST)
+        element_list = list(L.ELEMENTS_LIST)
+        name_list = list(L.MONSTER_NAMES_LIST)
         element = element_list[random.randint(0, len(element_list)-1)]
         name = name_list[random.randint(0, len(name_list)-1)]
         health = random.randint(C.MONSTER_MIN_HP, C.MONSTER_SCALE_HP * p_pc.level)

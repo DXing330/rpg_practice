@@ -78,6 +78,10 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                         monster.stats()
                 for hero in h_p:
                         hero.stats()
+                for wpn in h_w:
+                        wpn.stats()
+                for amr in h_a:
+                        amr.stats()
                         
         elif check.upper() == "C":
                 if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.skill > 0:
@@ -152,14 +156,16 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                         p_pc.mana -= 1
                 elif p_pc.name == "Knight" and p_pc.skill > 0:
                         p_pc.defbonus += p_pc.level
-                        armor.defense += 1
-                        armor.effect += 1
+                        if armor != None:
+                                armor.defense += 1
+                                armor.strength += 1
                         p_pc.skill -= round(p_pc.defbonus/p_pc.level)
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Defender" and p_pc.skill > 0:
                         p_pc.defbonus += p_pc.level
-                        armor.defense += 1
-                        armor.effect += 1
+                        if armor != None:
+                                armor.defense += 1
+                                armor.strength += 1
                         p_pc.skill -= round(p_pc.defbonus/p_pc.level)
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Cleric" and p_pc.mana > 0 and p_pc.skill > 0:
@@ -188,7 +194,9 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                         print("The enemies stare at you as you try to run behind them. ")
 
         elif check.upper() == "P":
+                armor = party_func.check_equipment(p_pc, h_a)
                 if p_pc.name == "Knight":
+                        armor.user = "Defender"
                         p_pc.name = "Defender"
                         p_pc.defbonus += 1
                         print(p_pc.name, "gets ready to block. ")

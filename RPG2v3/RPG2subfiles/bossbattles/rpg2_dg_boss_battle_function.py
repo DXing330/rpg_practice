@@ -229,10 +229,12 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                         print(monster2.name, "descends from beside the throne. ")
                                         new_b_p.append(monster)
                                         new_b_p.append(monster2)
-                                        dg_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+                                        dg_phase_one(new_h_p, new_b_p, p_npc, ib_pc,
+                                                     s_pc, new_h_w, new_h_a)
                                 elif mon.name == "Demon General" and mon.health < (B.DEMON_GENERAL_HEALTH * (C.BUFF ** ib_pc.dg_trophy))/2:
                                         print("Enough! I'll deal with you myself! ")
-                                        dg_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+                                        dg_phase_two(new_h_p, new_b_p, p_npc, ib_pc,
+                                                     s_pc, new_h_w, new_h_a)
                                         
         if not bBattle:
                 #adjust the hp of the heroes after battles

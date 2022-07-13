@@ -22,6 +22,7 @@ def armor_effect(m_npc, p_pc, a_pc, h_p, m_p):
                         m_npc.health -= a_pc.strength + max(p_pc.skill - m_npc.skill, 0)
                         if m_npc.health <= 0:
                                 new_atk = 0
+                        print ("The spiky armor hurts", m_npc.name)
                 elif a_pc.effect == "Reflect":
                         m_npc.health -= (a_pc.strength * m_npc.atk) ** C.DECREASE_EXPONENT
                         print (a_pc.user, "reflects some of the energy from the attack of ",
@@ -30,7 +31,10 @@ def armor_effect(m_npc, p_pc, a_pc, h_p, m_p):
                         m_npc.poison += a_pc.strength
                         m_npc.health -= m_npc.poison
                         print (m_npc.name, "is poisoned from attacking", a_pc.user)
-
+                elif a_pc.effect == "Super Poison":
+                        m_npc.poison += a_pc.strength * C.INCREASE_EXPONENT
+                        m_npc.health -= m_npc.poison
+                        print (m_npc.name, "is poisoned from attacking", a_pc.user)
                 elif a_pc.effect == "Absorb":
                         p_pc.health += a_pc.strength
                         if a_pc.element == m_npc.element:
@@ -53,18 +57,28 @@ def armor_effect(m_npc, p_pc, a_pc, h_p, m_p):
                 elif a_pc.effect == "Resist Fire":
                         if m_npc.element == "Fire":
                                 new_atk = new_atk / C.ELEMENT_BONUS
+                                print (a_pc.user, "resists the attack of", m_npc.name)
                 elif a_pc.effect == "Resist Water":
                         if m_npc.element == "Water":
                                 new_atk = new_atk / C.ELEMENT_BONUS
+                                print (a_pc.user, "resists the attack of", m_npc.name)
                 elif a_pc.effect == "Resist Earth":
                         if m_npc.element == "Earth":
                                 new_atk = new_atk / C.ELEMENT_BONUS
+                                print (a_pc.user, "resists the attack of", m_npc.name)
                 elif a_pc.effect == "Resist Air":
                         if m_npc.element == "Air":
                                 new_atk = new_atk / C.ELEMENT_BONUS
+                                print (a_pc.user, "resists the attack of", m_npc.name)
                 elif a_pc.effect == "Resist Dark":
                         if m_npc.element == "Dark":
                                 new_atk = new_atk / C.ELEMENT_BONUS
+                                print (a_pc.user, "resists the attack of", m_npc.name)
+                elif a_pc.effect == "Revive":
+                        if new_atk - p_pc.defbonus - p_pc.defense >= p_pc.health and a_pc.strength > 0:
+                                new_atk = 0
+                                a_pc.strength -= p_pc.health
+                                print (a_pc.user, "narrowly escapes death. ")
                         
         return new_atk
 
@@ -75,10 +89,10 @@ def weapon_effect(m_npc, p_pc, w_pc, h_p, m_p):
                 new_atk = p_pc.atk + w_pc.atk
                 if w_pc.effect == "Attack":
                         new_atk += w_pc.strength
-                elif w_pc.effect == "Death":
+                elif w_pc.effect == "Death" and w_pc.element == "Dark":
                         x = random.randint(0, max(m_npc.health, m_npc.skill))
                         if x < w_pc.strength:
-                                new_atk += C.DEATH_ATK
+                                new_atk += min(C.DEATH_ATK, m_npc.health)
                                 print ("Death comes for", m_npc.name)
                 elif w_pc.effect == "Lifesteal":
                         x = max(p_pc.atk + p_pc.atkbonus + w_pc.atk - m_npc.defense, 0)
@@ -94,8 +108,12 @@ def weapon_effect(m_npc, p_pc, w_pc, h_p, m_p):
                         m_npc.poison += w_pc.strength
                         m_npc.health -= m_npc.poison
                         print (w_pc.user, "poisons", m_npc.name)
+                elif w_pc.effect == "Super Poison":
+                        m_npc.poison += w_pc.strength * C.INCREASE_EXPONENT
+                        m_npc.health -= m_npc.poison
+                        print (w_pc.user, "poisons", m_npc.name)
                 elif w_pc.effect == "Lucky":
-                        x = random.randint(0, m_npc.skill ** C.INCREASE_EXPONENT)
+                        x = random.randint(0, m_npc.skill)
                         if x <= w_pc.strength:
                                 new_atk = (p_pc.atk + p_pc.atkbonus) * C.CRIT
                                 print (w_pc.user, "gets a lucky critical hit! ")
@@ -108,18 +126,23 @@ def weapon_effect(m_npc, p_pc, w_pc, h_p, m_p):
                                 print (w_pc.user, "drains the energy of ", m_npc.name)
                 elif w_pc.effect == "Slay Fire":
                         if m_npc.element == "Fire":
-                                new_atk = new_atk * C.ELEMENT_BONUS
+                                new_atk = (p_pc.atk + p_pc.atkbonus)  * C.ELEMENT_BONUS
+                                print (w_pc.user, "performs a super effective hit against", m_npc.name)
                 elif w_pc.effect == "Slay Water":
                         if m_npc.element == "Water":
-                                new_atk = new_atk * C.ELEMENT_BONUS
+                                new_atk = (p_pc.atk + p_pc.atkbonus) * C.ELEMENT_BONUS
+                                print (w_pc.user, "performs a super effective hit against", m_npc.name)
                 elif w_pc.effect == "Slay Earth":
                         if m_npc.element == "Earth":
-                                new_atk = new_atk * C.ELEMENT_BONUS
+                                new_atk = (p_pc.atk + p_pc.atkbonus) * C.ELEMENT_BONUS
+                                print (w_pc.user, "performs a super effective hit against", m_npc.name)
                 elif w_pc.effect == "Slay Air":
                         if m_npc.element == "Air":
-                                new_atk = new_atk * C.ELEMENT_BONUS
+                                new_atk = (p_pc.atk + p_pc.atkbonus) * C.ELEMENT_BONUS
+                                print (w_pc.user, "performs a super effective hit against", m_npc.name)
                 elif w_pc.effect == "Slay Dark":
                         if m_npc.element == "Dark":
-                                new_atk = new_atk * C.ELEMENT_BONUS
+                                new_atk = (p_pc.atk + p_pc.atkbonus) * C.ELEMENT_BONUS
+                                print (w_pc.user, "performs a super effective hit against", m_npc.name)
                                 
         return new_atk

@@ -7,12 +7,14 @@ from rpg2_constants import Constants
 import rpg2_element_function as element_func
 import rpg2_equipment_effect_function as ee_func
 import rpg2_party_management_functions as party_func
+from rpg2_constant_lists import List_Constants
+L = List_Constants()
 C = Constants()
 monsterList = ["Fire", "Water", "Air", "Earth", "Dark",
                "Demon", "Slime", "Skeleton", "Beast", "Elemental", "Troll"]
 #function that checks what kind of passives a monster has
 def monster_passive_effect(m_npc, p_pc, h_p, m_p):
-        for passive in C.MONSTER_PASSIVE_LIST:
+        for passive in L.MONSTER_PASSIVE_LIST:
                 if passive in m_npc.name:
                         if passive == "Fire":
                                 p_pc.health -= m_npc.skill

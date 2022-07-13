@@ -12,10 +12,12 @@ import rpg2_monster_function as monster_func
 import rpg2_battle_phase_function as battle_func
 import rpg2_mage_tower_function as magetower_func
 import rpg2_save_function as save_func
-import rpg2_quest_function as quest_func
+import rpg2_random_boss_function as boss_func
 import rpg2_monster_hunter_guild as mh_func
 from rpg2_constants import Constants
 C = Constants()
+from rpg2_constant_lists import List_Constants
+L = List_Constants()
 
 ##game where you will control a party of heroes who fight against monsters
 ##booleans
@@ -117,9 +119,9 @@ while bGame:
                                          heroes_weapons, heroes_armor)
         elif check.upper() == "L":
                 print ("Travelers?! You look strong. Please, can you help us? ")
-                quest_func.quest(heroes_party, monster_party,
-                                 hero_pet, heroes_bag, heroes_magic,
-                                 heroes_weapons, heroes_armor)
+                boss_func.random_boss(heroes_party, monster_party,
+                                      hero_pet, heroes_bag, heroes_magic,
+                                      heroes_weapons, heroes_armor)
         elif check.upper() == "M":
                 magetower_func.mage_tower(heroes_party, hero_pet,
                                           heroes_bag, heroes_magic,

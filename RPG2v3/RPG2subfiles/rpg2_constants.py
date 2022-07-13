@@ -1,3 +1,7 @@
+import sys
+sys.path.append(".")
+from rpg2_constant_lists import List_Constants
+L = List_Constants()
 class Constants:
      def __init__(self):
              ##constants
@@ -32,34 +36,15 @@ class Constants:
              #how much the pet buff affects atk
              self.PET_ATK_BUFF = 0.5
              #how much the pet buff affects defense
-             self.PET_DEF_BUFF = 0.33
+             self.PET_DEF_BUFF = 0.34
              #how much the pet buff affects skill
              self.PET_SKILL_BUFF = 0.25
              #base price for weapons
              self.WEAPON_PRICE = 10
              #base price for armor
              self.ARMOR_PRICE = 30
-             #list of basic effects for equipment
-             self.BASIC_ARMOR_EFFECT_LIST = ["Block", "Thorns",
-                                             "Reflect", "Poison",
-                                             "Absorb"]
-             self.BASIC_WEAPON_EFFECT_LIST = ["Attack", "Lifesteal",
-                                              "Poison", "Lucky"]
-             #types of elements
-             self.ELEMENTS_LIST = ["Fire", "Water", "Earth",
-                                   "Air", "Dark"]
-             self.FULL_ELEMENTS_LIST = ["Fire", "Water", "Earth",
-                                        "Air", "Light", "Dark"]
              #element bonus
              self.ELEMENT_BONUS = 2
-             #types of monsters
-             self.MONSTER_NAMES_LIST = ["Demon", "Slime", "Skeleton",
-                                        "Beast", "Elemental", "Troll"]
-             #list of all possible effects a monster can have
-             self.MONSTER_PASSIVE_LIST = ["Fire", "Water", "Air",
-                                          "Earth", "Dark", "Demon",
-                                          "Slime", "Skeleton", "Beast",
-                                          "Elemental", "Troll"]
              #potential health increase per level for basic monster
              self.MONSTER_SCALE_HP = 20
              #max health for basic monster

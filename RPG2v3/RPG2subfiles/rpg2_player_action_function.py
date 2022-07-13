@@ -79,7 +79,7 @@ def player_attack(p_pc, m_npc, h_w, h_p, m_p):
                 print(p_pc.name, "hits", m_npc.name)
         #if defender attacks then they can no longer block incoming attacks
         elif p_pc.name == "Defender":
-                m_npc.health -= max((new_atk + p_pc.armor + p_pc.defense - m_npc.defense),1)
+                m_npc.health -= max((new_atk + p_pc.defense - m_npc.defense),1)
                 p_pc.name = "Knight"
                 print (p_pc.name, "bashes", m_npc.name, "with their shield. ")
         else:
