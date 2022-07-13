@@ -44,7 +44,7 @@ class Constants:
                                              "Reflect", "Poison",
                                              "Absorb"]
              self.BASIC_WEAPON_EFFECT_LIST = ["Attack", "Lifesteal",
-                                              "Poison", "Lucky"]
+                                              "Poison"]
              #types of elements
              self.ELEMENTS_LIST = ["Fire", "Water", "Earth",
                                    "Air", "Dark"]

@@ -30,32 +30,36 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                         print("ATTACK, HEAL, BUFF, DEBUFF? ")
                         choice = input("A/B/D/H? ")
                         if choice.upper() == "A":
-                                atkgolem = Player_PC("Golem", 1, p_pc.skill, p_pc.skill, p_pc.skill, 0, 0, 0)
+                                atkgolem = Player_PC("Golem", 1, p_pc.skill,
+                                                     p_pc.skill, p_pc.skill, 0, 0, 0)
                                 totem = copy.copy(atkgolem)
                                 h_p.append(totem)
-                                p_pc.skill -= 1
-                                p_pc.mana -= 1
+                                p_pc.skill -= len(h_p)
+                                p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons an attacking totem. ")
                         elif choice.upper() == "B":
-                                bufgolem = Player_PC("Golem", 1, p_pc.skill, p_pc.skill, 0, 0, p_pc.skill, 0)
+                                bufgolem = Player_PC("Golem", 1, p_pc.skill,
+                                                     p_pc.skill, 0, 0, p_pc.skill, 0)
                                 totem = copy.copy(bufgolem)
                                 h_p.append(totem)
-                                p_pc.skill -= 1
-                                p_pc.mana -= 1
+                                p_pc.skill -= len(h_p)
+                                p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons a buffing totem. ")
                         elif choice.upper() == "D":
-                                debufgolem = Player_PC("Golem", 1, p_pc.skill, p_pc.skill, 0, 0, 0, p_pc.skill)
+                                debufgolem = Player_PC("Golem", 1, p_pc.skill,
+                                                       p_pc.skill, 0, 0, 0, p_pc.skill)
                                 totem = copy.copy(debufgolem)
                                 h_p.append(totem)
-                                p_pc.skill -= 1
-                                p_pc.mana -= 1
+                                p_pc.skill -= len(h_p)
+                                p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons a debuffing totem. ")
                         elif choice.upper() == "H":
-                                healgolem = Player_PC("Golem", 1, p_pc.skill, p_pc.skill, 0, p_pc.skill, 0, 0)
+                                healgolem = Player_PC("Golem", 1, p_pc.skill,
+                                                      p_pc.skill, 0, p_pc.skill, 0, 0)
                                 totem = copy.copy(healgolem)
                                 h_p.append(totem)
-                                p_pc.skill -= 1
-                                p_pc.mana -= 1
+                                p_pc.skill -= len(h_p)
+                                p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons a healing totem. ")
                         else:
                                 print("You don't know how to make that kind of golem. ")
@@ -97,8 +101,8 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
         elif check.upper() == "H":
                 if p_pc.name == "Cleric":
                         hero = party_func.pick_hero(h_p)
-                        hero.health += max(p_pc.mana+p_pc.skill+p_pc.level, p_pc.level + hero.level)
-                        hero.poison -= min(p_pc.skill+p_pc.level, hero.poison)
+                        hero.health += p_pc.mana + p_pc.skill + p_pc.level + hero.level
+                        hero.poison -= min(p_pc.skill + p_pc.level, hero.poison)
                         print (p_pc.name, "heals", hero.name)
                 elif p_pc.name == "Ninja" and p_pc.weapon > 0:
                         print (p_pc.name, "throws away his weapon and disappears into the shadows.")
@@ -124,7 +128,15 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                                 p_pc.mana -= 1
                         else:
                                 print (monster.name, "out-skills", p_pc.name)
-                elif p_pc.name == "Cleric":
+                elif p_pc.name == "Knight" or p_pc.name == "Defender":
+                        monster = party_func.pick_monster(m_p)
+                        if p_pc.skill > 0:
+                                monster.defense -= min(p_pc.skill, monster.defense)
+                                print (p_pc.name, "taunts", monster.name)
+                        else:
+                                print (p_pc.name, "taunts", monster.name)
+                                print (monster.name, "ignores the taunt. ")
+                elif p_pc.name == "Cleric" and p_pc.skill > 0:
                         monster = party_func.pick_monster(m_p)
                         monster.atk = max((monster.atk-p_pc.mana-p_pc.skill),0)
                         p_pc.mana -= 1
@@ -133,53 +145,49 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                 else:
                         print("Nothing happens.")
         elif check.upper() == "B":
-                armor = Armor_PC("None", "None", "None", 0, "None", 0)
-                for amr in h_a:
-                        if amr.user == p_pc.name:
-                                armor = amr
+                armor = party_func.check_equipment(p_pc, h_a)
                 if p_pc.name == "Ninja" and p_pc.mana > 0:
                         p_pc.skill = round(p_pc.skill * C.BUFF)
                         print (p_pc.name, "sharpens their senses. ")
                         p_pc.mana -= 1
                 elif p_pc.name == "Knight" and p_pc.skill > 0:
                         p_pc.defbonus += p_pc.level
-                        armor.defense += p_pc.level
+                        armor.defense += 1
                         armor.effect += 1
-                        p_pc.skill -= 1
+                        p_pc.skill -= round(p_pc.defbonus/p_pc.level)
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Defender" and p_pc.skill > 0:
                         p_pc.defbonus += p_pc.level
-                        armor.defense += p_pc.level
+                        armor.defense += 1
                         armor.effect += 1
-                        p_pc.skill -= 1
+                        p_pc.skill -= round(p_pc.defbonus/p_pc.level)
                         print (p_pc.name, "fortifies their position. ")
                 elif p_pc.name == "Cleric" and p_pc.mana > 0 and p_pc.skill > 0:
                         hero = party_func.pick_hero(h_p)
-                        hero.atkbonus += p_pc.mana+p_pc.skill
+                        p_pc.skill -= round(hero.atkbonus/(p_pc.level + p_pc.skill))
+                        hero.atkbonus += p_pc.level + p_pc.skill
                         p_pc.mana -= 1
-                        p_pc.skill -= 1
                         print ("Holy light surrounds", hero.name)
                 else:
-                        print("Nothing happens.")
+                        if p_pc.skill > round(p_pc.atkbonus/p_pc.level):
+                                p_pc.skill -= round(p_pc.atkbonus/p_pc.level)
+                                p_pc.atkbonus += p_pc.level
+                                print (p_pc.name, "focuses")
+                        else:
+                                print ("Nothing happens. ")
                         
         elif check.upper() == "S":
-                weapon = Weapon_PC("None", "None", "None", 0, "None", 0)
-                for wpn in h_w:
-                        if wpn.user == p_pc.name:
-                                weapon = wpn
+                weapon = party_func.check_equipment(p_pc, h_w)
                 if p_pc.name == "Ninja":
                         monster = party_func.pick_monster(m_p)
-                        monster.health -= p_pc.atk + (p_pc.skill * wpn.atk)
+                        monster.health -= p_pc.atk + (p_pc.skill * weapon.atk)
                         print (p_pc.name, "appears behind", monster.name, "and strikes.")
                         p_pc.skill -= max((monster.skill + monster.defense), p_pc.skill)
+                        weapon.atk = 0
                 else:
                         print("The enemies stare at you as you try to run behind them. ")
 
         elif check.upper() == "P":
-                armor = Armor_PC("None", "None", "None", 0, "None", 0)
-                for amr in h_a:
-                        if amr.user == p_pc.name:
-                                armor = amr
                 if p_pc.name == "Knight":
                         p_pc.name = "Defender"
                         p_pc.defbonus += 1
@@ -195,14 +203,13 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                         print("DIVINE JUDGEMENT STRIKES YOUR FOES")
                         for monster in m_p:
                                 monster.health -= (p_pc.mana + p_pc.skill + p_pc.level)
-                        p_pc.mana = round(p_pc.mana/(C.BUFF ** len(m_p)))
                 else:
                         print("The heavens ignore your call.")
 
         elif check.upper() == "W":
                 if p_pc.name == "Mage" and p_pc.level == C.LEVEL_LIMIT:
-                        p_pc.health -= (p_pc.mana - p_pc.skill)
-                        for x in range(1, len(m_p)):
+                        p_pc.health -= max((p_pc.mana - p_pc.skill), len(m_p))
+                        for x in range(0, len(m_p)):
                                 monster = party_func.pick_random_healthy_monster(m_p)
                                 monster.health -= (p_pc.mana + p_pc.level)
                                 print("The magic flows wildly and hits", monster.name)

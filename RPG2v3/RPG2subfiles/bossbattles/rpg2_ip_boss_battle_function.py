@@ -1,9 +1,13 @@
 import random
 import copy
 import sys
-sys.path.append("/Users/draco/Documents/RPG/RPG2/RPG2subfiles")
-from rpg2_classdefinitions import (Player_PC, Monster_NPC,
-                                   Pet_NPC, ItemBag_PC, Spell_PC, Statuses_NPC)
+sys.path.append("/Users/draco/Documents/RPG/RPG2v3/RPG2subfiles")
+from rpg2_classdefinitions import (Player_PC, Monster_NPC, Pet_NPC,
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
+import rpg2_element_function as element_func
+import rpg2_equipment_effect_function as ee_func
+import rpg2_monster_function as monster_func
 import rpg2_player_action_function as player_func
 import rpg2_party_management_functions as party_func
 from rpg2_constants import Constants
@@ -11,13 +15,14 @@ C = Constants()
 from rpg2_boss_constants import BOSS_CONSTANTS
 B = BOSS_CONSTANTS()
 #this is the boss
-#it's special thing is resurrecting itself
+#its special thing is resurrecting itself
 I_P = Monster_NPC("Cryo Phoenix", B.I_P_HEALTH, B.I_P_ATK,
                            B.I_P_DEF, B.I_P_SKL, "Dark",
                            B.I_P_DC)
 b_p = []
 
 #phoenix maker function
+#as the phoenix runs out of lives it grows stronger
 def rebirth(x, ib_pc):
         monster = Monster_NPC("Cryo Phoenix",
                               round(B.I_P_HEALTH * (C.BUFF ** ib_pc.ip_trophy)),
@@ -30,9 +35,9 @@ def rebirth(x, ib_pc):
         
 #egg maker function
 def egg_maker(x, ib_pc):
-        hp = round(B.I_P_HEALTH * (x + 1) * (C.BUFF ** ib_pc.ip_trophy))
+        hp = round(B.I_P_HEALTH * (1 + B.I_P_L - x) * (C.BUFF ** ib_pc.ip_trophy))
         atk = 0
-        defense = round(B.I_P_DEF * (x + 1) * (C.BUFF ** ib_pc.ip_trophy))
+        defense = round(B.I_P_DEF * (1 + B.I_P_L - x) * (C.BUFF ** ib_pc.ip_trophy))
         skl = 0
         dc = B.I_P_DC
         egg = Monster_NPC("Frozen Egg", hp, atk, defense, skl, "Dark", dc)
@@ -49,7 +54,7 @@ def pick_random_hero(h_p):
 def egg_action(m_npc, x, b_p, ib_pc):
         print ("The egg seems to shake a little. ")
         m_npc.skill += 1
-        if m_npc.skill >= x + 1:
+        if m_npc.skill >= (1 + B.I_P_L - x) + 1:
                 b_p.remove(m_npc)
                 monster = rebirth(x, ib_pc)
                 b_p.append(monster)
@@ -57,7 +62,11 @@ def egg_action(m_npc, x, b_p, ib_pc):
                 print ("The egg shatters and the Cryo Phoenix emerges! ")
 
 #phoenix actions
-def ip_battle_action(m_npc, h_p, x):
+def ip_battle_action(m_npc, h_p, x, h_a):
+        hero = party_func.pick_random_healthy_hero(h_p)
+        armor = party_func.check_equipment(hero, h_a)
+        new_atk = ee_func.armor_effect(m_npc, hero, armor, h_p, b_p)
+        new_m_atk = element_func.check_element_monster_attack(m_npc, new_atk, armor)
         print("The icy storm rages! ")
         m_npc.atk += m_npc.skill
         m_npc.defense += m_npc.skill
@@ -65,21 +74,17 @@ def ip_battle_action(m_npc, h_p, x):
                 hero.health -= m_npc.skill
                 hero.atkbonus -= min(m_npc.skill, hero.atkbonus)
                 hero.defbonus -= min(m_npc.skill, hero.defbonus)
-                hero.atk -= min(m_npc.skill, hero.atk)
-                hero.defense -= min(m_npc.skill, hero.defense)
-                hero.skill -= min(m_npc.skill, hero.skill)
         fhero = pick_random_hero(h_p)
         if fhero == None:
                 print (m_npc.name, "releases a victorious cry! ")
         else:
                 fhero.poison += 1
                 print (m_npc.name, "freezes", fhero.name)
-        hero = party_func.pick_random_healthy_hero(h_p)
-        hero.health -= max(m_npc.atk - hero.defense - hero.defbonus - hero.armor, 1)
+        hero.health -= max(new_m_atk - hero.defense - hero.defbonus, 1)
         print (m_npc.name, "attacks", hero.name)
         
 #phase one
-def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc):
+def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
         lives = B.I_P_L
         bPhase = True
         while bPhase:
@@ -99,14 +104,15 @@ def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc):
                                 elif hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc)
+                                                                  ib_pc, s_pc, p_npc,
+                                                                  h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
                                         
                         player_func.pet_action(p_npc, h_p, b_p)
                         for mon in b_p:
                                 if mon.name == "Cryo Phoenix" and mon.health > 0:
-                                        ip_battle_action(mon, h_p, lives)
+                                        ip_battle_action(mon, h_p, lives, h_a)
                                 elif mon.name == "Frozen Egg" and mon.health > 0:
                                         egg_action(mon, lives, b_p, ib_pc)
                 for mon in b_p:
@@ -135,16 +141,24 @@ def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc):
                         
 
 #phases will change according to boss hp                                              
-def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
+def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
         #make a copies of the party as usual
         b_p = []
         Cryo_Phoenix = copy.copy(I_P)
         Cryo_Phoenix.health = round(Cryo_Phoenix.health * (C.BUFF ** ib_pc.ip_trophy))
         b_p.append(Cryo_Phoenix)
         new_h_p = []
+        new_h_w = []
+        new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for wpn in h_w:
+                copy_weapon = copy.copy(wpn)
+                new_h_w.append(copy_weapon)
+        for amr in h_a:
+                copy_armor = copy.copy(amr)
+                new_h_a.append(copy_armor)
         new_b_p = copy.copy(b_p)
         #boolean to loop the battle phase until it finishes
         bBattle = True
@@ -175,5 +189,21 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
                         print ("The heroes make their way down the mountain. ")
                         break
                 else:
-                        print ("The air grows colder around you. ")
-                        ip_battle(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
+                        for mon in new_b_p:
+                                if mon.name == "Cryo Phoenix" and mon.health > 0:
+                                        print ("The air grows colder around you. ")
+                                        ip_battle(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+
+        if not bBattle:
+                #adjust the hp of the heroes after battles
+                for hero in h_p:
+                        check = None
+                        for heero in new_h_p:
+                                if hero.name == heero.name:
+                                        check = heero
+                        #if there is no matching hero then the hero's health goes to zero
+                        if check == None:
+                                hero.health = 0
+                        #if there is a matching hero then the hero's health becomes equal
+                        elif check != None:
+                                hero.health = min(check.health, hero.maxhealth)

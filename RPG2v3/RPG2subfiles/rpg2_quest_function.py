@@ -19,12 +19,12 @@ def quest_difficulty(ib_pc):
         x = 0
         if ib_pc.dg_trophy > 0:
                 x = 1
-        if ib_pc.gs_trophy > 0:
+        '''if ib_pc.gs_trophy > 0:
                 x = 2
         if ib_pc.ah_trophy > 0:
                 x = 3
         if ib_pc.sq_trophy > 0:
-                x = 4
+                x = 4'''
         return x
 #dgboss_func.boss_battle_phase(heroes_party, monster_party,
 #                              hero_pet, heroes_bag, heroes_magic)

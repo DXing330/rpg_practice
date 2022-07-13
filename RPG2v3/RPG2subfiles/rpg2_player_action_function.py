@@ -20,8 +20,8 @@ def pet_action(p_npc, h_p, m_p):
                         pet_func.pet_random_action(p_npc, h_p, m_p)
                 elif hero.name == "Hero":
                         hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
-                        hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
-                        hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                        hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                        hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                         hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                         hero.poison -= min(p_npc.stage, hero.poison)
                         print (p_npc.name, "uses their blessing magic on", hero.name)                        
@@ -33,8 +33,8 @@ def pet_action(p_npc, h_p, m_p):
                         elif hero.skill > 0:
                                 hero = party_func.pet_pick_random_healthy_hero(h_p)
                                 hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
-                                hero.atk += round(p_npc.atk ** C.PET_ATK_BUFF)
-                                hero.defense += round(p_npc.atk ** C.PET_DEF_BUFF)
+                                hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                                hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                                 hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                                 print (p_npc.name, "uses their blessing magic on", hero.name)
                         elif hero.defense > 0:
@@ -55,23 +55,26 @@ def pet_action(p_npc, h_p, m_p):
 
 #player attack function
 def player_attack(p_pc, m_npc, h_w, h_p, m_p):
-        weapon = Weapon_PC("None", "None", "None", 0, "None", 0)
-        for wpn in h_w:
-                if wpn.user == p_pc.name:
-                        weapon = wpn
+        weapon = party_func.check_equipment(p_pc, h_w)
         new_pa = ee_func.weapon_effect(m_npc, p_pc, weapon, h_p, m_p)
         new_atk = element_func.check_element_player_attack(p_pc, new_pa, m_npc, weapon)
         #warrior hits more often
         if p_pc.name == "Warrior" and p_pc.level == C.LEVEL_LIMIT:
                 m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
+                new_pa = ee_func.weapon_effect(m_npc, p_pc, weapon, h_p, m_p)
+                new_atk = element_func.check_element_player_attack(p_pc, new_pa, m_npc, weapon)
                 m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
+                new_pa = ee_func.weapon_effect(m_npc, p_pc, weapon, h_p, m_p)
+                new_atk = element_func.check_element_player_attack(p_pc, new_pa, m_npc, weapon)
                 m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
         elif p_pc.name == "Warrior" or p_pc.name == "Hero":
                 m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
+                new_pa = ee_func.weapon_effect(m_npc, p_pc, weapon, h_p, m_p)
+                new_atk = element_func.check_element_player_attack(p_pc, new_pa, m_npc, weapon)
                 m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
         #if defender attacks then they can no longer block incoming attacks
@@ -175,11 +178,12 @@ def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
         elif check.upper() == "S":
                 pskill_func.use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a)
         elif check.upper() == "P":
-                p_pc.health += p_pc.level + p_pc.skill
+                p_pc.health += p_pc.level
+                p_pc.atkbonus += 1
                 print("A warm and gentle breeze soothes your soul. ")
                 if p_pc.name == "Cleric":
                         p_pc.mana += 1
-                        p_pc.defense += 1
+                        p_pc.defbonus += 1
                         p_pc.poison -= min(p_pc.level, p_pc.poison)
                         print("Holy light envelops you. ")
         else:

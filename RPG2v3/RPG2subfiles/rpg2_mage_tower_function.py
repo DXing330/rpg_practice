@@ -220,12 +220,7 @@ def summoning_fields(h_p, p_npc, ib_pc):
         if p_npc.atk == 0:
                 print ("Looks like you need to summon a new ally.")
                 for hero in h_p:
-                        if hero.name == 'Summoner':
-                                print ("Here you go, take good care of it.")
-                                p_npc.name = "Angel"
-                                p_npc.stage = 1
-                                p_npc.atk = 2
-                        elif hero.name == "Hero":
+                        if hero.name == 'Summoner' or hero.name == "Hero":
                                 print ("Here you go, take good care of it.")
                                 p_npc.name = "Angel"
                                 p_npc.stage = 1
@@ -244,6 +239,7 @@ def summoning_fields(h_p, p_npc, ib_pc):
                         if choice.upper() == "Y" and ib_pc.coins >= p_npc.atk ** p_npc.stage:
                                 ib_pc.coins -= p_npc.atk ** p_npc.stage
                                 lvlup_func.stage_up(p_npc)
+                                summoning_fields(h_p, p_npc, ib_pc)
                                 print ("Whew, channelling spiritual power always tires me out.")
                                 print ("Your ally looks much stronger now.")
                         else:

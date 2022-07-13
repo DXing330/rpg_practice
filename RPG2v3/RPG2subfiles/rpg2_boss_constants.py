@@ -16,14 +16,14 @@ class BOSS_CONSTANTS:
                 self.DEMON_LORD_ATK = 200
                 self.DEMON_LORD_DEFENSE = 60
                 self.DEMON_LORD_SKILL = 20
-                self.DEMON_LORD_DROPCHANCE = 100000
+                self.DEMON_LORD_DROPCHANCE = 50000
                 self.D_L_SPAWN = 10
-                self.GOLDEN_SLIME_HEALTH = 100000
-                self.G_S_H = 100000
+                self.GOLDEN_SLIME_HEALTH = 50000
+                self.G_S_H = self.GOLDEN_SLIME_HEALTH
                 self.GOLDEN_SLIME_ATK = 0
                 self.GOLDEN_SLIME_DEFENSE = 0 
                 self.GOLDEN_SLIME_SKILL = 0
-                self.GOLDEN_SLIME_DROPCHANCE = 500000
+                self.GOLDEN_SLIME_DROPCHANCE = 100000
                 self.G_S_EXECUTE_TIMER = 20
                 self.G_S_DC_DOWN = 1000
                 self.ACID_HYDRA_HEALTH = 5000
@@ -31,7 +31,7 @@ class BOSS_CONSTANTS:
                 self.A_H_ATK = 1
                 self.A_H_DEF = 1
                 self.A_H_SKL = 1
-                self.A_H_DC = 1
+                self.A_H_DC = 0.5
                 self.A_H_DC_UP = 1.2
                 self.ADVANCED_SPAWN = 10
                 #succubus queen
@@ -39,7 +39,7 @@ class BOSS_CONSTANTS:
                 self.S_Q_ATK = 100
                 self.S_Q_DEF = 50
                 self.S_Q_SKL = 15
-                self.S_Q_DC = 200000
+                self.S_Q_DC = 50000
                 #when the sq enrages
                 self.S_Q_HPBP = 0.25
                 #ice phoenix
@@ -47,5 +47,5 @@ class BOSS_CONSTANTS:
                 self.I_P_ATK = 100
                 self.I_P_DEF = 50
                 self.I_P_SKL = 1
-                self.I_P_DC = 200000
+                self.I_P_DC = 50000
                 self.I_P_L = 3

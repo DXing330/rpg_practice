@@ -5,17 +5,15 @@ sys.path.append(".")
 from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
                                    ItemBag_PC, Spell_PC, Weapon_PC,
                                    Armor_PC)
-import rpg2_monster_function_elements as monster_func
+import rpg2_monster_function as monster_func
 import rpg2_player_action_function as player_func
 import rpg2_party_management_functions as party_func
+import rpg2_drop_table as drop_func
 
 #function that controls the monster drops after the battle phase
-def drop_step(ib_pc, m_p):
-        coins = 0
-        for monster in m_p:
-                coins += monster.dropchance
-        ib_pc.coins += coins
-        print ("You found", coins, "coins.")
+def drop_step(ib_pc, m_p, h_w, h_a):
+        for mon in m_p:
+                drop_func.drop_table(mon, ib_pc, h_w, h_a)
         #then clear the monster party list for the next fight
         while len(m_p) > 0:
                 m_p.pop(0)
@@ -91,5 +89,5 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         #if there is a matching hero then the hero's health becomes equal
                         elif check != None:
                                 hero.health = min(check.health, hero.maxhealth)
-                drop_step(ib_pc, m_p)
+                drop_step(ib_pc, m_p, h_w, h_a)
 

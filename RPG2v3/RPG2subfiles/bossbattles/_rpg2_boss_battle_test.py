@@ -1,9 +1,13 @@
 import random
 import copy
 import sys
-sys.path.append("/Users/draco/Documents/RPG/RPG2/RPG2subfiles")
-from rpg2_classdefinitions import (Player_PC, Monster_NPC,
-                                   Pet_NPC, ItemBag_PC, Spell_PC, Statuses_NPC)
+sys.path.append("/Users/draco/Documents/RPG/RPG2v3/RPG2subfiles")
+from rpg2_classdefinitions import (Player_PC, Monster_NPC, Pet_NPC,
+                                   ItemBag_PC, Spell_PC, Weapon_PC,
+                                   Armor_PC)
+import rpg2_element_function as element_func
+import rpg2_equipment_effect_function as ee_func
+import rpg2_monster_function as monster_func
 import rpg2_player_action_function as player_func
 import rpg2_party_management_functions as party_func
 from rpg2_constants import Constants
@@ -11,187 +15,242 @@ C = Constants()
 from rpg2_boss_constants import BOSS_CONSTANTS
 B = BOSS_CONSTANTS()
 #this is the boss
-#it's special thing is resurrecting itself
-I_P = Monster_NPC("Cryo Phoenix", B.I_P_HEALTH, B.I_P_ATK,
-                           B.I_P_DEF, B.I_P_SKL, "Dark",
-                           B.I_P_DC)
+G_S = Monster_NPC("Golden Slime", B.GOLDEN_SLIME_HEALTH, B.GOLDEN_SLIME_ATK,
+                           B.GOLDEN_SLIME_DEFENSE, B.GOLDEN_SLIME_SKILL, "Water",
+                           B.GOLDEN_SLIME_DROPCHANCE)
 b_p = []
-
-#phoenix maker function
-def rebirth(x, ib_pc):
-        monster = Monster_NPC("Cryo Phoenix",
-                              round(B.I_P_HEALTH * (C.BUFF ** ib_pc.ip_trophy)),
-                              B.I_P_ATK * (1 + B.I_P_L - x),
-                              B.I_P_DEF * (1 + B.I_P_L - x),
-                              (1 + B.I_P_L - x) ** 2,
-                              "Dark",
-                              B.I_P_DC)
+#smaller slime monster maker
+def baby_slime_spawn():
+        monster = Monster_NPC("Baby Golden Slime", C.MONSTER_MAX_HP/2, 0, 0, 0, "Water", 0)
         return monster
-        
-#egg maker function
-def egg_maker(x, ib_pc):
-        hp = round(B.I_P_HEALTH * (x + 1) * (C.BUFF ** ib_pc.ip_trophy))
-        atk = 0
-        defense = round(B.I_P_DEF * (x + 1) * (C.BUFF ** ib_pc.ip_trophy))
-        skl = 0
-        dc = B.I_P_DC
-        egg = Monster_NPC("Frozen Egg", hp, atk, defense, skl, "Dark", dc)
-        return egg
-#function which picks a hero
-def pick_random_hero(h_p):
-        if len(h_p) > 0:
-                x = random.randint(0, (len(h_p) - 1))
-                hero = h_p[x]
-        else:
-                hero = None
-        return hero
-#egg actions
-def egg_action(m_npc, x, b_p, ib_pc):
-        print ("The egg seems to shake a little. ")
-        m_npc.skill += 1
-        if m_npc.skill >= x + 1:
-                b_p.remove(m_npc)
-                monster = rebirth(x, ib_pc)
-                b_p.append(monster)
-                print ("The egg cracks! ")
-                print ("The egg shatters and the Cryo Phoenix emerges! ")
+#slime monster maker function
+def slime_spawn():
+        monster = Monster_NPC("Mini Golden Slime", C.MONSTER_MAX_HP, 0, 0, 0, "Water", 0)
+        return monster
+#slime monster actions
+def gs_slime_action(m_npc, h_p, m_p):
+        #slime chooses from a random pool of actions
+        x = random.randint(0, 3)
+        #the slime can regenerate by absorbing gold from the Golden Slime
+        if x == 0:
+                for mon in m_p:
+                        mon.dropchance -= B.G_S_DC_DOWN
+                m_npc.health += m_npc.health
+                print (m_npc.name, "absorbs some gold. ")
+        #the slime can split into two slimes
+        elif x == 1:
+                m_npc.health = round(m_npc.health * 0.5)
+                mon = copy.copy(m_npc)
+                m_p.append(mon)
+                print (m_npc.name, "copies itself. ")
+        #the slime can explode, hurting the heroes
+        elif x == 2:
+                for hero in h_p:
+                        hero.health -= max((m_npc.health - hero.defense -
+                                            hero.defbonus - hero.skill), 0)
+                print(m_npc.name, "explodes.")
+                m_npc.health = 0
+        elif x == 3:
+                print(m_npc.name, "bounces and wiggles around. ")
+#phase one actions
+def gs_phase_one_action(m_npc, h_p, b_p, ib_pc):
+        #if the players wait too long to set up then the slime will bounce
+        if m_npc.health >= B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.9 and m_npc.skill >= B.G_S_EXECUTE_TIMER:
+                for hero in h_p:
+                        hero.health -= m_npc.dropchance + m_npc.health
+                print(m_npc.name, "bounces! ")
+                print("The wave of gold consumes everything nearby. ")
+        #every turn the slime remains about 90% hp its timer increases
+        elif m_npc.health >= B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.9:
+                m_npc.skill += 1
+                print(m_npc.name, "seems to wiggle. ")
+        #otherwise the slime will spawn other slimes
+        elif B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.5 <= m_npc.health < B.G_S_H * (C.BUFF ** ib_pc.gs_trophy) * 0.9:
+                mon = slime_spawn()
+                b_p.append(mon)
+                m_npc.dropchance -= B.G_S_DC_DOWN
+                m_npc.health -= B.G_S_DC_DOWN
+                print(mon.name, "splits off from", m_npc.name)
 
-#phoenix actions
-def ip_battle_action(m_npc, h_p, x):
-        print("The icy storm rages! ")
-        m_npc.atk += m_npc.skill
-        m_npc.defense += m_npc.skill
-        for hero in h_p:
-                hero.health -= m_npc.skill
-                hero.atkbonus -= min(m_npc.skill, hero.atkbonus)
-                hero.defbonus -= min(m_npc.skill, hero.defbonus)
-                hero.atk -= min(m_npc.skill, hero.atk)
-                hero.defense -= min(m_npc.skill, hero.defense)
-                hero.skill -= min(m_npc.skill, hero.skill)
-        fhero = pick_random_hero(h_p)
-        if fhero == None:
-                print (m_npc.name, "releases a victorious cry! ")
-        else:
-                fhero.poison += 1
-                print (m_npc.name, "freezes", fhero.name)
-        hero = party_func.pick_random_healthy_hero(h_p)
-        hero.health -= max(m_npc.atk - hero.defense - hero.defbonus - hero.armor, 1)
-        print (m_npc.name, "attacks", hero.name)
-        
 #phase one
-def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc):
-        lives = B.I_P_L
-        bPhase = True
-        while bPhase:
-
+def gs_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+        bPhase1 = True
+        while bPhase1:
                 if len(h_p) == 0:
-                        print ("The heroes have all been frozen solid...")
-                        bPhase = False
+                        print ("The heroes have been routed and flee back to town.")
+                        bPhase1 = False
 
                 else:
                         for hero in h_p:
-                                if hero.health <= 0:
-                                        h_p.remove(hero)
-                        for hero in h_p:
-                                if hero.poison > 0 and hero.name != "Golem":
-                                        hero.poison -= 1
-                                        print (hero.name, "tries to break out of the ice. ")
-                                elif hero.health > 0 and hero.name != "Golem":
+                                if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc)
+                                                                  ib_pc, s_pc, p_npc,
+                                                                  h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
                                         
                         player_func.pet_action(p_npc, h_p, b_p)
-                        for mon in b_p:
-                                if mon.name == "Cryo Phoenix" and mon.health > 0:
-                                        ip_battle_action(mon, h_p, lives)
-                                elif mon.name == "Frozen Egg" and mon.health > 0:
-                                        egg_action(mon, lives, b_p, ib_pc)
-                for mon in b_p:
-                        #the phoenix can revive itself
-                        if mon.name == "Cryo Phoenix" and mon.health <= 0 and lives > 0:
-                                print (mon.name, "breaks into pieces. ")
-                                print ("The frozen shards seem to form into an egg. ")
-                                lives -= 1
-                                b_p.remove(mon)
-                                monster = egg_maker(lives, ib_pc)
-                                b_p.append(monster)
-                        if mon.name == "Frozen Egg" and mon.health <= 0 and lives > 0:
-                                print ("You break the frozen egg into pieces! ")
-                                print ("However, the egg shells reform. ")
-                                lives -= 1
-                                b_p.remove(mon)
-                                monster = egg_maker(lives, ib_pc)
-                                b_p.append(monster)
-                        elif mon.health <= 0 and lives <= 0 and mon.name == "Frozen Egg":
-                                bPhase = False
-                                print ("At last you break the egg into pieces and there's nothing inside...")
-                        elif mon.health <= 0 and lives <= 0 and mon.name == "Cryo Phoenix":
-                                bPhase = False
-                                print ("At last you break the bird into pieces and nothing seems to happen...")
-                                
                         
+                        for monster in b_p:
+                                if monster.health <= 0 and monster.name != "Golden Slime":
+                                        b_p.remove(monster)
+                        for monster in b_p:
+                                if monster.name == "Golden Slime" and monster.health > 0:
+                                        gs_phase_one_action(monster, h_p, b_p, ib_pc)
+                                elif monster.health > 0:
+                                        gs_slime_action(monster, h_p, b_p)
+                                elif monster.health <= 0 and monster.name != "Golden Slime":
+                                        b_p.remove(monster)
+                for mon in b_p:
+                        if mon.name == "Golden Slime" and mon.dropchance <= 0:
+                                bPhase1 = False
+                        elif mon.name == "Golden Slime" and mon.health <= (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2:
+                                bPhase1 = False
+#phase two actions
+def gs_phase_two_action(m_npc, h_p, b_p):
+        if m_npc.health > 0:
+                m_npc.dropchance -= B.G_S_DC_DOWN
+                m_npc.health -= B.G_S_DC_DOWN
+                mon = baby_slime_spawn()
+                b_p.append(mon)
+                print(mon.name, "splits off from", m_npc.name)
+                mon = baby_slime_spawn()
+                b_p.append(mon)
+                print(mon.name, "splits off from", m_npc.name)
+        else:
+                print ("The golden slime begins to deflate. ")
+        
+#phase two
+def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+        bPhase2 = True
+        while bPhase2:
+                if len(h_p) == 0:
+                        print ("The heroes have been routed and flee back to town.")
+                        bPhase2 = False
 
-#phases will change according to boss hp                                              
-def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc):
+                else:
+                        for hero in h_p:
+                                if hero.health > 0 and hero.name != "Golem":
+                                        hero.stats()
+                                        player_func.player_action(hero, h_p, b_p,
+                                                                  ib_pc, s_pc, p_npc,
+                                                                  h_w, h_a)
+                                elif hero.health <= 0:
+                                        h_p.remove(hero)
+                        player_func.pet_action(p_npc, h_p, b_p)
+                        for monster in b_p:
+                                if monster.health <= 0 and monster.name != "Golden Slime":
+                                        b_p.remove(monster)
+                        for monster in b_p:
+                                if monster.name == "Golden Slime" and monster.health > 0:
+                                        gs_phase_two_action(monster, h_p, b_p)
+                                elif monster.health > 0:
+                                        gs_slime_action(monster, h_p, b_p)
+                                elif monster.health <= 0 and monster.name != "Golden Slime":
+                                        b_p.remove(monster)
+                for mon in b_p:
+                        if mon.name == "Golden Slime" and mon.dropchance <= 0:
+                                bPhase2 = False
+                        elif mon.name == "Golden Slime" and mon.health <= 0:
+                                bPhase2 = False
+#phases will change according to boss hp
+#this battle is a dps rush, aiming to kill the slime before it can split too much                                               
+def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
         #make a copies of the party as usual
         b_p = []
-        Cryo_Phoenix = copy.copy(I_P)
-        Cryo_Phoenix.health = round(Cryo_Phoenix.health * (C.BUFF ** ib_pc.ip_trophy))
-        b_p.append(Cryo_Phoenix)
+        Golden_Slime = copy.copy(G_S)
+        #buff the enemy depending on how many times you beat it
+        Golden_Slime.health = round(Golden_Slime.health * (C.BUFF ** ib_pc.gs_trophy))
+        b_p.append(Golden_Slime)
         new_h_p = []
+        new_h_w = []
+        new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
-        new_b_p = copy.copy(b_p)
+        for wpn in h_w:
+                copy_weapon = copy.copy(wpn)
+                new_h_w.append(copy_weapon)
+        for amr in h_a:
+                copy_armor = copy.copy(amr)
+                new_h_a.append(copy_armor)
+        new_b_p = list(b_p)
         #boolean to loop the battle phase until it finishes
         bBattle = True
         while bBattle:
                 #check if the battle continues
                 for mon in new_b_p:
-                        if mon.name == "Cryo Phoenix" and mon.health <= 0:
-                                print ("Is it really dead? ")
-                                bBattle = False
-                                ib_pc.coins += B.I_P_DC
-                                ib_pc.ip_trophy += 1
+                        if mon.name == "Golden Slime" and mon.dropchance <= 0:
+                                print("The Golden Slime has escaped. ")
+                                print("The heroes return emptyhanded and covered in slime. ")
+                                print("The local economy never recovers from the massive influx of gold. ")
                                 new_b_p.remove(mon)
-                                print ("The heroes slowly begin to walk down. ")
-                                break
-                        elif mon.name == "Frozen Egg" and mon.health <= 0:
-                                print ("Is it really dead? ")
                                 bBattle = False
-                                ib_pc.coins += B.I_P_DC
-                                ib_pc.ip_trophy += 1
+                        elif mon.name == "Golden Slime" and mon.dropchance >= B.GOLDEN_SLIME_DROPCHANCE/2 and mon.health <= 0:
+                                print("The Golden Slime has been defeated. ")
+                                print("The hero's make it out with", mon.dropchance, "coins. ")
+                                print("They heroically take the gold far away from this small village.")
+                                print("The local economy is saved. ")
+                                bBattle = False
+                                ib_pc.coins += mon.dropchance
+                                ib_pc.gs_trophy += 1
                                 new_b_p.remove(mon)
-                                print ("The heroes slowly begin to walk down. ")
-                                break
+                        elif mon.name == "Golden Slime" and mon.dropchance < B.GOLDEN_SLIME_DROPCHANCE/2 and mon.health <= 0:
+                                print("The Golden Slime has been defeated. ")
+                                print("The hero's make it out with", mon.dropchance, "coins. ")
+                                print("Sadly, the slime split enough to potentially reform. ")
+                                print("The locals always fear another massive influx of gold. ")
+                                bBattle = False
+                                ib_pc.coins += mon.dropchance
+                                new_b_p.remove(mon)
+                        elif mon.name != "Golden Slime":
+                                new_b_p.remove(mon)
                 if len(new_h_p) == 0:
-                        print ("The frozen heroes are eventually discovered. ")
-                        print ("They manage to be thawed out at the village and recover. ")
+                        print ("The heroes have been routed and flee back to town.")
                         bBattle = False
-                if len(new_b_p) == 0:
-                        print ("The heroes make their way down the mountain. ")
-                        break
-                else:
-                        print ("The air grows colder around you. ")
-                        ip_battle(new_h_p, new_b_p, p_npc, ib_pc, s_pc)
+                elif len(new_b_p) == 0:
+                        print ("The heroes go back to clean their golden and sticky equipment. ")
 
+                else:
+                        for mon in new_b_p:
+                                if mon.name == "Golden Slime" and mon.health >= (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2:
+                                        print("Glug, glurp, splish! ")
+                                        gs_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+                                elif mon.name == "Golden Slime" and mon.health < (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2 and mon.health > 0:
+                                        print("Glurgh, Splash, Sploosh! ")
+                                        gs_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+        if not bBattle:
+                #adjust the hp of the heroes after battles
+                for hero in h_p:
+                        check = None
+                        for heero in new_h_p:
+                                if hero.name == heero.name:
+                                        check = heero
+                        #if there is no matching hero then the hero's health goes to zero
+                        if check == None:
+                                hero.health = 0
+                        #if there is a matching hero then the hero's health becomes equal
+                        elif check != None:
+                                hero.health = min(check.health, hero.maxhealth)
 
 
 heroes_party = []
 heroes_magic = []
+heroes_weapons = []
+heroes_armor = []
+death = Weapon_PC("Death", "Warrior", "Death", 5000, "Light", 1)
+troy = Armor_PC("Troy", "Warrior", "Counter", 1, "Light", 1)
 heroes_bag = ItemBag_PC(10, 10, 10, 100)
 fireball = Spell_PC("Fireball", 3, 2, "Fire", 1)
 rainstorm = Spell_PC("Rainstorm", 2, 2, "Water", 1)
 earthspike = Spell_PC("Earthspike", 3, 1, "Earth", 1)
-mage = Player_PC("Mage", 10, 1000, 1000, 20, 200, 0, 50)
-warrior = Player_PC("Warrior", 10, 150, 150, 102250, 30, 20, 0, 20, 20, 2, 1)
+mage = Player_PC("Mage", 10, 1000, 1000, 20, 20, 0, 50)
+warrior = Player_PC("Warrior", 10, 150, 150, 150, 30, 20, 0, 20, 20)
 cleric = Player_PC("Cleric", 10, 100, 100, 30, 20, 20, 30, 20, 20)
 summoner = Player_PC("Summoner", 10, 100, 100, 20, 30, 30, 30, 20, 20)
 ninja = Player_PC("Ninja", 10, 100, 100, 30, 30, 50, 0, 20, 20, 3)
-knight = Player_PC("Knight", 10, 200, 200, 40, 40, 20, 0, 20, 20, 0, 2)
+knight = Player_PC("Knight", 10, 200, 200, 40, 40, 20, 0, 20, 20)
 heroes_pet = Pet_NPC("Angel", 6, 64)
 heroes_magic.append(fireball)
 heroes_magic.append(rainstorm)
@@ -200,5 +259,7 @@ heroes_party.append(cleric)
 heroes_party.append(warrior)
 heroes_party.append(knight)
 heroes_party.append(summoner)
-boss_battle(heroes_party, b_p, heroes_pet, heroes_bag, heroes_magic)
-boss_battle(heroes_party, b_p, heroes_pet, heroes_bag, heroes_magic)
+heroes_weapons.append(death)
+heroes_armor.append(troy)
+boss_battle(heroes_party, b_p, heroes_pet, heroes_bag, heroes_magic, heroes_weapons, heroes_armor)
+#boss_battle(heroes_party, b_p, heroes_pet, heroes_bag, heroes_magic, heroes_weapons, heroes_armor)

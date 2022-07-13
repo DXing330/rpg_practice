@@ -172,7 +172,7 @@ class Armor_PC:
                       ", Defense:", self.defense)
 #used during quests
 class QuestItems_NPC:
-        def __init__(self, package = 0, rpackage = 0, managem = 0):
+        def __init__(self, package = 0, vpackage = 0, managem = 0):
                 #packages to be delivered by request of the guild
                 self.package = package
                 #packages to be returned to the guild

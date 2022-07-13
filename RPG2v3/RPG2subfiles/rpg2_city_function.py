@@ -11,10 +11,10 @@ from rpg2_constants import Constants
 C = Constants()
 #store the starter characters incase the player recruits them
 summoner = Player_PC("Summoner", 1, 10, 10, 2, 2, 2, 2)
-cleric = Player_PC("Cleric", 1, 10, 10, 3, 3, 2, 5)
-mage = Player_PC("Mage", 1, 10, 10, 2, 2, 5, 5)
+cleric = Player_PC("Cleric", 1, 10, 10, 3, 3, 2, 3)
+mage = Player_PC("Mage", 1, 10, 10, 2, 2, 2, 5)
 warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 2, 0)
-ninja = Player_PC("Ninja", 1, 10, 10, 3, 3, 5, 0)
+ninja = Player_PC("Ninja", 1, 10, 10, 3, 3, 5, 2)
 knight = Player_PC("Knight", 1, 20, 20, 3, 4, 2, 0)
 tactician = Player_PC("Tactician", 1, 10, 10, 1, 1, 5, 0)
 
@@ -38,7 +38,6 @@ def inn(ib_pc, h_p, h_w, h_a):
                 elif ib_pc.coins < len(h_p):
                         print ("I'll put it on your tab I guess. ")
                         print ("If you save the world then I'll wipe your tab. ")
-                inn(ib_pc, h_p, h_w, h_a)
         elif check.upper() == "T":
                 print ("We have a lot of adventurers passing through here.")
                 print ("Lots of them are looking for friends.")
@@ -132,7 +131,7 @@ def inn(ib_pc, h_p, h_w, h_a):
                                         armor.user = "None"
                                         print ("Which hero do you want to give it to? ")
                                         y = int(input("The first one is 1, etc. "))
-                                        hero = h_p[(x - 1)]
+                                        hero = h_p[(y - 1)]
                                         armr = None
                                         for amr in h_a:
                                                 if amr.user == hero.name:
@@ -153,7 +152,7 @@ def inn(ib_pc, h_p, h_w, h_a):
                                         weapon.user = "None"
                                         print ("Which hero do you want to give it to? ")
                                         y = int(input("The first one is 1, etc. "))
-                                        hero = h_p[(x - 1)]
+                                        hero = h_p[(y - 1)]
                                         weapn = None
                                         for wpn in h_a:
                                                 if wpn.user == hero.name:
@@ -166,7 +165,7 @@ def inn(ib_pc, h_p, h_w, h_a):
                                         print("That's not a good plan. ")
                 inn(ib_pc, h_p, h_w, h_a)
                 
-        elif check.upper() == "O":
+        elif check.upper() == "O" or check.upper() == "L":
                 print ("Come back soon. ")
         else:
                inn(ib_pc, h_p, h_w, h_a) 
@@ -199,8 +198,8 @@ def practice_arena(p_pc, ib_pc):
                 print ("What would you like to train? ")
                 print ("Attack, Defense, Health, Mana or Skill? ")
                 check = input("A/D/H/M/S ")
-                if check.upper() == "A" and ib_pc.coins >= C.LEVEL_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT):
-                        ib_pc.coins -= C.LEVEL_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT)
+                if check.upper() == "A" and ib_pc.coins >= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT):
+                        ib_pc.coins -= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT)
                         p_pc.atkbonus += 1
                         print("You're a big guy. ")
                         practice_arena(p_pc, ib_pc)
