@@ -69,7 +69,7 @@ def dg_phase_one_action(monster, h_p, b_p, ib_pc):
 #the boss battle phase will be a little different
 #boss battles will have different phases
 #this will be phase one
-def dg_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def dg_phase_one(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase1 = True
         while bPhase1:
                 if len(h_p) == 0:
@@ -81,11 +81,11 @@ def dg_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         for monster in b_p:
                                 if monster.health <= 0 and monster.name != "Demon General":
                                         b_p.remove(monster)
@@ -143,7 +143,7 @@ def dg_phase_two_action(m_npc, h_p, b_p, ib_pc, h_a):
 
 
 #this will be phase two
-def dg_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def dg_phase_two(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase2 = True
         while bPhase2:
                 for hero in h_p:
@@ -159,11 +159,11 @@ def dg_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         for monster in b_p:
                                 if monster.name == "Demon General":
                                         dg_phase_two_action(monster, h_p, b_p, ib_pc, h_a)
@@ -183,18 +183,22 @@ def dg_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         bPhase2 = False
                         break
 #phases will change according to boss hp
-def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def boss_battle(h_p, b_p, h_s, ib_pc, s_pc, h_w, h_a):
         #make a copy of the heroes party and the monster's party
         b_p = []
         Demon_General = copy.copy(D_G)
         Demon_General.health = round(Demon_General.health * (C.BUFF ** ib_pc.dg_trophy))
         b_p.append(Demon_General)
         new_h_p = []
+        new_h_s = []
         new_h_w = []
         new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for ally in h_s:
+                copy_ally = copy.copy(ally)
+                new_h_s.append(copy_ally)
         for wpn in h_w:
                 copy_weapon = copy.copy(wpn)
                 new_h_w.append(copy_weapon)
@@ -229,11 +233,11 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                         print(monster2.name, "descends from beside the throne. ")
                                         new_b_p.append(monster)
                                         new_b_p.append(monster2)
-                                        dg_phase_one(new_h_p, new_b_p, p_npc, ib_pc,
+                                        dg_phase_one(new_h_p, new_b_p, new_h_s, ib_pc,
                                                      s_pc, new_h_w, new_h_a)
                                 elif mon.name == "Demon General" and mon.health < (B.DEMON_GENERAL_HEALTH * (C.BUFF ** ib_pc.dg_trophy))/2:
                                         print("Enough! I'll deal with you myself! ")
-                                        dg_phase_two(new_h_p, new_b_p, p_npc, ib_pc,
+                                        dg_phase_two(new_h_p, new_b_p, new_h_s, ib_pc,
                                                      s_pc, new_h_w, new_h_a)
                                         
         if not bBattle:
@@ -246,9 +250,11 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         #if there is no matching hero then the hero's health goes to zero
                         if check == None:
                                 hero.health = 0
+                                hero.mana = 0
                         #if there is a matching hero then the hero's health becomes equal
                         elif check != None:
                                 hero.health = min(check.health, hero.maxhealth)
+                                hero.mana = min(check.mana, hero.maxmana)
 
                 if len(new_h_p) > 0:
                         print ("The heroes return victorious. ")

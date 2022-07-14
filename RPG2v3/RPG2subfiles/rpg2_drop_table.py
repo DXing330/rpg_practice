@@ -13,6 +13,9 @@ L = List_Constants()
 a = len(L.BASIC_ARMOR_EFFECT_LIST) - 1
 b = len(L.BASIC_WEAPON_EFFECT_LIST) - 1
 c = len(L.ELEMENTS_LIST) - 1
+d = len(L.INTERMEDIATE_ARMOR_EFFECT_LIST) - 1
+e = len(L.INTERMEDIATE_WEAPON_EFFECT_LIST) - 1
+f = len(L.FULL_ELEMENTS_LIST) - 1
 
 #function that will generate a random armor
 def random_basic_armor():
@@ -30,6 +33,52 @@ def random_basic_armor():
         armor.defense = z
         return armor
 
+#fulle is for the full element list, including light
+def random_basic_armor_fulle():
+        armor = Armor_PC("Armor", "None", "None",
+                         1, "None", 1)
+        x = random.randint(0, a)
+        y = random.randint(0, f)
+        w = random.randint(1, 2)
+        z = random.randint(1, 2)
+        effct = L.BASIC_ARMOR_EFFECT_LIST[x]
+        elmnt = L.FULL_ELEMENTS_LIST[y]
+        armor.effect = effct
+        armor.element = elmnt
+        armor.strength = w
+        armor.defense = z
+        return armor
+
+def random_intermediate_armor():
+        armor = Armor_PC("Armor", "None", "None",
+                         1, "None", 1)
+        x = random.randint(0, d)
+        y = random.randint(0, c)
+        w = random.randint(1, 2)
+        z = random.randint(1, 2)
+        effct = L.INTERMEDIATE_ARMOR_EFFECT_LIST[x]
+        elmnt = L.ELEMENTS_LIST[y]
+        armor.effect = effct
+        armor.element = elmnt
+        armor.strength = w
+        armor.defense = z
+        return armor
+
+def random_intermediate_armor_fulle():
+        armor = Armor_PC("Armor", "None", "None",
+                         1, "None", 1)
+        x = random.randint(0, d)
+        y = random.randint(0, f)
+        w = random.randint(1, 2)
+        z = random.randint(1, 2)
+        effct = L.INTERMEDIATE_ARMOR_EFFECT_LIST[x]
+        elmnt = L.FULL_ELEMENTS_LIST[y]
+        armor.effect = effct
+        armor.element = elmnt
+        armor.strength = w
+        armor.defense = z
+        return armor
+
 #function that will generate a random weapon
 def random_basic_weapon():
         weapon = Weapon_PC("Weapon", "None", "None",
@@ -40,6 +89,52 @@ def random_basic_weapon():
         z = random.randint(1, 3)
         effct = L.BASIC_WEAPON_EFFECT_LIST[x]
         elmnt = L.ELEMENTS_LIST[y]
+        weapon.effect = effct
+        weapon.element = elmnt
+        weapon.strength = w
+        weapon.atk = z
+        return weapon
+
+def random_basic_weapon_fulle():
+        weapon = Weapon_PC("Weapon", "None", "None",
+                           1, "None", 1)
+        x = random.randint(0, b)
+        y = random.randint(0, f)
+        w = random.randint(1, 3)
+        z = random.randint(1, 3)
+        effct = L.BASIC_WEAPON_EFFECT_LIST[x]
+        elmnt = L.FULL_ELEMENTS_LIST[y]
+        weapon.effect = effct
+        weapon.element = elmnt
+        weapon.strength = w
+        weapon.atk = z
+        return weapon
+
+#function that will generate a random weapon
+def random_intermediate_weapon():
+        weapon = Weapon_PC("Weapon", "None", "None",
+                           1, "None", 1)
+        x = random.randint(0, e)
+        y = random.randint(0, c)
+        w = random.randint(1, 3)
+        z = random.randint(1, 3)
+        effct = L.INTERMEDIATE_WEAPON_EFFECT_LIST[x]
+        elmnt = L.ELEMENTS_LIST[y]
+        weapon.effect = effct
+        weapon.element = elmnt
+        weapon.strength = w
+        weapon.atk = z
+        return weapon
+
+def random_intermediate_weapon_fulle():
+        weapon = Weapon_PC("Weapon", "None", "None",
+                           1, "None", 1)
+        x = random.randint(0, e)
+        y = random.randint(0, f)
+        w = random.randint(1, 3)
+        z = random.randint(1, 3)
+        effct = L.INTERMEDIATE_WEAPON_EFFECT_LIST[x]
+        elmnt = L.FULL_ELEMENTS_LIST[y]
         weapon.effect = effct
         weapon.element = elmnt
         weapon.strength = w
@@ -78,9 +173,33 @@ def drop_table(m_npc, ib_pc, h_w, h_a):
                 weapon = random_basic_weapon()
                 h_w.append(weapon)
                 print ("The heroes found a weapon. ")
+        elif x == 9:
+                armor = random_basic_armor_fulle()
+                h_a.append(armor)
+                print ("The heroes found a piece of armor. ")
+        elif x == 10:
+                armor = random_intermediate_armor_fulle()
+                h_a.append(armor)
+                print ("The heroes found a piece of armor. ")
+        elif x == 11:
+                armor = random_intermediate_armor()
+                h_a.append(armor)
+                print ("The heroes found a piece of armor. ")
+        elif x == 12:
+                weapon = random_basic_weapon_fulle()
+                h_w.append(weapon)
+                print ("The heroes found a weapon. ")
+        elif x == 13:
+                weapon = random_intermediate_weapon()
+                h_w.append(weapon)
+                print ("The heroes found a weapon. ")
+        elif x == 14:
+                weapon = random_intermediate_weapon_fulle()
+                h_w.append(weapon)
+                print ("The heroes found a weapon. ")
 
 def quest_drop_table(m_npc, ib_pc, h_w, h_a, q_i):
-        x = random.randint(0, 9)
+        x = random.randint(0, 15)
         y = random.randint(1, max(m_npc.dropchance, 1))
         if x == 0:
                 ib_pc.coins += m_npc.dropchance
@@ -112,6 +231,30 @@ def quest_drop_table(m_npc, ib_pc, h_w, h_a, q_i):
                 h_w.append(weapon)
                 print ("The heroes found a weapon. ")
         elif x == 9:
+                armor = random_basic_armor_fulle()
+                h_a.append(armor)
+                print ("The heroes found a piece of armor. ")
+        elif x == 10:
+                armor = random_intermediate_armor_fulle()
+                h_a.append(armor)
+                print ("The heroes found a piece of armor. ")
+        elif x == 11:
+                armor = random_intermediate_armor()
+                h_a.append(armor)
+                print ("The heroes found a piece of armor. ")
+        elif x == 12:
+                weapon = random_basic_weapon_fulle()
+                h_w.append(weapon)
+                print ("The heroes found a weapon. ")
+        elif x == 13:
+                weapon = random_intermediate_weapon()
+                h_w.append(weapon)
+                print ("The heroes found a weapon. ")
+        elif x == 14:
+                weapon = random_intermediate_weapon_fulle()
+                h_w.append(weapon)
+                print ("The heroes found a weapon. ")
+        elif x == 15:
                 print ("The heroes find the package. ")
                 q_i.rpackage += 1
                 

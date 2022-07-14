@@ -68,6 +68,9 @@ def check_element_monster_attack(m_npc, m_npc_atk, armor):
                         elif armor.element == "Light" and armor.user == "Hero":
                                 new_atk = round(m_npc_atk * C.ELEMENT_BONUS)
                                 print (armor.user, "is weak against the attack of", m_npc.name)
+                        elif armor.element == "Light":
+                                new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
+                                print (armor.user, "resists the attack of", m_npc.name)
                         else:
                                 new_atk = m_npc_atk
         return new_atk
@@ -155,7 +158,7 @@ def check_element_player_attack(p_pc, p_pc_atk, m_npc, w_pc):
                                 new_atk = min(w_pc.atk - (p_pc_atk + p_pc.atkbonus), 0)
                                 print (m_npc.name, "resists", p_pc.name)
                 elif w_pc.element == "Light":
-                        if m_npc.element == "Dark" and p_pc.name == "Hero":
+                        if m_npc.element == "Dark":
                                 new_atk = (new_atk * C.ELEMENT_BONUS)
                                 print (m_npc.name, "is weak against", w_pc.user)
         return new_atk

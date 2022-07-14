@@ -9,6 +9,8 @@ import rpg2_party_management_functions as party_func
 import rpg2_level_up_function as lvlup_func
 from rpg2_constants import Constants
 C = Constants()
+from rpg2_constant_lists import List_Constants
+L = List_Constants()
 angel = Pet_NPC("Angel", 1, 2)
 new_spell = Spell_PC("new", 1, 1, None, 1)
 ##functions in the tower
@@ -51,16 +53,19 @@ def equipment_enchanter(ib_pc, h_w, h_a):
                                 equipment_enchanter(ib_pc, h_w, h_a)
                         else:
                                 print ("Don't waste our time. ")
-                elif check.upper() == "F" and weapon.effect == "Attack":
+                elif check.upper() == "F":
                         ib_pc.coins -= C.ENCHANT_PRICE
                         print ("what effect do you want? ")
-                        print ("Lifesteal or Poison?")
-                        efct = input("L/P? ")
+                        print ("Attack, Lifesteal or Poison?")
+                        efct = input("P/A/L? ")
                         if efct.upper() == "L":
                                 weapon.effect = "Lifesteal"
                                 equipment_enchanter(ib_pc, h_w, h_a)
                         elif efct.upper() == "P":
                                 weapon.effect = "Poison"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif efct.upper() == "A":
+                                weapon.effect = "Attack"
                                 equipment_enchanter(ib_pc, h_w, h_a)
                         else:
                                 print ("Don't waste our time. ")
@@ -95,13 +100,16 @@ def equipment_enchanter(ib_pc, h_w, h_a):
                                 equipment_enchanter(ib_pc, h_w, h_a)
                         else:
                                 print ("Don't waste our time. ")
-                elif check.upper() == "F" and armor.effect == "Block":
+                elif check.upper() == "F":
                         ib_pc.coins -= C.ENCHANT_PRICE
                         print ("what effect do you want? ")
-                        print ("Thorns or Absorb?")
-                        efct = input("A/T? ")
+                        print ("Block, Thorns or Absorb?")
+                        efct = input("B/A/T? ")
                         if efct.upper() == "T":
                                 armor.effect = "Thorns"
+                                equipment_enchanter(ib_pc, h_w, h_a)
+                        elif efct.upper() == "Block":
+                                armor.effect = "Block"
                                 equipment_enchanter(ib_pc, h_w, h_a)
                         elif efct.upper() == "A":
                                 armor.effect = "Absorb"
@@ -215,55 +223,67 @@ def library(ib_pc, h_m):
                 library(ib_pc, h_m)
 #function that will allow the pet to be trained and evolved
 def summoning_fields(h_p, p_npc, ib_pc):
-        p_npc.stats()
+        for pet in p_npc:
+                pet.stats()
         ib_pc.stats()
-        if p_npc.atk == 0:
+        if len(p_npc) == 0:
                 print ("Looks like you need to summon a new ally.")
                 for hero in h_p:
                         if hero.name == 'Summoner' or hero.name == "Hero":
                                 print ("Here you go, take good care of it.")
-                                p_npc.name = "Angel"
-                                p_npc.stage = 1
-                                p_npc.atk = 2
-        elif p_npc.stage < C.STAGE_LIMIT:
-                hero = None
-                for p in h_p:
-                        if p.name == "Summoner":
-                                hero = p
-                if hero != None:
-                        print ("Aww, what a cute little friend you have.")
-                        print ("It looks like it can still get a lot stronger.")
-                        print ("Do you want us to help you train it?")
-                        print ("It'll cost you", (p_npc.atk ** p_npc.stage), "coins.")
-                        choice = input("Y/N? ")
-                        if choice.upper() == "Y" and ib_pc.coins >= p_npc.atk ** p_npc.stage:
-                                ib_pc.coins -= p_npc.atk ** p_npc.stage
-                                lvlup_func.stage_up(p_npc)
-                                summoning_fields(h_p, p_npc, ib_pc)
-                                print ("Whew, channelling spiritual power always tires me out.")
-                                print ("Your ally looks much stronger now.")
-                        else:
-                                print ("Come back when you're ready.")
-                elif hero == None:
-                        print ("You need a summoner's magic to make your ally stronger. ")
-        elif p_npc.stage == C.STAGE_LIMIT:
-                hero = None
-                for p in h_p:
-                        if p.name == "Summoner":
-                                hero = p
-                if hero != None:
-                        print ("That's a mighty strong looking ally you have.")
-                        print ("Do you want me to try to strengthen it?")
-                        print ("It'll cost you", ((p_npc.atk * p_npc.stage) ** C.INCREASE_EXPONENT), "coins.")
-                        choice = input("Y/N? ")
-                        if choice.upper() == "Y" and ib_pc.coins >= (p_npc.atk * p_npc.stage) ** C.INCREASE_EXPONENT:
-                                ib_pc.coins -= (p_npc.atk * p_npc.stage) ** C.INCREASE_EXPONENT
-                                lvlup_func.pet_atk_up(p_npc)
-                                summoning_fields(h_p, p_npc, ib_pc)
-                        else:
-                                print ("Come back when you're ready.")
-                elif hero == None:
-                        print ("You need a summoner's magic to make your ally stronger. ")
+                                angel = Pet_NPC("Angel", 1, 2)
+                                copy_ally = copy.copy(angel)
+                                p_npc.append(copy_ally)
+                #make sure they don't get more than one angel ally
+                while len(p_npc) > 1:
+                        p_npc.pop(0)
+        else:
+                ally = party_func.pick_hero(p_npc)
+                angel = None
+                for name in L.ANGEL_NAMES:
+                        if name in ally.name:
+                                angel = name
+                if angel == None:
+                        print ("I'm not sure how you summoned that thing, but we can't work with it. ")
+                elif ally.stage < C.STAGE_LIMIT and angel != None:
+                        hero = None
+                        for p in h_p:
+                                if p.name == "Summoner":
+                                        hero = p
+                        if hero != None:
+                                print ("Aww, what a cute little friend you have.")
+                                print ("It looks like it can still get a lot stronger.")
+                                print ("Do you want us to help you train it?")
+                                print ("It'll cost you", (ally.atk ** ally.stage), "coins.")
+                                choice = input("Y/N? ")
+                                if choice.upper() == "Y" and ib_pc.coins >= ally.atk ** ally.stage:
+                                        ib_pc.coins -= ally.atk ** ally.stage
+                                        lvlup_func.angel_stage_up(ally)
+                                        summoning_fields(h_p, p_npc, ib_pc)
+                                        print ("Whew, channelling spiritual power always tires me out.")
+                                        print ("Your ally looks much stronger now.")
+                                else:
+                                        print ("Come back when you're ready.")
+                        elif hero == None:
+                                print ("You need a summoner's magic to make your ally stronger. ")
+                elif ally.stage == C.STAGE_LIMIT and angel != None:
+                        hero = None
+                        for p in h_p:
+                                if p.name == "Summoner":
+                                        hero = p
+                        if hero != None:
+                                print ("That's a mighty strong looking ally you have.")
+                                print ("Do you want me to try to strengthen it?")
+                                print ("It'll cost you", ((ally.atk * ally.stage) ** C.INCREASE_EXPONENT), "coins.")
+                                choice = input("Y/N? ")
+                                if choice.upper() == "Y" and ib_pc.coins >= (ally.atk * ally.stage) ** C.INCREASE_EXPONENT:
+                                        ib_pc.coins -= (ally.atk * ally.stage) ** C.INCREASE_EXPONENT
+                                        lvlup_func.pet_atk_up(ally)
+                                        summoning_fields(h_p, p_npc, ib_pc)
+                                else:
+                                        print ("Come back when you're ready.")
+                        elif hero == None:
+                                print ("You need a summoner's magic to make your ally stronger. ")
                         
 #UI function where the player chooses what to do
 def mage_tower(h_p, p_npc, ib_pc, h_m, h_w, h_a):

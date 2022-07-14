@@ -78,6 +78,8 @@ class Constants:
              self.SPELL_COST = 1
              #base price for enchanting
              self.ENCHANT_PRICE = 100
+             #price for potion
+             self.POTION_PRICE = 10
              #death weapon effect atk bonus
              self.DEATH_ATK = 9999999
 

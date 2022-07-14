@@ -19,50 +19,50 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
         print ("HEAL Ally? H")
         print ("BUFF? B")
         print ("DEBUFF Enemy? D")
-        print ("Summon GOLEM? G")
+        print ("Summon TOTEM? T")
         print ("PROTECT your allies? P")
         print ("Try to go for a SNEAK ATTACK? S")
         
-        check = input("B/P/O/C/S/H/D/G")
-        if check.upper() == "G":
+        check = input("B/P/O/C/S/H/D/T")
+        if check.upper() == "T":
                 if p_pc.name == "Summoner" and p_pc.mana > 0:
                         print("What kind of golem do you make? ")
                         print("ATTACK, HEAL, BUFF, DEBUFF? ")
                         choice = input("A/B/D/H? ")
                         if choice.upper() == "A":
-                                atkgolem = Player_PC("Golem", 1, p_pc.skill,
-                                                     p_pc.skill, p_pc.skill, 0, 0, 0)
+                                atkgolem = Player_PC("Totem", 1, p_pc.skill,
+                                                     p_pc.skill, p_pc.skill, 0, 0, 0, 0)
                                 totem = copy.copy(atkgolem)
                                 h_p.append(totem)
                                 p_pc.skill -= len(h_p)
                                 p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons an attacking totem. ")
                         elif choice.upper() == "B":
-                                bufgolem = Player_PC("Golem", 1, p_pc.skill,
-                                                     p_pc.skill, 0, 0, p_pc.skill, 0)
+                                bufgolem = Player_PC("Totem", 1, p_pc.skill,
+                                                     p_pc.skill, 0, 0, p_pc.skill, 0, 0)
                                 totem = copy.copy(bufgolem)
                                 h_p.append(totem)
                                 p_pc.skill -= len(h_p)
                                 p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons a buffing totem. ")
                         elif choice.upper() == "D":
-                                debufgolem = Player_PC("Golem", 1, p_pc.skill,
-                                                       p_pc.skill, 0, 0, 0, p_pc.skill)
+                                debufgolem = Player_PC("Totem", 1, p_pc.skill,
+                                                       p_pc.skill, 0, 0, 0, p_pc.skill, 0)
                                 totem = copy.copy(debufgolem)
                                 h_p.append(totem)
                                 p_pc.skill -= len(h_p)
                                 p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons a debuffing totem. ")
                         elif choice.upper() == "H":
-                                healgolem = Player_PC("Golem", 1, p_pc.skill,
-                                                      p_pc.skill, 0, p_pc.skill, 0, 0)
+                                healgolem = Player_PC("Totem", 1, p_pc.skill,
+                                                      p_pc.skill, 0, p_pc.skill, 0, 0, 0)
                                 totem = copy.copy(healgolem)
                                 h_p.append(totem)
                                 p_pc.skill -= len(h_p)
                                 p_pc.mana -= len(h_p)
                                 print (p_pc.name, "summons a healing totem. ")
                         else:
-                                print("You don't know how to make that kind of golem. ")
+                                print("You don't know how to make that kind of totem. ")
                 else:
                         print("You don't know how to do that. ")
         elif check.upper() == "O":
@@ -79,19 +79,21 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                 for hero in h_p:
                         hero.stats()
                 for wpn in h_w:
-                        wpn.stats()
+                        if wpn.user != "None":
+                                wpn.stats()
                 for amr in h_a:
-                        amr.stats()
+                        if amr.user != "None":
+                                amr.stats()
                         
         elif check.upper() == "C":
-                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.skill > 0:
-                        print(p_pc.name, "calls to", p_npc.name)
+                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT:
+                        print(p_pc.name, "channels energy to their allies.")
                         player_func.pet_action(p_npc, h_p, m_p)
                         player_func.pet_action(p_npc, h_p, m_p)
                         p_pc.health += min((p_pc.skill + p_pc.level), (p_pc.maxhealth - p_pc.health))
-                        p_pc.skill -= 1
+                        p_pc.mana += 1
                 elif p_pc.name == "Summoner":
-                        print(p_pc.name, "calls to", p_npc.name)
+                        print(p_pc.name, "channels energy to their allies.")
                         player_func.pet_action(p_npc, h_p, m_p)
                 elif p_pc.name == "Tactician":
                         p_pc.skill -= 1
@@ -211,6 +213,7 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                         print("DIVINE JUDGEMENT STRIKES YOUR FOES")
                         for monster in m_p:
                                 monster.health -= (p_pc.mana + p_pc.skill + p_pc.level)
+                        p_pc.mana -= len(m_p)
                 else:
                         print("The heavens ignore your call.")
 
@@ -224,14 +227,14 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                 else:
                         print("Nothing happened. ")
         elif check.upper() == "L":
-                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.mana > 0 and p_pc.skill > 0:
-                        print(p_npc.name, "is empowered by your call.")
+                if p_pc.name == "Summoner" and p_pc.level == C.LEVEL_LIMIT and p_pc.skill > 0:
+                        print("Your allies are empowered by your call.")
                         for x in range(0, len(m_p)):
                                 player_func.pet_action(p_npc, h_p, m_p)
-                        p_pc.skill -= len(m_p)
                         p_pc.mana -= len(m_p)
+                        
                 else:
-                        print(p_npc.name, "briefly glances at you in confusion.")
+                        print(" You allies briefly glances at you in confusion.")
         else:
                 use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a)
                 

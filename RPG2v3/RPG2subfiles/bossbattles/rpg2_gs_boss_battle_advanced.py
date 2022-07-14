@@ -68,7 +68,7 @@ def gs_phase_one_action(m_npc, h_p, b_p, ib_pc):
                 print(mon.name, "splits off from", m_npc.name)
 
 #phase one
-def gs_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def gs_phase_one(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase1 = True
         while bPhase1:
                 for mon in b_p:
@@ -85,12 +85,12 @@ def gs_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
                                         
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         
                         for monster in b_p:
                                 if monster.health <= 0 and monster.name != "Golden Slime":
@@ -120,7 +120,7 @@ def gs_phase_two_action(m_npc, h_p, b_p):
                 print ("The golden slime begins to deflate. ")
         
 #phase two
-def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def gs_phase_two(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase2 = True
         while bPhase2:
                 for mon in b_p:
@@ -137,11 +137,11 @@ def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         for monster in b_p:
                                 if monster.health <= 0 and monster.name != "Golden Slime":
                                         b_p.remove(monster)
@@ -154,7 +154,7 @@ def gs_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                         b_p.remove(monster)
 #phases will change according to boss hp
 #this battle is a dps rush, aiming to kill the slime before it can split too much                                               
-def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def boss_battle(h_p, b_p, h_s, ib_pc, s_pc, h_w, h_a):
         #make a copies of the party as usual
         b_p = []
         Golden_Slime = copy.copy(G_S)
@@ -162,11 +162,15 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
         Golden_Slime.health = round(Golden_Slime.health * (C.BUFF ** ib_pc.gs_trophy))
         b_p.append(Golden_Slime)
         new_h_p = []
+        new_h_s = []
         new_h_w = []
         new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for ally in h_s:
+                copy_ally = copy.copy(ally)
+                new_h_s.append(copy_ally)
         for wpn in h_w:
                 copy_weapon = copy.copy(wpn)
                 new_h_w.append(copy_weapon)
@@ -214,10 +218,10 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         for mon in new_b_p:
                                 if mon.name == "Golden Slime" and mon.health >= (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2:
                                         print("Glug, glurp, splish! ")
-                                        gs_phase_one(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+                                        gs_phase_one(new_h_p, new_b_p, new_h_s, ib_pc, s_pc, new_h_w, new_h_a)
                                 elif mon.name == "Golden Slime" and mon.health < (B.GOLDEN_SLIME_HEALTH * (C.BUFF ** ib_pc.gs_trophy))/2 and mon.health > 0:
                                         print("Glurgh, Splash, Sploosh! ")
-                                        gs_phase_two(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+                                        gs_phase_two(new_h_p, new_b_p, new_h_s, ib_pc, s_pc, new_h_w, new_h_a)
         if not bBattle:
                 #adjust the hp of the heroes after battles
                 for hero in h_p:

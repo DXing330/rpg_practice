@@ -69,7 +69,7 @@ def sq_phase_one_action(m_npc, h_p, b_p, ib_pc):
         
 #phase one
 #the succubus will try to lure the heroes to her side
-def sq_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def sq_phase_one(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase1 = True
         while bPhase1:
                 for mon in b_p:
@@ -82,11 +82,11 @@ def sq_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                         print ("Want to play nice this time? ")
                                 elif ib_pc.sq_trophy >= B.ADVANCED_SPAWN:
                                         x = random.randint(0, ib_pc.sq_trophy)
-                                        if x < B.ADVANCED_SPAWN:
+                                        if x < B.ADVANCED_SPAWN + (ib_pc.sq_trophy/2):
                                                 print ("I've about had it with you! ")
                                                 print ("You always ruin it when I'm having a good time. ")
                                                 print ("STOP FOLLOWING ME! ")
-                                                sq_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a)
+                                                sq_phase_two(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a)
                                         else:
                                                 print ("Ugh, you again. Please just relax. ")
                                                 print ("You know that I just want to have a little fun. ")
@@ -108,12 +108,12 @@ def sq_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 elif hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
                                         
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         
                         for mon in b_p:
                                 if mon.health > 0 and mon.name == "Succubus Queen":
@@ -162,7 +162,7 @@ def sq_phase_two_action(m_npc, h_p, b_p, h_a):
         
 #phase two
 #the succubus will try to attack and knock out the heroes
-def sq_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def sq_phase_two(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase2 = True
         while bPhase2:
                                 
@@ -179,12 +179,12 @@ def sq_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 elif hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
                                         
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
 
                         for mon in b_p:
                                 if mon.name == "Succubus Queen" and mon.health > 0:
@@ -202,18 +202,22 @@ def sq_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
 
 #phases will change according to boss hp
 #this battle is a dps rush, aiming to kill the slime before it can split too much                                               
-def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def boss_battle(h_p, b_p, h_s, ib_pc, s_pc, h_w, h_a):
         #make a copies of the party as usual
         b_p = []
         Succubus_Queen = copy.copy(S_Q)
         Succubus_Queen.health = round(Succubus_Queen.health * (C.BUFF ** ib_pc.sq_trophy))
         b_p.append(Succubus_Queen)
         new_h_p = []
+        new_h_s = []
         new_h_w = []
         new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for ally in h_s:
+                copy_ally = copy.copy(ally)
+                new_h_s.append(copy_ally)
         for wpn in h_w:
                 copy_weapon = copy.copy(wpn)
                 new_h_w.append(copy_weapon)
@@ -248,12 +252,12 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         for mon in new_b_p:
                                 if mon.name == "Succubus Queen" and mon.health >= (B.S_Q_HEALTH * (C.BUFF ** ib_pc.sq_trophy)) * B.S_Q_HPBP:
                                         print ("The smell of perfume is overpowering as you enter the castle. ")
-                                        sq_phase_one(new_h_p, new_b_p, p_npc, ib_pc,
+                                        sq_phase_one(new_h_p, new_b_p, new_h_s, ib_pc,
                                                      s_pc, new_h_w, new_h_a)
                                 elif mon.name == "Succubus Queen" and mon.health < (B.S_Q_HEALTH * (C.BUFF ** ib_pc.sq_trophy)) * B.S_Q_HPBP and mon.health > 0:
                                         print ("The Succubus Queen reveals her true form! ")
                                         print ("Her wings stretch and her claws extend! ")
-                                        sq_phase_two(new_h_p, new_b_p, p_npc, ib_pc,
+                                        sq_phase_two(new_h_p, new_b_p, new_h_s, ib_pc,
                                                      s_pc, new_h_w, new_h_a)
 
         if not bBattle:
@@ -263,10 +267,9 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         for heero in new_h_p:
                                 if hero.name == heero.name:
                                         check = heero
-                        #if there is no matching hero then the hero's health goes to zero
                         if check == None:
-                                hero.health = 0
-                        #if there is a matching hero then the hero's health becomes equal
+                                        hero.health = 0
+                                        hero.mana = 0
                         elif check != None:
-                                hero.health = min(check.health, hero.maxhealth)
-
+                                        hero.health = min(check.health, hero.maxhealth)
+                                        hero.mana = min(check.mana, hero.maxmana)

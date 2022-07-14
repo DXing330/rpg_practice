@@ -37,13 +37,13 @@ def write_object_list(objs, fileName):
     write_object(heroes_bag, PREFIX + HEROES_BAG_FILE)
     write_object(heroes_pet, PREFIX + HEROES_ALLY_FILE)'''
 
-def write_to_files(heroes_party, heroes_magic, heroes_bag, heroes_pet,
+def write_to_files(heroes_party, heroes_magic, heroes_bag, heroes_summon,
                    heroes_weapons, heroes_armor,
                    quest_items, access_items, prefix):
     write_object_list(heroes_party, PREFIX + HEROES_FILE)
     write_object_list(heroes_magic, PREFIX + HEROES_MAGIC_FILE)
     write_object(heroes_bag, PREFIX + HEROES_BAG_FILE)
-    write_object(heroes_pet, PREFIX + HEROES_ALLY_FILE)
+    write_object_list(heroes_summon, PREFIX + HEROES_ALLY_FILE)
     write_object_list(heroes_weapons, PREFIX + HEROES_WEAPONS_FILE)
     write_object_list(heroes_armor, PREFIX + HEROES_ARMOR_FILE)
     write_object(quest_items, PREFIX + QUEST_FILE)
@@ -61,7 +61,7 @@ def read_hero_objects(sFileNm):
         #you know this list contains only one type of Player object
         p = Player_PC(**e)
         load_hero_list.append(p)
-    print("player from json file ", sFileNm)
+    print("Players from ", sFileNm)
     for pp in load_hero_list:
         pp.stats()
     return load_hero_list
@@ -93,10 +93,11 @@ def read_weapon_objects(sFileNm):
         load_weapon_list.append(p)
     print("Weapons from ", sFileNm)
     for pp in load_weapon_list:
-        pp.stats()
+        if pp.user != "None":
+            pp.stats()
     return load_weapon_list
 
-#this function will read a list of spells from the given filename, etc.
+#this function will read a list of armor from the given filename, etc.
 def read_armor_objects(sFileNm):
     load_armor_list = []
     jsonFile = open(sFileNm, "r")
@@ -108,8 +109,21 @@ def read_armor_objects(sFileNm):
         load_armor_list.append(p)
     print("Armors from ", sFileNm)
     for pp in load_armor_list:
-        pp.stats()
+        if pp.user != "None":
+            pp.stats()
     return load_armor_list
+
+#this function will read a list of allys from the given filename, etc.
+def read_ally_object(sFileNm):
+    load_ally_list = []
+    jsonFile = open(sFileNm, "r")
+    lst = json.load(jsonFile)
+    for e in lst:
+        p = Pet_NPC(**e)
+        load_ally_list.append(p)
+    for pp in load_ally_list:
+        pp.stats()
+    return load_ally_list
 
 #the input will be the file names storing each of those things
 '''def read_from_files(heroes, spells, items, ally):
@@ -132,9 +146,7 @@ def read_from_files(heroes, spells, items, ally,
     jsonFile = open(items, "r")
     items_bag = json.load(jsonFile)
     items_bag_obj = ItemBag_PC(**items_bag)
-    jsonFile = open(ally, "r")
-    aly = json.load(jsonFile)
-    pet_obj = Pet_NPC(**aly)
+    heroes_ally = read_ally_object(ally)
     heroes_weapons = read_weapon_objects(weapons)
     heroes_armor = read_armor_objects(armor)
     jsonFile = open(quest, "r")
@@ -144,7 +156,7 @@ def read_from_files(heroes, spells, items, ally,
     access = json.load(jsonFile)
     access_obj = Access_NPC(**access)
 
-    return (heroes_list, heroes_magic_list, items_bag_obj, pet_obj,
+    return (heroes_list, heroes_magic_list, items_bag_obj, heroes_ally,
             heroes_weapons, heroes_armor, quest_items_obj, access_obj)
 
 #function that will read lists

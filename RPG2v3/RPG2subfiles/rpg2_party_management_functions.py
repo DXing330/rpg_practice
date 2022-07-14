@@ -130,8 +130,8 @@ def pick_monster(monster_party):
         monster = None
         if len(monster_party) > 1:
                 try:
-                        x = int(input("Which monster?"
-                                          "(First monster is number 1, etc.)"))
+                        x = int(input("Which monster?",
+                                      "(First monster is number 1, etc.)"))
                         if 0 < x <= len(monster_party):
                                 monster = monster_party[(x - 1)]
                         else:
@@ -139,7 +139,7 @@ def pick_monster(monster_party):
                                 monster = pick_monster(monster_party)
                 except (ValueError, AttributeError):
                         print ("That's not a real choice.")
-                        monster = pick_monster(monster_party)
+                        monster = monster_party[0]
         elif len(monster_party) == 1:
                 monster = monster_party[0]
         else:

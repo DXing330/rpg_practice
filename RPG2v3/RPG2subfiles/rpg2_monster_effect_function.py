@@ -64,3 +64,16 @@ def monster_passive_effect(m_npc, p_pc, h_p, m_p):
                         if passive == "Troll":
                                 m_npc.health += m_npc.skill
                                 print (m_npc.name, "regenerates. ")
+                        if passive == "Goblin":
+                                x = random.randint(0, 2)
+                                if x == 0:
+                                        p_pc.health -= m_npc.skill
+                                        print ("The goblin stabs", p_pc.name, "with a hidden dagger. ")
+                                elif x == 1:
+                                        p_pc.atkbonus -= min(m_npc.skill, p_pc.atkbonus)
+                                        print ("The goblin trips", p_pc.name, "with a hidden stick. ")
+                                elif x == 2:
+                                        p_pc.defbonus -= min(m_npc.skill, p_pc.defbonus)
+                                        print ("The goblin blinds", p_pc.name, "with a handful of dirt. ")
+                                        
+                                        

@@ -9,7 +9,7 @@ from rpg2_constants import Constants
 C = Constants()
 #function that controls what the pet will do during battle
 #need to input the pet and both parties
-def pet_random_action(p_npc, h_p, m_p):
+def angel_random_action(p_npc, h_p, m_p):
         z = random.randint(0, p_npc.stage)
         if z == 0:
                 hero = party_func.pet_pick_random_injured_hero(h_p)
@@ -76,6 +76,41 @@ def pet_random_action(p_npc, h_p, m_p):
                 for monster in m_p:
                         monster.atk = max(monster.atk - round(p_npc.atk ** C.PET_ATK_BUFF), 0)
                         monster.defense = max(monster.defense - round(p_npc.atk ** C.PET_DEF_BUFF), 0)
-                        monster.atk = max(monster.atk - round(p_npc.atk ** C.PET_ATK_BUFF), 0)
-                        monster.defense = max(monster.defense - round(p_npc.atk ** C.PET_DEF_BUFF), 0)
-                        
+
+def angel_action(p_npc, h_p, m_p):
+        for hero in h_p:
+                if hero.name == "Summoner":
+                        angel_random_action(p_npc, h_p, m_p)
+                elif hero.name == "Hero":
+                        hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
+                        hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                        hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
+                        hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
+                        hero.poison -= min(p_npc.stage, hero.poison)
+                        print (p_npc.name, "uses their blessing magic on", hero.name)                        
+                elif hero.name == "Totem":
+                        if hero.atk > 0:
+                                monster = party_func.pick_random_healthy_monster(m_p)
+                                monster.health -= max((p_npc.atk - monster.defense), 1)
+                                print (p_npc.name, "uses their attacking magic on", monster.name)
+                        elif hero.skill > 0:
+                                hero = party_func.pet_pick_random_healthy_hero(h_p)
+                                hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
+                                hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
+                                hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
+                                hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
+                                print (p_npc.name, "uses their blessing magic on", hero.name)
+                        elif hero.defense > 0:
+                                hero = party_func.pet_pick_random_injured_hero(h_p)
+                                hero.poison -= min(p_npc.stage, hero.poison)
+                                hero.health = min((hero.health + p_npc.atk), hero.maxhealth)
+                                print (p_npc.name, "uses their healing magic on", hero.name)
+                        elif hero.mana > 0:
+                                monster = party_func.pick_random_healthy_monster(m_p)
+                                monster.atk = max(monster.atk - round(p_npc.atk ** C.PET_ATK_BUFF), 0)
+                                monster.defense = max(monster.defense - round(p_npc.atk ** C.PET_DEF_BUFF), 0)
+                                print (p_npc.name, "uses their weakening magic on", monster.name)
+                else:
+                        x = random.randint(0, C.PET_ACTION_UP * len(h_p) * len(m_p))
+                        if x == 0:
+                                angel_random_action(p_npc, h_p, m_p)

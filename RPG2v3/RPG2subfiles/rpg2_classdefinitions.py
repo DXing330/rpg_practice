@@ -7,7 +7,7 @@ class Statuses_NPC:
 #player object
 class Player_PC:
         def __init__(self, name, level, health, maxhealth,
-                     atk, defense, skill, mana,
+                     atk, defense, skill, mana, maxmana, 
                      atkbonus = 0, defbonus = 0, 
                      poison = 0):
                 #player's name, usually represented by their class
@@ -29,6 +29,7 @@ class Player_PC:
                 #resource used when casting spells
                 #recovered by resting or through potions
                 self.mana = mana
+                self.maxmana = maxmana
                 #bonus atk that can be increased through quests
                 self.atkbonus = atkbonus
                 #bonus defense that can be increase through quests
@@ -49,7 +50,7 @@ class Player_PC:
                 print (self.name, self.level,
                       self.health, self.maxhealth,
                       self.atk, self.defense,
-                      self.skill, self.mana,
+                      self.skill, self.mana, self.maxmana, 
                       self.atkbonus, self.defbonus)
                 if self.poison > 0:
                         print ("POISON:", self.poison)
@@ -57,7 +58,7 @@ class Player_PC:
                 print (self.level, self.maxhealth, self.atk, self.defense)
         #bonus stats
         def bstats(self):
-                print ("MAX HEALTH:", self.maxhealth, "SKILL:", self.skill, "MANA:", self.mana,
+                print ("MAX HEALTH:", self.maxhealth, "SKILL:", self.skill, "MANA:", self.maxmana,
                        "BONUS ATK:", self.atkbonus, "BONUS DEF:", self.defbonus)
 class Pet_NPC:
         def __init__(self, name, stage, atk):
@@ -135,7 +136,7 @@ class Monster_NPC:
 
 
 class Weapon_PC:
-        def __init__(self, name, user, effect, strength, element, atk):
+        def __init__(self, name, user, effect, strength, element, atk, upgrade = 0):
                 #the name of the weapon
                 self.name = name
                 #user of the weapon
@@ -148,13 +149,16 @@ class Weapon_PC:
                 self.element = element
                 #how much atk the weapon will give
                 self.atk = atk
+                self.upgrade = upgrade
         def stats(self):
                 print("Name:", self.name, ", Owner:", self.user, ", Effect:", self.effect,
                       ", Power:", self.strength, ", Element:", self.element, 
                       ", Attack:", self.atk)
+                if self.upgrade > 0:
+                        print ("Upgrades:", self.upgrade)
 
 class Armor_PC:
-        def __init__(self, name, user, effect, strength, element, defense):
+        def __init__(self, name, user, effect, strength, element, defense, upgrade = 0):
                 #the name of the armor
                 self.name = name
                 #the user of the armor
@@ -166,10 +170,13 @@ class Armor_PC:
                 self.element = element
                 #how much defense the armor will give
                 self.defense = defense
+                self.upgrade = upgrade
         def stats(self):
                 print("Name:", self.name, ", Owner:", self.user, ", Effect:", self.effect,
                       ", Power:", self.strength, ", Element:", self.element, 
                       ", Defense:", self.defense)
+                if self.upgrade > 0:
+                        print ("Upgrades:", self.upgrade)
 #used during quests
 class QuestItems_NPC:
         def __init__(self, package = 0, rpackage = 0, managem = 0):
@@ -181,7 +188,7 @@ class QuestItems_NPC:
                 #reward for completing quests
                 self.managem = managem
         def stats(self):
-                print ("Packages:", self.package)
+                print ("Packages:", self.package, "Mana Gems:", self.managem)
 #obtained through gameplay and allows access to new content
 class Access_NPC:
         def __init__(self, fame = 0, rank = 0):

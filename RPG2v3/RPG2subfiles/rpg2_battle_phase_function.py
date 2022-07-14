@@ -18,14 +18,18 @@ def drop_step(ib_pc, m_p, h_w, h_a):
         while len(m_p) > 0:
                 m_p.pop(0)
 #function that controls the basic battle_phase
-def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def battle_phase(h_p, m_p, h_s, ib_pc, s_pc, h_w, h_a):
         #make a copy of the heroes party and the monster's party
         new_h_p = []
+        new_h_s = []
         new_h_w = []
         new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for ally in h_s:
+                copy_ally = copy.copy(ally)
+                new_h_s.append(copy_ally)
         for wpn in h_w:
                 copy_weapon = copy.copy(wpn)
                 new_h_w.append(copy_weapon)
@@ -46,19 +50,20 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
                 else:
                 #give the player's actions
                         for hero in new_h_p:
-                                if hero.health > 0 and hero.name != "Golem":
+                                if hero.health > 0 and hero.name != "Totem":
                                         hero.stats()
                                         player_func.player_action(hero, new_h_p, new_m_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   new_h_w, new_h_a)
                                 elif hero.health <= 0:
                                         new_h_p.remove(hero)
                         #then give the pet a turn
-                        player_func.pet_action(p_npc, new_h_p, new_m_p)
+                        player_func.pet_action(new_h_s, new_h_p, new_m_p)
                         #then check if the monster's are still alive
-                        for monster in new_m_p:
-                                if monster.health <= 0:
-                                        new_m_p.remove(monster)
+                        for x in range(0, len(m_p)):
+                                for monster in new_m_p:
+                                        if monster.health <= 0:
+                                                new_m_p.remove(monster)
                         #also check if the heroes killed themselves somehow
                         for hero in new_h_p:
                                 if hero.health <= 0:
@@ -84,10 +89,17 @@ def battle_phase(h_p, m_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 if hero.name == heero.name:
                                         check = heero
                         #if there is no matching hero then the hero's health goes to zero
-                        if check == None:
+                        if check == None and hero.name != "Knight":
                                 hero.health = 0
+                                hero.mana = 0
                         #if there is a matching hero then the hero's health becomes equal
                         elif check != None:
                                 hero.health = min(check.health, hero.maxhealth)
+                                hero.mana = min(check.mana, hero.maxmana)
+                        elif check == None and hero.name == "Knight":
+                                for heeero in new_h_p:
+                                        if heeero.name == "Defender":
+                                                hero.health = min(heeero.health, hero.maxhealth)
+                                                hero.mana = min(heeero.mana, hero.maxmana)
                 drop_step(ib_pc, m_p, h_w, h_a)
 

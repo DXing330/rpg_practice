@@ -10,13 +10,13 @@ import rpg2_level_up_function as lvlup_func
 from rpg2_constants import Constants
 C = Constants()
 #store the starter characters incase the player recruits them
-summoner = Player_PC("Summoner", 1, 10, 10, 2, 2, 2, 2)
-cleric = Player_PC("Cleric", 1, 10, 10, 3, 3, 2, 3)
-mage = Player_PC("Mage", 1, 10, 10, 2, 2, 2, 5)
-warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 2, 0)
-ninja = Player_PC("Ninja", 1, 10, 10, 3, 3, 5, 2)
-knight = Player_PC("Knight", 1, 20, 20, 3, 4, 2, 0)
-tactician = Player_PC("Tactician", 1, 10, 10, 1, 1, 5, 0)
+summoner = Player_PC("Summoner", 1, 10, 10, 2, 2, 2, 2, 2)
+cleric = Player_PC("Cleric", 1, 10, 10, 3, 3, 2, 3, 3)
+mage = Player_PC("Mage", 1, 10, 10, 2, 2, 2, 5, 5)
+warrior = Player_PC("Warrior", 1, 15, 15, 5, 3, 2, 0, 0)
+ninja = Player_PC("Ninja", 1, 10, 10, 3, 3, 5, 2, 2)
+knight = Player_PC("Knight", 1, 20, 20, 3, 4, 2, 0, 0)
+tactician = Player_PC("Tactician", 1, 10, 10, 1, 1, 5, 0, 0)
 
 
 ##functions in the town
@@ -32,6 +32,7 @@ def inn(ib_pc, h_p, h_w, h_a):
                 for hero in h_p:
                         hero.stats()
                         hero.health = hero.maxhealth
+                        hero.mana = hero.maxmana
                 if ib_pc.coins >= len(h_p):
                         ib_pc.coins -= len(h_p)
                         print ("Thank you for your patronage.")
@@ -64,8 +65,15 @@ def inn(ib_pc, h_p, h_w, h_a):
                         hero = copy.copy(warrior)
                         party_func.add_to_party(h_p, hero)
                 elif choice.upper() == "K":
-                        hero = copy.copy(knight)
-                        party_func.add_to_party(h_p, hero)
+                        hero = None
+                        for player in h_p:
+                                if player.name == "Knight":
+                                        hero = player
+                        if hero == None:
+                                hero = copy.copy(knight)
+                                party_func.add_to_party(h_p, hero)
+                        else:
+                                print("Looks like you already have a knight with you. ")
                 elif choice.upper() == "N":
                         hero = copy.copy(ninja)
                         party_func.add_to_party(h_p, hero)
@@ -119,50 +127,65 @@ def inn(ib_pc, h_p, h_w, h_a):
                                 except (ValueError, AttributeError):
                                         print("That's not a good plan. ")
                 elif chck.upper() == "E":
-                        print ("Do you want to adjust WEAPONS or ARMOR? ")
-                        choice = input("A/W? ")
-                        if choice.upper() == "A":
-                                for amr in h_a:
-                                        amr.stats()
-                                try:
-                                        print ("Which armor do you want to reassign? ")
-                                        x = int(input("The first one is 1, etc. "))
-                                        armor = h_a[(x - 1)]
-                                        armor.user = "None"
-                                        print ("Which hero do you want to give it to? ")
-                                        y = int(input("The first one is 1, etc. "))
-                                        hero = h_p[(y - 1)]
-                                        armr = None
+                        print ("Do you want to save or rearrange your equipment? ")
+                        echoice = input("Save or Rearrange? S/R? ")
+                        if echoice.upper() == "S":
+                                print ("Do you want to save WEAPONS or ARMOR? ")
+                                choice = input("A/W? ")
+                                if choice.upper() == "A":
                                         for amr in h_a:
-                                                if amr.user == hero.name:
-                                                        armr = amr
-                                        if armr == None:
+                                                amr.stats()
+                                        armor = party_func.pick_hero(h_a)
+                                        armor.user = "save"
+                                elif choice.upper() == "W":
+                                        for wpn in h_w:
+                                                wpn.stats()
+                                        weapon = party_func.pick_hero(h_w)
+                                        weapon.user = "save"
+                                        
+                        elif echoice.upper() == "R":
+                                print ("Do you want to adjust WEAPONS or ARMOR? ")
+                                choice = input("A/W? ")
+                                if choice.upper() == "A":
+                                        for amr in h_a:
+                                                amr.stats()
+                                        try:
+                                                print ("Which armor do you want to reassign? ")
+                                                x = int(input("The first one is 1, etc. "))
+                                                armor = h_a[(x - 1)]
+                                                armor.user = "None"
+                                                print ("Which hero do you want to give it to? ")
+                                                for hero in h_p:
+                                                        hero.stats()
+                                                y = int(input("The first one is 1, etc. "))
+                                                hero = h_p[(y - 1)]
+                                                #make sure no one has two armors
+                                                for amr in h_a:
+                                                        if amr.user == hero.name:
+                                                                amr.user = "None"
                                                 armor.user = hero.name
-                                        else:
-                                                print (hero.name, "already has an armor. ")
-                                except (ValueError, AttributeError):
-                                        print("That's not a good plan. ")
-                        if choice.upper() == "W":
-                                for wpn in h_a:
-                                        wpn.stats()
-                                try:
-                                        print ("Which weapon do you want to reassign? ")
-                                        x = int(input("The first one is 1, etc. "))
-                                        weapon = h_a[(x - 1)]
-                                        weapon.user = "None"
-                                        print ("Which hero do you want to give it to? ")
-                                        y = int(input("The first one is 1, etc. "))
-                                        hero = h_p[(y - 1)]
-                                        weapn = None
-                                        for wpn in h_a:
-                                                if wpn.user == hero.name:
-                                                        weapn = amr
-                                        if weapn == None:
+                                                
+                                        except (ValueError, AttributeError):
+                                                print("That's not a good plan. ")
+                                if choice.upper() == "W":
+                                        for wpn in h_w:
+                                                wpn.stats()
+                                        try:
+                                                print ("Which weapon do you want to reassign? ")
+                                                x = int(input("The first one is 1, etc. "))
+                                                weapon = h_w[(x - 1)]
+                                                weapon.user = "None"
+                                                print ("Which hero do you want to give it to? ")
+                                                for hero in h_p:
+                                                        hero.stats()
+                                                y = int(input("The first one is 1, etc. "))
+                                                hero = h_p[(y - 1)]
+                                                for wpn in h_w:
+                                                        if wpn.user == hero.name:
+                                                                wpn.user = "None"
                                                 weapon.user = hero.name
-                                        else:
-                                                print (hero.name, "already has a weapon. ")
-                                except (ValueError, AttributeError):
-                                        print("That's not a good plan. ")
+                                        except (ValueError, AttributeError):
+                                                print("That's not a good plan. ")
                 inn(ib_pc, h_p, h_w, h_a)
                 
         elif check.upper() == "O" or check.upper() == "L":
@@ -208,9 +231,9 @@ def practice_arena(p_pc, ib_pc):
                         p_pc.defbonus += 1
                         print("You're a thick guy now. ")
                         practice_arena(p_pc, ib_pc)
-                elif check.upper() == "M" and ib_pc.coins >= C.STAT_PRICE * (p_pc.mana ** C.INCREASE_EXPONENT):
-                        ib_pc.coins -= C.STAT_PRICE * (p_pc.mana ** C.INCREASE_EXPONENT)
-                        p_pc.mana += 1
+                elif check.upper() == "M" and ib_pc.coins >= C.STAT_PRICE * (p_pc.maxmana ** C.INCREASE_EXPONENT):
+                        ib_pc.coins -= C.STAT_PRICE * (p_pc.maxmana ** C.INCREASE_EXPONENT)
+                        p_pc.maxmana += 1
                         print("You don't look any different. ")
                         practice_arena(p_pc, ib_pc)
                 elif check.upper() == "S" and ib_pc.coins >= C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT):
@@ -230,42 +253,82 @@ def practice_arena(p_pc, ib_pc):
                         
 #potion store function
 def potion_store(ib_pc):
-        print ("What kind of potions do you want?")
-        #all potions cost one coin
-        check = input("Health, Mana, or Boost? H/M/B")
-        if check.upper() == "H":
-                try:
-                        quantity = int(input("How many do you want? "))
-                        if ib_pc.coins >= quantity:
-                                ib_pc.coins -= quantity
-                                ib_pc.heal += quantity
-                                print ("Thank you for your patronage.")
-                        else:
-                                print ("You can't afford that.")
-                except ValueError:
-                        print ("Please don't waste my time.")
-        elif check.upper() == "M":
-                try:
-                        quantity = int(input("How many do you want? "))
-                        if ib_pc.coins >= quantity:
-                                ib_pc.coins -= quantity
-                                ib_pc.mana += quantity
-                                print ("Thank you for your patronage.")
-                        else:
-                                print ("You can't afford that.")
-                except ValueError:
-                        print ("Please don't waste my time.")
-        elif check.upper() == "B":
-                try:
-                        quantity = int(input("How many do you want? "))
-                        if ib_pc.coins >= quantity:
-                                ib_pc.coins -= quantity
-                                ib_pc.buff += quantity
-                                print ("Thank you for your patronage.")
-                        else:
-                                print ("You can't afford that.")
-                except ValueError:
-                        print ("Please don't waste my time.")
+        print ("Buying or selling? ")
+        choice = input("BUY/SELL? B/S? ")
+        if choice.upper() == "B":
+                print ("What kind of potions do you want?")
+                #all potions cost C.POTION_PRICE
+                check = input("Health, Mana, or Boost? H/M/B")
+                if check.upper() == "H":
+                        try:
+                                quantity = int(input("How many do you want? "))
+                                if ib_pc.coins >= quantity * C.POTION_PRICE:
+                                        ib_pc.coins -= quantity * C.POTION_PRICE
+                                        ib_pc.heal += quantity
+                                        print ("Thank you for your patronage.")
+                                else:
+                                        print ("You can't afford that.")
+                        except ValueError:
+                                print ("Please don't waste my time.")
+                elif check.upper() == "M":
+                        try:
+                                quantity = int(input("How many do you want? "))
+                                if ib_pc.coins >= quantity * C.POTION_PRICE:
+                                        ib_pc.coins -= quantity * C.POTION_PRICE
+                                        ib_pc.mana += quantity
+                                        print ("Thank you for your patronage.")
+                                else:
+                                        print ("You can't afford that.")
+                        except ValueError:
+                                print ("Please don't waste my time.")
+                elif check.upper() == "B":
+                        try:
+                                quantity = int(input("How many do you want? "))
+                                if ib_pc.coins >= quantity * C.POTION_PRICE:
+                                        ib_pc.coins -= quantity * C.POTION_PRICE
+                                        ib_pc.buff += quantity
+                                        print ("Thank you for your patronage.")
+                                else:
+                                        print ("You can't afford that.")
+                        except ValueError:
+                                print ("Please don't waste my time.")
+        elif choice.upper() == "S":
+                print ("What kind of potions do you want to sell?")
+                #all potions sell for C.POTION_PRICE/2
+                check = input("Health, Mana, or Boost? H/M/B")
+                if check.upper() == "H":
+                        try:
+                                quantity = int(input("How many do you want? "))
+                                if ib_pc.heal >= quantity:
+                                        ib_pc.coins += quantity * C.POTION_PRICE/2
+                                        ib_pc.heal -= quantity
+                                        print ("Thank you for your patronage.")
+                                else:
+                                        print ("You don't have that many.")
+                        except ValueError:
+                                print ("Please don't waste my time.")
+                elif check.upper() == "M":
+                        try:
+                                quantity = int(input("How many do you want? "))
+                                if ib_pc.mana >= quantity:
+                                        ib_pc.coins += quantity * C.POTION_PRICE/2
+                                        ib_pc.mana -= quantity
+                                        print ("Thank you for your patronage.")
+                                else:
+                                        print ("You don't have that many.")
+                        except ValueError:
+                                print ("Please don't waste my time.")
+                elif check.upper() == "B":
+                        try:
+                                quantity = int(input("How many do you want? "))
+                                if ib_pc.buff >= quantity:
+                                        ib_pc.coins += quantity * C.POTION_PRICE/2
+                                        ib_pc.buff -= quantity
+                                        print ("Thank you for your patronage.")
+                                else:
+                                        print ("You don't have that many.")
+                        except ValueError:
+                                print ("Please don't waste my time.")
         else:
                 print ("Come back soon.")
 #equipment store

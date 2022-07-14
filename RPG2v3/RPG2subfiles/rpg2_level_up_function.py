@@ -14,7 +14,7 @@ def level_up(p_pc):
                 p_pc.defense += (p_pc.defense/(p_pc.level - 1))
                 p_pc.maxhealth += (p_pc.maxhealth/(p_pc.level - 1))
                 p_pc.skill += (p_pc.skill/(p_pc.level - 1))
-                p_pc.mana += (p_pc.mana/(p_pc.level - 1))
+                p_pc.maxmana += (p_pc.maxmana/(p_pc.level - 1))
         #if the player is already max level then nothing happens
         elif p_pc.level == C.LEVEL_LIMIT:
                 print ("Sorry, it looks like you're already too strong.")
@@ -28,7 +28,7 @@ def def_up(p_pc):
 def mana_up(p_pc):
         p_pc.mana += 1
 #function that will increase the pet's stage
-def stage_up(p_npc):
+def angel_stage_up(p_npc):
         #check if the pet is at the stage limit
         if p_npc.stage < C.LEVEL_LIMIT:
                 p_npc.stage += 1

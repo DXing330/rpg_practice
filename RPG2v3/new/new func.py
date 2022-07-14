@@ -11,4 +11,3 @@ from rpg2_constant_lists import List_Constants
 L = List_Constants()
 C = Constants()
 
-

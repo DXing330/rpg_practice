@@ -99,7 +99,7 @@ def ip_battle_action(m_npc, h_p, x, h_a):
         print (m_npc.name, "attacks", hero.name)
         
 #phase one
-def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def ip_battle(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         lives = B.I_P_L
         bPhase = True
         while bPhase:
@@ -119,12 +119,12 @@ def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 elif hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
                                         
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         for mon in b_p:
                                 if mon.name == "Cryo Phoenix" and mon.health > 0:
                                         ip_battle_action(mon, h_p, lives, h_a)
@@ -156,18 +156,22 @@ def ip_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         
 
 #phases will change according to boss hp                                              
-def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def boss_battle(h_p, b_p, h_s, ib_pc, s_pc, h_w, h_a):
         #make a copies of the party as usual
         b_p = []
         Cryo_Phoenix = copy.copy(I_P)
         Cryo_Phoenix.health = round(Cryo_Phoenix.health * (C.BUFF ** ib_pc.ip_trophy))
         b_p.append(Cryo_Phoenix)
         new_h_p = []
+        new_h_s = []
         new_h_w = []
         new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for ally in h_s:
+                copy_ally = copy.copy(ally)
+                new_h_s.append(copy_ally)
         for wpn in h_w:
                 copy_weapon = copy.copy(wpn)
                 new_h_w.append(copy_weapon)
@@ -207,7 +211,7 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         for mon in new_b_p:
                                 if mon.name == "Cryo Phoenix" and mon.health > 0:
                                         print ("The air grows colder around you. ")
-                                        ip_battle(new_h_p, new_b_p, p_npc, ib_pc, s_pc, new_h_w, new_h_a)
+                                        ip_battle(new_h_p, new_b_p, new_h_s, ib_pc, s_pc, new_h_w, new_h_a)
         if not bBattle:
                 #adjust the hp of the heroes after battles
                 for hero in h_p:
@@ -215,9 +219,9 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         for heero in new_h_p:
                                 if hero.name == heero.name:
                                         check = heero
-                        #if there is no matching hero then the hero's health goes to zero
                         if check == None:
-                                hero.health = 0
-                        #if there is a matching hero then the hero's health becomes equal
+                                        hero.health = 0
+                                        hero.mana = 0
                         elif check != None:
-                                hero.health = min(check.health, hero.maxhealth)
+                                        hero.health = min(check.health, hero.maxhealth)
+                                        hero.mana = min(check.mana, hero.maxmana)

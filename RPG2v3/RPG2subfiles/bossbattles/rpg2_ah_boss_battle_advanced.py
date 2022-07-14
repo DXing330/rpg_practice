@@ -83,7 +83,7 @@ def ah_phase_one_action(m_npc, h_p, b_p):
 
 
 #phase one
-def ah_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def ah_phase_one(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase1 = True
         while bPhase1:
                 for mon in b_p:
@@ -100,12 +100,12 @@ def ah_phase_one(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
                                         
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         
                         for monster in b_p:
                                 if monster.health <= 0 and monster.name != "Acid Hydra":
@@ -183,7 +183,7 @@ def ah_phase_two_action(m_npc, h_p, b_p, h_a):
 
         
 #phase two
-def ah_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def ah_phase_two(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
         bPhase2 = True
         while bPhase2:
                 if len(h_p) == 0:
@@ -195,11 +195,11 @@ def ah_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                                 if hero.health > 0 and hero.name != "Golem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
-                                                                  ib_pc, s_pc, p_npc,
+                                                                  ib_pc, s_pc, new_h_s,
                                                                   h_w, h_a)
                                 elif hero.health <= 0:
                                         h_p.remove(hero)
-                        player_func.pet_action(p_npc, h_p, b_p)
+                        player_func.pet_action(new_h_s, h_p, b_p)
                         for monster in b_p:
                                 if monster.health <= 0 and monster.name != "Acid Hydra":
                                         b_p.remove(monster)
@@ -217,18 +217,22 @@ def ah_phase_two(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
 
 #phases will change according to boss hp
 #this battle is a dps rush, aiming to kill the slime before it can split too much                                               
-def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
+def boss_battle(h_p, b_p, h_s, ib_pc, s_pc, h_w, h_a):
         #make a copies of the party as usual
         b_p = []
         Acid_Hydra = copy.copy(A_H)
         Acid_Hydra.health = round(Acid_Hydra.health * (C.BUFF ** ib_pc.ah_trophy))
         b_p.append(Acid_Hydra)
         new_h_p = []
+        new_h_s = []
         new_h_w = []
         new_h_a = []
         for hero in h_p:
                 copy_hero = copy.copy(hero)
                 new_h_p.append(copy_hero)
+        for ally in h_s:
+                copy_ally = copy.copy(ally)
+                new_h_s.append(copy_ally)
         for wpn in h_w:
                 copy_weapon = copy.copy(wpn)
                 new_h_w.append(copy_weapon)
@@ -259,11 +263,11 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         for mon in new_b_p:
                                 if mon.name == "Acid Hydra" and mon.health >= (B.A_H_HEALTH * (C.BUFF ** ib_pc.ah_trophy))/2:
                                         print ("You spot the massive monster in the swamp! ")
-                                        ah_phase_one(new_h_p, new_b_p, p_npc, ib_pc,
+                                        ah_phase_one(new_h_p, new_b_p, new_h_s, ib_pc,
                                                      s_pc, new_h_w, new_h_a)
                                 elif mon.name == "Acid Hydra" and mon.health < (B.A_H_HEALTH * (C.BUFF ** ib_pc.ah_trophy))/2:
                                         print ("It seems to be focusing its regeneration on its main head now! ")
-                                        ah_phase_two(new_h_p, new_b_p, p_npc, ib_pc,
+                                        ah_phase_two(new_h_p, new_b_p, new_h_s, ib_pc,
                                                      s_pc, new_h_w, new_h_a)
 
         if not bBattle:
@@ -276,7 +280,8 @@ def boss_battle(h_p, b_p, p_npc, ib_pc, s_pc, h_w, h_a):
                         #if there is no matching hero then the hero's health goes to zero
                         if check == None:
                                 hero.health = 0
+                                hero.mana = 0
                         #if there is a matching hero then the hero's health becomes equal
                         elif check != None:
-                                hero.health = min(check.health, hero.maxhealth)           
-
+                                hero.health = min(check.health, hero.maxhealth)
+                                hero.mana = min(check.mana, hero.maxmana)
