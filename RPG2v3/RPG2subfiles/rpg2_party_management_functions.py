@@ -75,12 +75,12 @@ def pet_pick_random_healthy_hero(heroes_party):
                         x = random.randint(0, len(heroes_party) - 1)
                         hero = heroes_party[x]
                         #don't pick golems
-                        if hero.health <=0 or hero.name == "Golem":
+                        if hero.health <=0 or hero.name == "Totem":
                                 hero = pet_pick_random_healthy_hero(heroes_party)
                         return hero
                 else:
                         hero = heroes_party[0]
-                        if hero.name != "Golem":
+                        if hero.name != "Totem":
                                 return hero
                         else:
                                 hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
@@ -97,12 +97,12 @@ def pet_pick_random_injured_hero(heroes_party):
                         x = random.randint(0, len(heroes_party) - 1)
                         hero = heroes_party[x]
                         #only pick heroes, not golems, heros need to be injured but still conscious
-                        if hero.health <=0 or hero.name == "Golem" or hero.health >= hero.maxhealth:
+                        if hero.health <=0 or hero.name == "Totem" or hero.health >= hero.maxhealth:
                                 hero = pet_pick_random_healthy_hero(heroes_party)
                         return hero
                 else:
                         hero = heroes_party[0]
-                        if hero.name != "Golem" and hero.health > 0:
+                        if hero.name != "Totem" and hero.health > 0:
                                 return hero
                         else:
                                 hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
@@ -112,7 +112,7 @@ def pet_pick_random_injured_hero(heroes_party):
                 print ("The heroes have all been defeated.")
                 hero = Player_PC("nothing", 1, 0, 0, 0, 0, 0, 0, 0)
                 return hero
-#function that picks a random hero from the party who has been injured
+#function that picks a random monster from the party who has been injured
 def pick_random_healthy_monster(monster_party):
         try:
                 if len(monster_party) > 1:
@@ -120,7 +120,20 @@ def pick_random_healthy_monster(monster_party):
                         monster = monster_party[x]
                         if monster.health <= 0:
                                 monster = pick_random_healthy_monster(monster_party)
-                if len(monster_party) == 1:
+                elif len(monster_party) == 1:
+                        monster = monster_party[0]
+        except:
+                monster = Monster_NPC("nothing", 0, 0, 0, 0, "None", 0)
+        return monster
+def pet_pick_random_monster(monster_party):
+        try:
+                if len(monster_party) > 1:
+                        x = random.randint(0, len(monster_party) - 1)
+                        monster = monster_party[x]
+                        #don't pick bombs
+                        if monster.health <= 0 or "Bomb" in monster.name:
+                                monster = pet_pick_random_monster(monster_party)
+                elif len(monster_party) == 1:
                         monster = monster_party[0]
         except:
                 monster = Monster_NPC("nothing", 0, 0, 0, 0, "None", 0)
@@ -130,7 +143,7 @@ def pick_monster(monster_party):
         monster = None
         if len(monster_party) > 1:
                 try:
-                        x = int(input("Which monster?",
+                        x = int(input("Which monster?"
                                       "(First monster is number 1, etc.)"))
                         if 0 < x <= len(monster_party):
                                 monster = monster_party[(x - 1)]
@@ -152,3 +165,40 @@ def check_equipment(hero, equipment_list):
                 if equip.user == hero.name:
                         equipment = equip
         return equipment
+#function that picks the lowest health character
+def pick_lowest_health(h_p):
+        #start with 100% health
+        x = 100
+        hro = None
+        #repeat this process a few times to make sure you pick the lowest health hero
+        for z in range(0, len(h_p)):
+                #then check each characters health percentage
+                for hero in h_p:
+                        #make sure to only count health heroes
+                        if hero.health > 0 and hero.name != "Totem":
+                                #multiply by 100 to get an rounded percentage
+                                y = round((hero.health/hero.maxhealth), 2) * 100
+                                #if the percentage is lower then pick that hero
+                                if y < x:
+                                        x = y
+                                        hro = hero
+        return hro
+
+#function that picks the highest health character
+def pick_highest_health(h_p):
+        #start with 0% health
+        x = 0
+        hro = None
+        #repeat this process a few times to make sure you pick the highest health hero
+        for z in range(0, len(h_p)):
+                #then check each characters health percentage
+                for hero in h_p:
+                        #make sure to only count healthy heroes
+                        if hero.health > 0 and hero.name != "Totem":
+                                #multiply by 100 to get an rounded percentage
+                                y = round((hero.health/hero.maxhealth), 2) * 100
+                                #if the percentage is higher then pick that hero
+                                if y > x:
+                                        x = y
+                                        hro = hero
+        return hro

@@ -221,31 +221,51 @@ def practice_arena(p_pc, ib_pc):
                 print ("What would you like to train? ")
                 print ("Attack, Defense, Health, Mana or Skill? ")
                 check = input("A/D/H/M/S ")
-                if check.upper() == "A" and ib_pc.coins >= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT):
-                        ib_pc.coins -= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT)
-                        p_pc.atkbonus += 1
-                        print("You're a big guy. ")
-                        practice_arena(p_pc, ib_pc)
-                elif check.upper() == "D" and ib_pc.coins >= C.STAT_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT):
-                        ib_pc.coins -= C.STAT_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT)
-                        p_pc.defbonus += 1
-                        print("You're a thick guy now. ")
-                        practice_arena(p_pc, ib_pc)
-                elif check.upper() == "M" and ib_pc.coins >= C.STAT_PRICE * (p_pc.maxmana ** C.INCREASE_EXPONENT):
-                        ib_pc.coins -= C.STAT_PRICE * (p_pc.maxmana ** C.INCREASE_EXPONENT)
-                        p_pc.maxmana += 1
-                        print("You don't look any different. ")
-                        practice_arena(p_pc, ib_pc)
-                elif check.upper() == "S" and ib_pc.coins >= C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT):
-                        ib_pc.coins -= C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT)
-                        p_pc.skill += 1
-                        print("You're a skilled guy now. ")
-                        practice_arena(p_pc, ib_pc)
-                elif check.upper() == "H" and ib_pc.coins >= p_pc.maxhealth ** C.INCREASE_EXPONENT:
-                        ib_pc.coins -= p_pc.maxhealth ** C.INCREASE_EXPONENT
-                        p_pc.maxhealth += 1
-                        print("You're a big guy. ")
-                        practice_arena(p_pc, ib_pc)
+                if check.upper() == "A":
+                        if ib_pc.coins >= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT):
+                                ib_pc.coins -= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT)
+                                p_pc.atkbonus += 1
+                                print("You're a big guy. ")
+                                practice_arena(p_pc, ib_pc)
+                        else:
+                                print ("You can't afford that right now. ")
+                                print ("It costs ", C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT))
+                elif check.upper() == "D":
+                        if ib_pc.coins >= C.STAT_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT):
+                                ib_pc.coins -= C.STAT_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT)
+                                p_pc.defbonus += 1
+                                print("You're a thick guy now. ")
+                                practice_arena(p_pc, ib_pc)
+                        else:
+                                print ("You can't afford that right now. ")
+                                print ("It costs ", C.STAT_PRICE * (p_pc.defbonus ** C.INCREASE_EXPONENT))
+                elif check.upper() == "M":
+                        if ib_pc.coins >= C.STAT_PRICE * (p_pc.maxmana ** C.INCREASE_EXPONENT):
+                                ib_pc.coins -= C.STAT_PRICE * (p_pc.maxmana ** C.INCREASE_EXPONENT)
+                                p_pc.maxmana += 1
+                                print("You don't look any different. ")
+                                practice_arena(p_pc, ib_pc)
+                        else:
+                                print ("You can't afford that right now. ")
+                                print ("It costs ", C.STAT_PRICE * (p_pc.maxmana ** C.INCREASE_EXPONENT))
+                elif check.upper() == "S":
+                        if ib_pc.coins >= C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT):
+                                ib_pc.coins -= C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT)
+                                p_pc.skill += 1
+                                print("You're a skilled guy now. ")
+                                practice_arena(p_pc, ib_pc)
+                        else:
+                                print ("You can't afford that right now. ")
+                                print ("It costs ", C.STAT_PRICE * (p_pc.skill ** C.INCREASE_EXPONENT))
+                elif check.upper() == "H":
+                        if ib_pc.coins >= (p_pc.maxhealth ** C.INCREASE_EXPONENT) / C.STAT_PRICE:
+                                ib_pc.coins -= round((p_pc.maxhealth ** C.INCREASE_EXPONENT) / C.STAT_PRICE)
+                                p_pc.maxhealth += 1
+                                print("You're a big guy. ")
+                                practice_arena(p_pc, ib_pc)
+                        else:
+                                print ("You can't afford that right now. ")
+                                print ("It costs ", round((p_pc.maxhealth ** C.INCREASE_EXPONENT) / C.STAT_PRICE))
                 elif check.upper() == "L":
                         print ("Come back soon. ")
                 else:

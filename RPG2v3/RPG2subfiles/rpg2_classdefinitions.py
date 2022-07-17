@@ -37,14 +37,9 @@ class Player_PC:
                 #status effects that can be modified by the monsters or player skills
                 #self.statusObj = Statuses_NPC(0)
                 self.poison = poison
-
-        def update_poison(self, poison):
-                #self.statusObj.poison += poison
-                self.poison += poison
                 
-        def get_poison(self):
-                #return self.statusObj.poison
-                return self.poison
+        def hstats(self):
+                print ("Health:", self.health)
 
         def stats(self):
                 print (self.name, self.level,
@@ -133,6 +128,8 @@ class Monster_NPC:
                 print(self.name, self.health, self.atk, self.defense, self.skill)
                 if self.poison > 0:
                         print ("POISON:", self.poison)
+        def hstats(self):
+                print ("Health:", self.health)
 
 
 class Weapon_PC:

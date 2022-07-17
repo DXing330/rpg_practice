@@ -10,6 +10,7 @@ C = Constants()
 #fire>air>earth>water>fire is the element cycle
 #function that checks for elemental advantage during monster's attack
 def check_element_monster_attack(m_npc, m_npc_atk, armor):
+        new_atk = m_npc_atk
         if armor == None:
                 new_atk = m_npc_atk
         else:

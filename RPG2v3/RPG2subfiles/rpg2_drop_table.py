@@ -142,7 +142,7 @@ def random_intermediate_weapon_fulle():
         return weapon
 
 def drop_table(m_npc, ib_pc, h_w, h_a):
-        x = random.randint(0, 8)
+        x = random.randint(0, 6)
         y = random.randint(1, max(m_npc.dropchance, 1))
         if x == 0:
                 ib_pc.coins += m_npc.dropchance
@@ -165,95 +165,35 @@ def drop_table(m_npc, ib_pc, h_w, h_a):
         elif x == 6:
                 ib_pc.buff += 1
                 print ("The heroes found a buff potion. ")
-        elif x == 7:
-                armor = random_basic_armor()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 8:
-                weapon = random_basic_weapon()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
-        elif x == 9:
-                armor = random_basic_armor_fulle()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 10:
-                armor = random_intermediate_armor_fulle()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 11:
-                armor = random_intermediate_armor()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 12:
-                weapon = random_basic_weapon_fulle()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
-        elif x == 13:
-                weapon = random_intermediate_weapon()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
-        elif x == 14:
-                weapon = random_intermediate_weapon_fulle()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
+
 
 def quest_drop_table(m_npc, ib_pc, h_w, h_a, q_i):
-        x = random.randint(0, 15)
+        x = random.randint(0, 29)
         y = random.randint(1, max(m_npc.dropchance, 1))
-        if x == 0:
+        if x == 0 or x == 16 or x == 23:
                 ib_pc.coins += m_npc.dropchance
                 print ("The heroes found", m_npc.dropchance, "coins.")
-        elif x == 1:
+        elif x == 1 or x == 17 or x == 24:
                 ib_pc.heal += y
                 print ("The heroes found", y, "heal potions. ")
-        elif x == 2:
+        elif x == 2 or x == 18 or x == 25:
                 ib_pc.mana += y
                 print ("The heroes found", y, "mana potions. ")
-        elif x == 3:
+        elif x == 3 or x == 19 or x == 26:
                 ib_pc.buff += y
                 print ("The heroes found", y, "buff potions. ")
-        elif x == 4:
+        elif x == 4 or x == 20 or x == 27:
                 ib_pc.heal += 1
                 print ("The heroes found a heal potion. ")
-        elif x == 5:
+        elif x == 5 or x == 21 or x == 28:
                 ib_pc.mana += 1
                 print ("The heroes found a mana potion. ")
-        elif x == 6:
+        elif x == 6 or x == 22 or x == 29:
                 ib_pc.buff += 1
                 print ("The heroes found a buff potion. ")
-        elif x == 7:
-                armor = random_basic_armor()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 8:
-                weapon = random_basic_weapon()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
-        elif x == 9:
-                armor = random_basic_armor_fulle()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 10:
-                armor = random_intermediate_armor_fulle()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 11:
-                armor = random_intermediate_armor()
-                h_a.append(armor)
-                print ("The heroes found a piece of armor. ")
-        elif x == 12:
-                weapon = random_basic_weapon_fulle()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
-        elif x == 13:
-                weapon = random_intermediate_weapon()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
-        elif x == 14:
-                weapon = random_intermediate_weapon_fulle()
-                h_w.append(weapon)
-                print ("The heroes found a weapon. ")
+        elif 7 <= x <= 14:
+                ib_pc.coins += C.ENCHANT_PRICE + (m_npc.dropchance * C.ARMOR_PRICE)
+                print ("The heroes find an old coin purse. ")
         elif x == 15:
                 print ("The heroes find the package. ")
                 q_i.rpackage += 1

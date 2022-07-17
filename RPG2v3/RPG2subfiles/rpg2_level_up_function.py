@@ -30,7 +30,7 @@ def mana_up(p_pc):
 #function that will increase the pet's stage
 def angel_stage_up(p_npc):
         #check if the pet is at the stage limit
-        if p_npc.stage < C.LEVEL_LIMIT:
+        if p_npc.stage < C.STAGE_LIMIT:
                 p_npc.stage += 1
                 #adjust the pet's atk according to it's new level
                 p_npc.atk += round(p_npc.atk * C.PET_ATK_UP)
@@ -45,8 +45,16 @@ def angel_stage_up(p_npc):
                 elif p_npc.stage == 6:
                         p_npc.name = "Legendary Guardian Angel"
         #if the pet is already fully evolved then nothing happens
-        elif p_npc.stage == C.LEVEL_LIMIT:
+        elif p_npc.stage == C.STAGE_LIMIT:
                 print ("Sorry, it's already too powerful.")
+def spirit_stage_up(p_npc):
+        if p_npc.stage < C.STAGE_LIMIT:
+                p_npc.stage += 1
+                p_npc.atk += round(p_npc.atk * C.PET_ATK_UP)
+                if p_npc.stage == 3:
+                        p_npc.name = "Awoken Spirit"
+                elif p_npc.stage == 6:
+                        p_npc.name = "Guardian Spirit"
 def pet_atk_up(p_npc):
         if p_npc.stage == C.STAGE_LIMIT:
                 p_npc.atk += 1

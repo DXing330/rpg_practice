@@ -37,14 +37,9 @@ class Player_PC:
                 #self.statusObj = Statuses_NPC(0)
                 self.poison = poison
 
-        def update_poison(self, poison):
-                #self.statusObj.poison += poison
-                self.poison += poison
+        def hstats(self):
+                print ("Health:", self.health)
                 
-        def get_poison(self):
-                #return self.statusObj.poison
-                return self.poison
-
         def stats(self):
                 print (self.name, self.level,
                       self.health, self.maxhealth,
@@ -132,6 +127,8 @@ class Monster_NPC:
                 print(self.name, self.health, self.atk, self.defense, self.skill)
                 if self.poison > 0:
                         print ("POISON:", self.poison)
+        def hstats(self):
+                print ("Health:", self.health)
 
 
 class Weapon_PC:

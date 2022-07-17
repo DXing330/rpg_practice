@@ -62,8 +62,9 @@ def monster_passive_effect(m_npc, p_pc, h_p, m_p):
                                         m_npc.skill += 1
                                 print (m_npc.name, "pulses erratically. ")
                         if passive == "Troll":
-                                m_npc.health += m_npc.skill
-                                print (m_npc.name, "regenerates. ")
+                                if m_npc.poison == 0:
+                                        m_npc.health += m_npc.skill + m_npc.defense
+                                        print (m_npc.name, "regenerates. ")
                         if passive == "Goblin":
                                 x = random.randint(0, 2)
                                 if x == 0:
@@ -75,5 +76,25 @@ def monster_passive_effect(m_npc, p_pc, h_p, m_p):
                                 elif x == 2:
                                         p_pc.defbonus -= min(m_npc.skill, p_pc.defbonus)
                                         print ("The goblin blinds", p_pc.name, "with a handful of dirt. ")
-                                        
-                                        
+                        if passive == "Orc":
+                                m_npc.atk += len(m_p)
+                                m_npc.defense += len(m_p)
+                                print (m_npc.name, "roars. ")
+                        if passive == "Bomb":
+                                m_npc.health -= m_npc.skill
+                                if m_npc.health <= 0:
+                                        print (m_npc.name, "explodes! ")
+                                        if m_npc.element == "Poison":
+                                                for mon in m_p:
+                                                        mon.poison += m_npc.skill
+                                                print ("Poison gas surrounds the monsters. ")
+                                        elif m_npc.element == "Blast":
+                                                for mon in m_p:
+                                                        mon.health -= C.BOMB_DAMAGE
+                                                        mon.health -= m_npc.skill
+                                                print ("Shrapnel pieces fly at the monsters. ")
+
+                        if passive == "Giant":
+                                m_npc.atk += m_npc.skill
+                                m_npc.skill += 1
+                                print (m_npc.name, "begins to warm up. ")

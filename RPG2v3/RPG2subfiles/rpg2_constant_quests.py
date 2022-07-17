@@ -6,7 +6,7 @@ class Q_Constants:
 		self.DIAMOND = 9
 		self.PLATINUM = 8
 		self.GOLD = 7
-		self.SILVER = 6
+		self.SILVER = 5
 		self.IRON = 4
 		self.BRONZE = 3
 		#goblin stats
@@ -27,4 +27,22 @@ class Q_Constants:
 		self.CGOBLIN_DEF = 30
 		self.CGOBLIN_SKILL = 10
 		self.CGOBLIN_DC = 20
+		#orc stats
+		self.ORC_HP = 300
+		self.ORC_ATK = 100
+		self.ORC_DEF = 30
+		self.ORC_SKILL = 5
+		self.ORC_DC = 5
+		#corc is chief orc
+		self.CORC_HP = 500
+		self.CORC_ATK = 150
+		self.CORC_DEF = 50
+		self.CORC_SKILL = 15
+		self.CORC_DC = 5
+		#giant stats
+		self.GIANT_HP = 2000
+		self.GIANT_ATK = 200
+		self.GIANT_DEF = 100
+		self.GIANT_SKILL = 20
+		self.GIANT_DC = 20
 

@@ -6,6 +6,7 @@ from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
                                    ItemBag_PC, Spell_PC, Weapon_PC,
                                    Armor_PC)
 import rpg2_party_management_functions as party_func
+import rpg2_hunter_function as hunt_func
 from rpg2_constants import Constants
 from rpg2_constant_quests import Q_Constants
 from rpg2_constant_lists import List_Constants
@@ -15,23 +16,31 @@ Q = Q_Constants()
 
 #enchanter with the monster hunter guild
 #has access to new kinds of enchantments that cost mana gem
-def enchanter(h_w, h_a, qi_npc, ai_npc):
+def enchanter(p_npc, h_w, h_a, qi_npc, a_npc):
         print ("I only work with unenchanted equipment. ")
         print ("Prices will be", C.ENCHANT_PRICE, "mana gems. ")
-        if qi_npc.managem >= C.ENCHANT_PRICE:
+        aly = None
+        for ally in p_npc:
+                if "Spirit" in ally.name:
+                        print ("Oh, I see you have a SPIRIT companion. ")
+                        print ("I've always had a soft spot for those. ")
+                        aly = ally
+        if qi_npc.managem >= C.ENCHANT_PRICE or aly != None:
                 choice = input("ARMOR or WEAPONS? A/W? ")
-                if choice.upper() == "A":
+                if choice.upper() == "S" and aly != None:
+                        hunt_func.companion_upgrade(aly, qi_npc, a_npc)
+                elif choice.upper() == "A":
                         for amr in h_a:
                                 amr.stats()
                         armor = party_func.pick_hero(h_a)
-                        if armor.effect == "None":
+                        if armor.effect == "None" or armor.effect == "Block":
                                 print ("What kind of enchantment do you want? ")
                                 if ai_npc.rank > Q.MASTER:
                                         print ("Revive: R")
                                 if ai_npc.rank > Q.PLATINUM:
                                         print("Ethereal: E")
                                 enchnt = input("Bomb: B")
-                                if enchnt.upper() == E and ai_npc.rank > Q.PLATINUM:
+                                if enchnt.upper() == "E" and ai_npc.rank > Q.PLATINUM:
                                         armor.effect = "Ethereal"
                                         qi_npc.managem -= C.ENCHANT_PRICE
                                 elif enchnt.upper() == "B":
@@ -48,18 +57,21 @@ def enchanter(h_w, h_a, qi_npc, ai_npc):
                         for wpn in h_w:
                                 wpn.stats()
                         weapon = party_func.pick_hero(h_w)
-                        if weapon.effect == "None":
+                        if weapon.effect == "None" or weapon.effect == "Attack":
                                 print ("What kind of enchantment do you want? ")
                                 if ai_npc.rank > Q.MASTER:
                                         print ("Death: D")
                                 if ai_npc.rank > Q.PLATINUM:
                                         print ("Necromancer: N")
                                 enchnt = input("Explode: E")
-                                if enchnt.upper() == E:
+                                if enchnt.upper() == "E":
                                         weapon.effect = "Explode"
                                         qi_npc.managem -= C.ENCHANT_PRICE
-                                elif cnchnt.upper() == D and ai_npc.rank > Q.MASTER:
+                                elif enchnt.upper() == "D" and ai_npc.rank > Q.MASTER:
                                         weapon.effect = "Death"
+                                        qi_npc.managem -= C.ENCHANT_PRICE
+                                elif enchnt.upper() == "N" and ai_npc.rank > Q.PLATINUM:
+                                        weapon.effect = "Necromancer"
                                         qi_npc.managem -= C.ENCHANT_PRICE
                                 else:
                                         print ("Leave. ")
@@ -71,6 +83,9 @@ def enchanter(h_w, h_a, qi_npc, ai_npc):
 #function that upgrades weapons and armor
 def equipment_upgrade(h_w, h_a, q_i, a_i):
         q_i.stats()
+        if a_i.rank > Q.MASTER:
+                print ("I think I can COMBINE some effects together, want to try? ")
+                print ("It'll cost", C.ENCHANT_PRICE, "mana gems though. ")
         print ("What do you want me to work on? ")
         choice = input("WEAPONS or ARMOR? W/A? ")
         if choice.upper() == "W":
@@ -126,6 +141,79 @@ def equipment_upgrade(h_w, h_a, q_i, a_i):
                         equipment_upgrade(h_w, h_a, q_i, a_i)
                 else:
                         print ("I'll need some experience before I try that. ")
+        elif choice.upper() == "C" and q_i.managem > C.ENCHANT_PRICE and a_i.rank > Q.MASTER:
+                check = input("WEAPONS or ARMORS? ")
+                if check.upper() == "A":
+                        for amr in h_a:
+                                amr.stats()
+                        print ("Which two do you want me to try to combine? ")
+                        armor = party_func.pick_hero(h_a)
+                        armor.stats()
+                        armor2 = party_func.pick_hero(h_a)
+                        armor2.stats()
+                        if armor == armor2:
+                                print ("Those are the same thing. ")
+                        else:
+                                if " " in armor.effect or " " in armor2.effect:
+                                        print ("I can't combine things already combined together. ")
+                                else:
+                                        if armor.effect in L.COMBINABLE and armor2.effect in L.COMBINABLE:
+                                                new_effect = armor.effect + " " + armor2.effect
+                                                new_strength = max(armor.strength, armor2.strength)
+                                                new_defense = max(armor.defense, armor2.defense)
+                                                new_upgrade = max(armor.upgrade, armor2.upgrade)
+                                                new_user = "None"
+                                                new_name = "Chimera Armor"
+                                                new_element = "None"
+                                                new_armor = Armor_PC(new_name, new_user, new_effect,
+                                                                     new_strength, new_element, new_defense,
+                                                                     new_upgrade)
+                                                new_amr = copy.copy(new_armor)
+                                                h_a.remove(armor)
+                                                h_a.remove(armor2)
+                                                h_a.append(new_amr)
+                                                q_i.managem -= C.ENCHANT_PRICE
+                                                print ("I think it worked! ")
+                                                equipment_upgrade(h_w, h_a, q_i, a_i)
+                                        else:
+                                                print ("I don't think I can combine those two. ")
+                                                equipment_upgrade(h_w, h_a, q_i, a_i)
+                elif check.upper() == "W":
+                        for wpn in h_w:
+                                wpn.stats()
+                        print ("Which two do you want me to try to combine? ")
+                        weapon = party_func.pick_hero(h_w)
+                        weapon.stats()
+                        weapon2 = party_func.pick_hero(h_w)
+                        weapon2.stats()
+                        if weapon == weapon2:
+                                print ("Those are the same thing. ")
+                        else:
+                                if " " in weapon.effect or " " in weapon2.effect:
+                                        print ("I can't combine things already combined together. ")
+                                else:
+                                        if weapon.effect in L.COMBINABLE and weapon2.effect in L.COMBINABLE:
+                                                new_effect = weapon.effect + " " + weapon2.effect
+                                                new_strength = max(weapon.strength, weapon2.strength)
+                                                new_atk = max(weapon.atk, weapon2.atk)
+                                                new_upgrade = max(weapon.upgrade, weapon2.upgrade)
+                                                new_user = "None"
+                                                new_name = "Chimera Weapon"
+                                                new_element = "None"
+                                                new_weapon = Weapon_PC(new_name, new_user, new_effect,
+                                                                     new_strength, new_element, new_atk,
+                                                                     new_upgrade)
+                                                new_wpn = copy.copy(new_weapon)
+                                                h_w.remove(weapon)
+                                                h_w.remove(weapon2)
+                                                h_w.append(new_wpn)
+                                                q_i.managem -= C.ENCHANT_PRICE
+                                                print ("I think it worked! ")
+                                                equipment_upgrade(h_w, h_a, q_i, a_i)
+                                        else:
+                                                print ("I don't think I can combine those two. ")
+                                                equipment_upgrade(h_w, h_a, q_i, a_i)
+                        
         elif choice.upper() == "L":
                 print ("Good luck out there. ")
         else:
@@ -167,7 +255,7 @@ def equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc):
                                 print ("I'll find a use for them. ")
                         else:
                                 print ("Well, what else do you have? ")
-                                equipment_buyer(ib_pc, h_w, h_a, a_npc) 
+                                equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                 if sell.upper() == "O":
                         weapon = party_func.pick_hero(h_w)
                         weapon.stats()
@@ -186,10 +274,10 @@ def equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc):
                                 ib_pc.coins += price
                                 h_w.remove(weapon)
                                 print ("I'll find a use for it. ")
-                                equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                                equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                         else:
                                 print ("Well, what else do you have? ")
-                                equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                                equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
         elif choice.upper() == "A":
                 for amr in h_a:
                         amr.stats()
@@ -217,7 +305,7 @@ def equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc):
                                 print ("I'll find a use for them. ")
                         else:
                                 print ("Well, what else do you have? ")
-                                equipment_buyer(ib_pc, h_w, h_a, a_npc) 
+                                equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                 if sell.upper() == "O":
                         armor = party_func.pick_hero(h_a)
                         armor.stats()
@@ -235,10 +323,10 @@ def equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc):
                                 ib_pc.coins += price
                                 h_a.remove(armor)
                                 print ("I'll find a use for it. ")
-                                equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                                equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                         else:
                                 print ("Well, what else do you have? ")
-                                equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                                equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
         elif choice.upper() == "L":
                 print ("Good luck out there. ")
         elif choice.upper() == "B" and a_npc.rank > Q.GOLD:
@@ -255,46 +343,58 @@ def equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc):
                         if wpn.user == "Cleric":
                                 print ("C =",
                                        "Weapon_PC(Staff, none, Heal, 1, none, 1)")
-                buy = input("Any of them catch your eyes? I'll sell them to you for", C.ENCHANT_PRICE, "mana gems.")
+                        if wpn.user == "Knight":
+                                print ("K =",
+                                       "Weapon_PC(Shield, none, Shield, 1, none, 1)")
+                print("Any of them catch your eyes? I'll sell them to you for", C.ENCHANT_PRICE, "mana gems.")
+                buy = input(" ?")
                 if buy.upper() == "O" and qi_npc.managem > C.ENCHANT_PRICE:
                         weapon = Weapon_PC("Observer", "None", "None", 1, "None", 1)
                         copy_weapon = copy.copy(weapon)
                         h_w.append(copy_weapon)
                         qi_npc.managem -= C.ENCHANT_PRICE
                         print ("Pleasure doing business with you. ")
-                        equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                        equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                 elif buy.upper() == "S" and qi_npc.managem > C.ENCHANT_PRICE:
                         weapon = Weapon_PC("Summon Staff", "None", "Summon", 1, "None", 1)
                         copy_weapon = copy.copy(weapon)
                         h_w.append(copy_weapon)
                         qi_npc.managem -= C.ENCHANT_PRICE
                         print ("Pleasure doing business with you. ")
-                        equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                        equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                 elif buy.upper() == "C" and qi_npc.managem > C.ENCHANT_PRICE:
                         weapon = Weapon_PC("Heal Staff", "None", "Heal", 1, "None", 1)
                         copy_weapon = copy.copy(weapon)
                         h_w.append(copy_weapon)
                         qi_npc.managem -= C.ENCHANT_PRICE
                         print ("Pleasure doing business with you. ")
-                        equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                        equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                 elif buy.upper() == "N" and qi_npc.managem > C.ENCHANT_PRICE:
                         weapon = Weapon_PC("Dagger", "None", "Hidden Dagger", 1, "None", 1)
                         copy_weapon = copy.copy(weapon)
                         h_w.append(copy_weapon)
                         qi_npc.managem -= C.ENCHANT_PRICE
                         print ("Pleasure doing business with you. ")
-                        equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                        equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
+                elif buy.upper() == "K" and qi_npc.managem > C.ENCHANT_PRICE:
+                        weapon = Weapon_PC("Shield", "None", "Shield", 1, "None", 1)
+                        copy_weapon = copy.copy(weapon)
+                        h_w.append(copy_weapon)
+                        qi_npc.managem -= C.ENCHANT_PRICE
+                        print ("Pleasure doing business with you. ")
+                        equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
                 else:
                         print ("Well I'm sure someone will want them. ")
         else:
-                equipment_buyer(ib_pc, h_w, h_a, a_npc)
+                equipment_buyer(ib_pc, h_w, h_a, qi_npc, a_npc)
 
 #function that gives out quest packages
 def give_quest(qi_npc, a_npc):
         print ("Lots of work all around. ")
-        print ("For you though, this should be fine. ")
-        print ("Take this package and deliver it to the city. ")
-        qi_npc.package += 1
+        print ("For you, this should be fine. ")
+        print ("Take this package and deliver it. ")
+        print ("If the client asks for something else then just do it. ")
+        qi_npc.package += max(a_npc.rank - qi_npc.package, 0)
 #function that rewards completed quests
 def reward_quest(qi_npc, a_npc):
         print ("Seems like you finished some work. ")
@@ -307,7 +407,7 @@ def reward_quest(qi_npc, a_npc):
 #a place to obtain and go on quests
 #if you increase your rank and fame you get access to more things
 #need to input the heroes party and their items and equipment
-def monster_hunter_guild(h_p, ib_pc, h_w, h_a, qi_npc, a_npc):
+def monster_hunter_guild(h_p, ib_pc, p_npc, h_w, h_a, qi_npc, a_npc):
         if a_npc.rank == 0 and ib_pc.dg_trophy == 0:
                 print ("Welcome.  Do you have a request for us? ")
                 print ("Wait who are you again? I don't recognize you. ")
@@ -318,7 +418,7 @@ def monster_hunter_guild(h_p, ib_pc, h_w, h_a, qi_npc, a_npc):
                 print ("You should join us, we need more people like you. ")
                 a_npc.rank += 1
                 a_npc.fame += 1
-                monster_hunter_guild(h_p, ib_pc, h_w, h_a, qi_npc, a_npc)
+                monster_hunter_guild(h_p, ib_pc, p_npc, h_w, h_a, qi_npc, a_npc)
         elif a_npc.rank >= 1:
                 print ("Welcome back. ")
                 if a_npc.fame > a_npc.rank ** C.INCREASE_EXPONENT:
@@ -331,8 +431,10 @@ def monster_hunter_guild(h_p, ib_pc, h_w, h_a, qi_npc, a_npc):
                         print ("We have a new Tinkerer now if you want to visit him. ")
                 if a_npc.rank > Q.SILVER:
                         print ("We have an Enchanter now if you want to visit him. ")
+                if len(h_p) < C.PARTY_LIMIT:
+                        print ("If you want some help, we have some HUNTERS looking for a party. ")
                 check = input("Look for a Quest? Claim Reward? Visit Armorer? Q/A/R?")
-                if check.upper() == "Q" and qi_npc.package <= a_npc.rank:
+                if check.upper() == "Q" and qi_npc.package < a_npc.rank:
                         give_quest(qi_npc, a_npc)
                 elif check.upper() == "R" and qi_npc.rpackage > 0:
                         reward_quest(qi_npc, a_npc)
@@ -341,7 +443,9 @@ def monster_hunter_guild(h_p, ib_pc, h_w, h_a, qi_npc, a_npc):
                 elif check.upper() == "T" and a_npc.rank > Q.BRONZE:
                         equipment_upgrade(h_w, h_a, qi_npc, a_npc)
                 elif check.upper() == "E" and a_npc.rank > Q.SILVER:
-                        enchanter(h_w, h_a, qi_npc, ai_npc)                        
+                        enchanter(p_npc, h_w, h_a, qi_npc, a_npc)
+                elif check.upper() == "H" and len(h_p) < C.PARTY_LIMIT:
+                        hunt_func.add_hunter(h_p, p_npc)
                 else:
                         print ("Good luck out there. ")
 

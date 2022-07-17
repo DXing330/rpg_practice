@@ -19,7 +19,8 @@ from rpg2_constants import Constants
 C = Constants()
 from rpg2_constant_lists import List_Constants
 L = List_Constants()
-
+from rpg2_constant_quests import Q_Constants
+Q = Q_Constants()
 ##game where you will control a party of heroes who fight against monsters
 ##booleans
 #will ask for the player's starting hero and start the game
@@ -129,7 +130,8 @@ while bGame:
                                           heroes_bag, heroes_magic,
                                           heroes_weapons, heroes_armor)
         elif check.upper() == "H":
-                mh_func.monster_hunter_guild(heroes_party, heroes_bag, heroes_weapons, 
+                mh_func.monster_hunter_guild(heroes_party, heroes_bag,
+                                             heroes_allies, heroes_weapons, 
                                              heroes_armor, q_items, a_items)
         elif check.upper() == "W":
                 quest_func.quest(heroes_party, heroes_bag, heroes_magic,

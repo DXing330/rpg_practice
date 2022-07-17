@@ -12,6 +12,7 @@ class BOSS_CONSTANTS:
                 self.DEMON_GENERAL_DEFENSE = 40 
                 self.DEMON_GENERAL_SKILL = 15
                 self.DEMON_GENERAL_DROPCHANCE = 10000
+                self.DG_DC = self.DEMON_GENERAL_DROPCHANCE
                 self.DEMON_LORD_HEALTH = 5000
                 self.DEMON_LORD_ATK = 200
                 self.DEMON_LORD_DEFENSE = 60

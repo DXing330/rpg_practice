@@ -73,13 +73,18 @@ def battle_phase(h_p, m_p, h_s, ib_pc, s_pc, h_w, h_a, q_i):
                         for monster in new_m_p:
                                 if monster.health <= 0:
                                         new_m_p.remove(monster)
-                                if monster.health > 0:
+                                elif monster.health > 0:
                                         hero = party_func.pick_random_healthy_hero(new_h_p)
                                         monster_func.monster_attack(monster, hero, new_h_a, new_h_p, new_m_p)
                         #after the monster attacks, check on the heroes again
                         for hero in new_h_p:
                                 if hero.health <= 0:
                                         new_h_p.remove(hero)
+                        #also check on the monsters incase they blew up
+                        for x in range(0, len(m_p)):
+                                for monster in new_m_p:
+                                        if monster.health <= 0:
+                                                new_m_p.remove(monster)
                                 
         #if the battle is over and you win then find out how many coins you get
         if not bBattle and len(new_h_p) > 0:
@@ -90,13 +95,19 @@ def battle_phase(h_p, m_p, h_s, ib_pc, s_pc, h_w, h_a, q_i):
                                 if hero.name == heero.name:
                                         check = heero
                         #if there is no matching hero then the hero's health goes to zero
-                        if check == None:
+                        if check == None and hero.name != "Knight":
                                 hero.health = 0
                                 hero.mana = 0
                         #if there is a matching hero then the hero's health becomes equal
                         elif check != None:
                                 hero.health = min(check.health, hero.maxhealth)
                                 hero.mana = min(check.mana, hero.maxmana)
+                        #knight could have another name so check that
+                        elif check == None and hero.name == "Knight":
+                                for heeero in new_h_p:
+                                        if heeero.name == "Defender":
+                                                hero.health = min(heeero.health, hero.maxhealth)
+                                                hero.mana = min(heeero.mana, hero.maxmana)
                 for hero in h_p:
                         if hero.health == 0:
                                 h_p.remove(hero)

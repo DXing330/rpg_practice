@@ -12,6 +12,8 @@ from rpg2_constant_quests import Q_Constants
 L = List_Constants()
 C = Constants()
 Q = Q_Constants()
+
+e = len(L.ELEMENTS_LIST) - 1
 #function that makes goblins
 def goblin_maker():
         x = random.randint(0, 1)
@@ -58,3 +60,32 @@ def super_goblin_maker():
                                           Q.CGOBLIN_SKILL, "Earth",
                                           Q.CGOBLIN_DC)
         return mon
+
+#function that makes orcs
+def orc_maker():
+        elmnt = random.randint(0, e)
+        element = L.ELEMENTS_LIST[elmnt]
+        mon = Monster_NPC(element + " Orc",
+                          Q.ORC_HP, Q.ORC_ATK,
+                          Q.ORC_DEF, Q.ORC_SKILL,
+                          element, Q.ORC_DC)
+        return mon
+
+def orc_chief():
+        elmnt = random.randint(0, e)
+        element = L.ELEMENTS_LIST[elmnt]
+        mon = Monster_NPC(element + " Orc Chief",
+                          Q.CORC_HP, Q.CORC_ATK,
+                          Q.CORC_DEF, Q.CORC_SKILL,
+                          element, Q.CORC_DC)
+        return mon
+
+def giant_maker():
+        elmnt = random.randint(0, e)
+        element = L.ELEMENTS_LIST[elmnt]
+        mon = Monster_NPC(element + " Giant",
+                          Q.GIANT_HP, Q.GIANT_ATK,
+                          Q.GIANT_DEF, Q.GIANT_SKILL,
+                          element, Q.GIANT_DC)
+        return mon
+

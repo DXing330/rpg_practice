@@ -18,5 +18,7 @@ quest that has you explore a labyrinth of tunnels
 	a rng decides which tunnel is right
 	if you pick the right one you can continue deeper
 	if you pick wrong then you go back either to where you started or the beginning
+function that let's players upgrade their hero into a higher class
+	ex warrior into death knight
 
 

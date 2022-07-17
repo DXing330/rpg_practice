@@ -8,7 +8,8 @@ class List_Constants:
                                                     "Resist Earth", "Resist Air",
                                                     "Resist Dark"]
              self.INTERMEDIATE_WEAPON_EFFECT_LIST = ["Attack", "Lifesteal",
-                                                     "Poison", "Lucky", "Mana Drain",
+                                                     "Poison", "Lucky", "ManaDrain",
+                                                     "SkillDrain", 
                                                      "Slay Fire", "Slay Water",
                                                      "Slay Earth", "Slay Air",
                                                      "Slay Dark"]
@@ -24,7 +25,8 @@ class List_Constants:
              self.MONSTER_PASSIVE_LIST = ["Fire", "Water", "Air",
                                           "Earth", "Dark", "Demon",
                                           "Slime", "Skeleton", "Beast",
-                                          "Elemental", "Troll", "Goblin"]
+                                          "Elemental", "Troll", "Goblin",
+                                          "Bomb", "Trap", "Orc", "Giant"]
              #lists of weapon and armor effects
              self.BASIC_ARMOR_EFFECT_LIST = ["Block",
                                              "Resist Fire", "Resist Water",
@@ -34,8 +36,8 @@ class List_Constants:
                                               "Slay Fire", "Slay Water",
                                               "Slay Earth", "Slay Air",
                                               "Slay Dark"]
-             self.UPGRADE_EFFECT_W = ["Attack", "Lifesteal", "Mana Drain",
-                                      "Poison", "Lucky", "Skill Drain",
+             self.UPGRADE_EFFECT_W = ["Attack", "Lifesteal", "ManaDrain",
+                                      "Poison", "Lucky", "SkillDrain",
                                       "Explode"]
              self.UPGRADE_EFFECT_A = ["Thorns", "Reflect", "Poison",
                                       "Absorb", "Ethereal", "Revive",
@@ -43,5 +45,8 @@ class List_Constants:
              self.ANGEL_NAMES = ["Angel", "Awoken Angel", "Mega Awoken Angel",
                                  "Archangel", "Guardian Angel",
                                  "Legendary Guardian Angel"]
+             self.COMBINABLE = ["Bomb", "Absorb", "Thorns", "Reflect",
+                                "Poison", "Ethereal", "Revive", "Lucky",
+                                "ManaDrain", "Lifesteal", "Explode"]
 
 L = List_Constants()

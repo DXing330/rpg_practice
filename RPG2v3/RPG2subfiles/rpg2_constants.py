@@ -82,5 +82,24 @@ class Constants:
              self.POTION_PRICE = 10
              #death weapon effect atk bonus
              self.DEATH_ATK = 9999999
+             #bomb trap explosion damage
+             self.BOMB_DAMAGE = 100
+             #stat increase per level up
+             self.LVL_UP_HP_LOW = 10
+             self.LVL_UP_HP_MID = 15
+             self.LVL_UP_HP_HIGH = 20
+             self.LVL_UP_ATK_LOW = 1
+             self.LVL_UP_ATK_MID = 3
+             self.LVL_UP_ATK_HIGH = 5
+             self.LVL_UP_DEF_LOW = 2
+             self.LVL_UP_DEF_MID = 3
+             self.LVL_UP_DEF_HIGH = 4
+             self.LVL_UP_SKL_LOW = 3
+             self.LVL_UP_SKL_MID = 4
+             self.LVL_UP_SKL_HIGH = 5
+             self.LVL_UP_MANA_LOW = 0
+             self.LVL_UP_MANA_MID = 3
+             self.LVL_UP_MANA_HIGH = 5
+             
 
 C = Constants()

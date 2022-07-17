@@ -6,7 +6,8 @@ from rpg2_classdefinitions import (Player_PC, Pet_NPC, Monster_NPC,
                                    Armor_PC)
 import rpg2_party_management_functions as party_func
 import rpg2_player_skill_function as pskill_func
-import rpg2_pet_action_function as pet_func
+import rpg2_hunter_function as hunt_func
+import rpg2_angel_action_function as angel_func
 import rpg2_element_function as element_func
 import rpg2_equipment_effect_function as ee_func
 from rpg2_constants import Constants
@@ -19,15 +20,20 @@ C = Constants()
 def pet_action(p_npc, h_p, m_p):
         #check if there is an angel ally
         aaly = None
+        comp = None
         for ally in p_npc:
-                for name in L.ANGEL_NAMES:
-                        if name in ally.name:
-                                aly = ally
+                if "Angel" in ally.name:
+                        aaly = ally
+        for ally in p_npc:
+                if "Spirit" in ally.name:
+                        comp = ally
         if aaly != None:
-                pet_func.angel_action(aly, h_p, m_p)
+                angel_func.angel_action(aaly, h_p, m_p)
+        if comp != None:
+                hunt_func.companion_action(comp, h_p, m_p)
 
 #player attack function
-def player_attack(p_pc, m_npc, h_w, h_p, m_p):
+def player_attack(p_pc, m_npc, h_w, h_a, h_p, m_p):
         weapon = party_func.check_equipment(p_pc, h_w)
         new_pa = ee_func.weapon_effect(m_npc, p_pc, weapon, h_p, m_p)
         new_atk = element_func.check_element_player_attack(p_pc, new_pa, m_npc, weapon)
@@ -55,6 +61,13 @@ def player_attack(p_pc, m_npc, h_w, h_p, m_p):
                 m_npc.health -= max((new_atk + p_pc.defense - m_npc.defense),1)
                 p_pc.name = "Knight"
                 print (p_pc.name, "bashes", m_npc.name, "with their shield. ")
+                #if they have the right weapon then they can change back into defender
+                if weapon != None:
+                        if weapon.effect == "Shield":
+                                new_pa = ee_func.weapon_effect(m_npc, p_pc, weapon, h_p, m_p)
+                for amr in h_a:
+                        if amr.user == "Defender":
+                                amr.user = p_pc.name
         else:
                 m_npc.health -= max((new_atk - m_npc.defense),1)
                 print(p_pc.name, "hits", m_npc.name)
@@ -140,10 +153,10 @@ def player_action(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
                 check = input("Attack, Item, Magic, Skill or Pray? P/A/I/M/S")
                 if check.upper() == "A" and len(m_p) > 1:
                         monster = party_func.pick_monster(m_p)
-                        player_attack(p_pc, monster, h_w, h_p, m_p)
+                        player_attack(p_pc, monster, h_w, h_a, h_p, m_p)
                 elif check.upper() == "A" and len(m_p) == 1:
                         for monster in m_p:
-                                player_attack(p_pc, monster, h_w, h_p, m_p)
+                                player_attack(p_pc, monster, h_w, h_a, h_p, m_p)
                 elif check.upper() == "I":
                         ib_pc.stats()
                         use_item(p_pc, ib_pc)
