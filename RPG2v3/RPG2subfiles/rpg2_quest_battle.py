@@ -71,7 +71,10 @@ def battle_phase(h_p, m_p, h_s, ib_pc, s_pc, h_w, h_a, q_i):
                                         new_h_p.remove(hero)
                         #then give the monster's a turn
                         for monster in new_m_p:
-                                if monster.health <= 0:
+                                if monster.health <= 0 and "Bomb" in monster.name:
+                                        monster_func.monster_attack(monster, hero, new_h_a, new_h_p, new_m_p)
+                                        new_m_p.remove(monster)
+                                elif monster.health <= 0:
                                         new_m_p.remove(monster)
                                 elif monster.health > 0:
                                         hero = party_func.pick_random_healthy_hero(new_h_p)
@@ -83,7 +86,10 @@ def battle_phase(h_p, m_p, h_s, ib_pc, s_pc, h_w, h_a, q_i):
                         #also check on the monsters incase they blew up
                         for x in range(0, len(m_p)):
                                 for monster in new_m_p:
-                                        if monster.health <= 0:
+                                        if monster.health <= 0 and "Bomb" in monster.name:
+                                                monster_func.monster_attack(monster, hero, new_h_a, new_h_p, new_m_p)
+                                                new_m_p.remove(monster)
+                                        elif monster.health <= 0:
                                                 new_m_p.remove(monster)
                                 
         #if the battle is over and you win then find out how many coins you get

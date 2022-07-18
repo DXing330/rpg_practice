@@ -16,6 +16,36 @@ C = Constants()
 Q = Q_Constants()
 
 import rpg2_orc_quest as orc_func
+import rpg2_giant_quest as giant_func
+#quest four is dealing with giants
+def quest_four(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
+        print ("There are reports of some giants fighting nearby. ")
+        print ("Something like that is too dangerous to allow. ")
+        print ("Go find out why they're fighting and stop them. ")
+        new_h_p = []
+        for hro in h_p:
+                copy_hero = copy.copy(hro)
+                new_h_p.append(copy_hero)
+        g_p = []
+        q_i.package -= 1
+        y = len(h_p)
+        g = random.randint(2, max(3, len(h_p)))
+        for p in range(0, g):
+                mon = mon_func.giant_maker()
+                g_p.append(mon)
+        print ("You see the giants fighting from atop a hill. ")
+        print ("After a lot of shouting at them, they pause to take a breather. ")
+        print ("Finally noticing your shouts, they stomp over. ")
+        print ("The hills shake with every step. ")
+        giant_func.giant_quest(new_h_p, g_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
+        if len(new_h_p) <= 0:
+                print ("You look pretty bad. ")
+                print ("At least you survived an encounter with giants. ")
+                print ("A lot of people aren't that lucky. ")
+        elif len(new_h_p) > 0:
+                print ("I knew I could count on you.  Thanks.")
+                q_i.rpackage += 1
+                a_i.fame += a_i.rank
 #quest three is orc negotiations
 #use skill or force to convince the orcs to calm down
 def quest_three(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
@@ -66,7 +96,8 @@ def quest_two(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
                         mon = mon_func.super_goblin_maker()
                         g_p.append(mon)
                 print ("You see a band of goblins approaching. ")
-                battle_func.battle_phase(new_h_p, g_p, p_npc, ib_pc, s_pc, h_w, h_a, q_i)
+                battle_func.battle_phase(new_h_p, g_p, p_npc, ib_pc,
+                                         s_pc, h_w, h_a, q_i)
                 for hero in new_h_p:
                         if hero.health <= 0:
                                 new_h_p.remove(hero)
@@ -137,6 +168,9 @@ def quest(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
                         quest_two(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
                 elif x == 7:
                         quest_three(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
+                elif x == 10:
+                        quest_four(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
+                        
                 else:
                         quest(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
         else:

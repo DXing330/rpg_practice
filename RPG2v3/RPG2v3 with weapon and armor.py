@@ -15,6 +15,7 @@ import rpg2_save_function as save_func
 import rpg2_random_boss_function as boss_func
 import rpg2_monster_hunter_guild as mh_func
 import rpg2_quest_function as quest_func
+import rpg2_tavern as tavern_func
 from rpg2_constants import Constants
 C = Constants()
 from rpg2_constant_lists import List_Constants
@@ -52,6 +53,7 @@ hero = Player_PC("Hero", 1, 15, 15, 5, 4, 2, 2, 2)
 hero_sword = Weapon_PC("LS", "Hero", "Attack", 1, "Light", 1)
 hero_armor = Armor_PC("LA", "Hero", "Block", 1, "Light", 1)
 #pet
+pet = Pet_NPC("Nothing", 1, 0)
 heroes_bag = ItemBag_PC(1, 1, 1, 50)
 q_items = QuestItems_NPC()
 a_items = Access_NPC()
@@ -63,6 +65,7 @@ while bChoice:
                 add_to_party(heroes_party, hero)
                 heroes_weapons.append(hero_sword)
                 heroes_armor.append(hero_armor)
+                heroes_allies.append(pet)
                 bChoice = False
                 bGame = True
 
@@ -88,10 +91,11 @@ while bGame:
         print("LISTEN to the pleas of a nearby village? ")
         print("vist the MAGE TOWER?")
         print("go to the HUNTER GUILD?")
+        print("enter the TAVERN? ")
         print("WORK on your assignment")
         print("head back to the CITY?")
         print("or perhaps you want to rest and RECORD your adventures?")
-        check = input("A/C/H/L/M/R/W")
+        check = input("A/C/H/L/M/R/T/W")
         if check.upper() == "C":
                 #if the hero goes to town call the town function
                 city_func.city(heroes_bag, heroes_party,
@@ -158,4 +162,9 @@ while bGame:
                 check =  input("Would you like to keep going after you write or STOP?")
                 if check.upper() == "S":
                         bGame = False
-                        break                        
+                        break
+        elif check.upper() == "T":
+                tavern_func.tavern(heroes_party, heroes_bag, heroes_magic,
+                                   heroes_allies, heroes_weapons, heroes_armor,
+                                   q_items, a_items)
+
