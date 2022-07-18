@@ -46,7 +46,7 @@ class Q_Constants:
                 self.GIANT_HP = 5000
                 self.GIANT_ATK = 300
                 self.GIANT_DEF = 100
-                self.GIANT_SKILL = 20
+                self.GIANT_SKILL = 0
                 self.GIANT_DC = 20
                 self.GIANT_FLOCK = 10000
 

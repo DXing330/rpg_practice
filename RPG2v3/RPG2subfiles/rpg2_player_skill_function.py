@@ -23,12 +23,20 @@ def use_skill(p_pc, h_p, m_p, ib_pc, s_pc, p_npc, h_w, h_a):
         print ("HEAL Ally? H")
         print ("BUFF? B")
         print ("DEBUFF Enemy? D")
-        print ("Summon TOTEM? T")
-        print ("Use EXPLOSIVE? E")
-        print ("PROTECT your allies? P")
-        print ("Try to go for a SNEAK ATTACK? S")
+        for hero in h_p:
+                if "Summoner" in hero.name:
+                        print ("Summon TOTEM? T")
+        for hero in h_p:
+                if "Hunter" in hero.name:
+                        print ("Use EXPLOSIVE? E")
+        for hero in h_p:
+                if "Knight" in hero.name:
+                        print ("PROTECT your allies? P")
+        for hero in h_p:
+                if "Ninja" in hero.name:
+                        print ("Try to go for a SNEAK ATTACK? S")
         
-        check = input("B/P/O/C/S/H/D/T")
+        check = input("B/C/D/H/O")
         if check.upper() == "T":
                 if p_pc.name == "Summoner" and p_pc.mana > 0:
                         print("What kind of golem do you make? ")

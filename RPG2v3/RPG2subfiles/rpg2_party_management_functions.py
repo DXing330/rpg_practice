@@ -202,3 +202,12 @@ def pick_highest_health(h_p):
                                         x = y
                                         hro = hero
         return hro
+
+#function that lets a monster pick another monster to attack
+def pick_different_monster(m_npc, m_p):
+        target = None
+        if len(m_p) > 1:
+                target = pick_random_healthy_monster(m_p)
+                if target == m_npc:
+                        target = pick_different_monster(m_npc, m_p)
+        return target

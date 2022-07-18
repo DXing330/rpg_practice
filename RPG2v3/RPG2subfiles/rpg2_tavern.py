@@ -12,7 +12,9 @@ from rpg2_constant_quests import Q_Constants
 Q = Q_Constants()
 L = List_Constants()
 C = Constants()
-
+import rpg2_rumors as rumors_func
+        
+        
 #function that gives the player a tutorial
 def tutorial():
         print ("What do you want to know about? ")
@@ -100,3 +102,5 @@ def tavern(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
         choice = input("RUMORS/TUTORIAL? R/T ")
         if choice.upper() == "T":
                 tutorial()
+        elif choice.upper() == "R":
+                rumors_func.rumors(ib_pc, q_i, a_i)

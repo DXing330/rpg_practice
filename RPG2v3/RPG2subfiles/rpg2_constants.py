@@ -100,6 +100,8 @@ class Constants:
              self.LVL_UP_MANA_LOW = 0
              self.LVL_UP_MANA_MID = 3
              self.LVL_UP_MANA_HIGH = 5
-             
+             #random event stuff
+             self.CHARITY = 100
+             self.THIEF = 10000
 
 C = Constants()

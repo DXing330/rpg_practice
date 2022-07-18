@@ -48,9 +48,11 @@ def inn(ib_pc, h_p, h_w, h_a):
                 if choice.upper() == "C":
                         hero = copy.copy(cleric)
                         party_func.add_to_party(h_p, hero)
+                        print ("Let the Lord guide our way. ")
                 elif choice.upper() == "M":
                         hero = copy.copy(mage)
                         party_func.add_to_party(h_p, hero)
+                        print ("Sorry in advance if my spells go awry. ")
                 elif choice.upper() == "S":
                         hero = None
                         for player in h_p:
@@ -59,11 +61,13 @@ def inn(ib_pc, h_p, h_w, h_a):
                         if hero == None:
                                 hero = copy.copy(summoner)
                                 party_func.add_to_party(h_p, hero)
+                                print ("I always like more friends. ")
                         else:
                                 print("Looks like you already have a summoner on your team. ")
                 elif choice.upper() == "W":
                         hero = copy.copy(warrior)
                         party_func.add_to_party(h_p, hero)
+                        print ("I'll take care of any big guys. ")
                 elif choice.upper() == "K":
                         hero = None
                         for player in h_p:
@@ -72,11 +76,13 @@ def inn(ib_pc, h_p, h_w, h_a):
                         if hero == None:
                                 hero = copy.copy(knight)
                                 party_func.add_to_party(h_p, hero)
+                                print ("I'll watch your back. ")
                         else:
                                 print("Looks like you already have a knight with you. ")
                 elif choice.upper() == "N":
                         hero = copy.copy(ninja)
                         party_func.add_to_party(h_p, hero)
+                        print ("I hope we have pleasant travels together. ")
                 elif choice.upper() == "T":
                         hero = None
                         for player in h_p:
@@ -85,6 +91,7 @@ def inn(ib_pc, h_p, h_w, h_a):
                         if hero == None:
                                 hero = copy.copy(tactician)
                                 party_func.add_to_party(h_p, hero)
+                                print ("I hope I can be of use. ")
                         else:
                                 print("Looks like you already have a tactician on your team. ")
                 inn(ib_pc, h_p, h_w, h_a)

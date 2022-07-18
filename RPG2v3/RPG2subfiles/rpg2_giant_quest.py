@@ -95,8 +95,8 @@ def giant_quest(h_p, g_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
                                 elif option.upper() == "A":
                                         print ("I want some of those sweet heal potions! ")
                                         give = input("YES/NO? Y/N ")
-                                        if give.upper() == "Y" and ib_pc.heal > Q.GIANT_FLOCK * (len(g_p)//2):
-                                                ib_pc.heal -= Q.GIANT_FLOCK * (len(g_p)//2)
+                                        if give.upper() == "Y" and ib_pc.heal > Q.GIANT_FLOCK:
+                                                ib_pc.heal -= Q.GIANT_FLOCK
                                                 print ("'Ah I love that taste. '")
                                                 print ("The giant tosses handfuls of potions into it's mouth. ")
                                                 print ("The other giants also demand potions. ")

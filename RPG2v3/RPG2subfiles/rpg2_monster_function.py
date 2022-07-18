@@ -74,19 +74,6 @@ def monster_attack(m_npc, p_pc, h_a, h_p, m_p):
         new_m_npc_atk = element_func.check_element_monster_attack(m_npc, new_atk, armor)
         if p_pc == None:
                 print (m_npc.name, "roars with confidence.")
-        elif "Bomb" in m_npc.name:
-                m_npc.health -= m_npc.skill
-                if m_npc.health <= 0:
-                        print (m_npc.name, "explodes! ")
-                        if m_npc.element == "Poison":
-                                for mon in m_p:
-                                        mon.poison += m_npc.skill
-                                print ("Poison gas surrounds the monsters. ")
-                        elif m_npc.element == "Blast":
-                                for mon in m_p:
-                                        mon.health -= C.BOMB_DAMAGE
-                                        mon.health -= m_npc.skill
-                                print ("Shrapnel pieces fly at the monsters. ")
                 
         else:
                 #randomly pick the monster's actions

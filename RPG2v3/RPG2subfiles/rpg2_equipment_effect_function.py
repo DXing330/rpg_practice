@@ -124,12 +124,12 @@ def armor_effect(m_npc, p_pc, a_pc, h_p, m_p):
                                 a_pc.strength -= 1
                                 print ("The smell of ", a_pc.name, "seems to distract ", m_npc.name)
                         else:
-                                m_npc.skill -= 1
+                                m_npc.skill -= min(1, m_npc.skill)
                 if "Chill" in a_pc.effect:
                         m_npc.health -= a_pc.strength
-                        m_npc.atk -= a_pc.strength
-                        m_npc.defense -= a_pc.strength
-                        m_npc.skill -= a_pc.strength
+                        m_npc.atk -= min(a_pc.strength, m_npc.atk)
+                        m_npc.defense -= min(a_pc.strength, m_npc.defense)
+                        m_npc.skill -= min(a_pc.strength, m_npc.skill)
                         print ("Contact with ", a_pc.name, "chills ", m_npc.name)
                         
         return new_atk

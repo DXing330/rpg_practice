@@ -188,10 +188,15 @@ class QuestItems_NPC:
                 print ("Packages:", self.package, "Mana Gems:", self.managem)
 #obtained through gameplay and allows access to new content
 class Access_NPC:
-        def __init__(self, fame = 0, rank = 0):
+        def __init__(self, fame = 0, rank = 0, posrep = 0, negrep = 0):
                 #affects what kind of quests you can take
                 self.fame = fame
                 #affects what kind of facilities you can use at the monster hunter guild
                 self.rank = rank
+                #affects certain events
+                #rep is for reputation
+                self.posrep = posrep
+                self.negrep = negrep
         def stats(self):
-                print ("Fame:", self.fame, ", Rank:", self.rank)
+                print ("Fame:", self.fame, ", Rank:", self.rank, "+:", self.posrep,
+                       "-:", self.negrep)
