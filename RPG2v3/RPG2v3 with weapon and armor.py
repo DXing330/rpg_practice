@@ -52,7 +52,6 @@ hero = Player_PC("Hero", 1, 15, 15, 5, 4, 2, 2, 2)
 hero_sword = Weapon_PC("LS", "Hero", "Attack", 1, "Light", 1)
 hero_armor = Armor_PC("LA", "Hero", "Block", 1, "Light", 1)
 #pet
-heroes_allies = Pet_NPC("Nothing", 1, 0)
 heroes_bag = ItemBag_PC(1, 1, 1, 50)
 q_items = QuestItems_NPC()
 a_items = Access_NPC()
