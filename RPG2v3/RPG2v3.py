@@ -55,7 +55,7 @@ a_items = Access_NPC()
 
 while bChoice:
         print ("Would you like to start a new game?  Or input a save? \n ")
-        game = input("NEW GAME, IMPORT SAVE? I/N  \n ")
+        game = input("NEW GAME, IMPORT SAVE? I/N \n")
         if game.upper() == "N":
                 print ("A fresh start.  \n ")
                 party_func.add_to_party(heroes_party, hero)
@@ -99,7 +99,7 @@ while bGame:
         print("WORK on your assignment \n ")
         print("head back to the CITY? \n ")
         print("or perhaps you want to rest and RECORD your adventures? \n ")
-        check = input("A/C/H/L/M/R/T/W \n ")
+        check = input("A/C/H/L/M/R/T/W \n")
         if check.upper() == "C":
                 #if the hero goes to town call the town function
                 city_func.city(heroes_bag, heroes_party,
@@ -114,7 +114,7 @@ while bGame:
                                          heroes_allies, heroes_bag, heroes_magic,
                                          heroes_weapons, heroes_armor)
         elif check.upper() == "L":
-                print ("Travelers?! You look strong. Please, can you help us?  \n ")
+                print ("Travelers?! You look strong. Please, can you help us?  \n")
                 boss_func.random_boss(heroes_party, monster_party,
                                       heroes_allies, heroes_bag, heroes_magic,
                                       heroes_weapons, heroes_armor)
@@ -149,7 +149,7 @@ while bGame:
                 heroes_bag.stats()
                 q_items.stats()
                 a_items.stats()
-                check =  input("Would you like to keep going after you write or STOP? \n ")
+                check =  input("Would you like to keep going after you write or STOP? \n")
                 if check.upper() == "S":
                         bGame = False
                         break

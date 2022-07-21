@@ -99,10 +99,10 @@ def ip_battle(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
                                 if hero.health <= 0:
                                         h_p.remove(hero)
                         for hero in h_p:
-                                if hero.poison > 0 and hero.name != "Golem":
+                                if hero.poison > 0 and hero.name != "Totem":
                                         hero.poison -= 1
                                         print (hero.name, "tries to break out of the ice. ")
-                                elif hero.health > 0 and hero.name != "Golem":
+                                elif hero.health > 0 and hero.name != "Totem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
                                                                   ib_pc, s_pc, new_h_s,

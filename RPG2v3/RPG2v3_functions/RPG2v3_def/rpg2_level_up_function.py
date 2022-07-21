@@ -18,6 +18,9 @@ def level_up(p_pc):
         #if the player is already max level then nothing happens
         elif p_pc.level == C.LEVEL_LIMIT:
                 print ("Sorry, it looks like you're already too strong.")
+
+
+#function that levels up further
 def prestige_level_up(p_pc):
         if p_pc.level < C.LEVEL_LIMIT * C.INCREASE_EXPONENT:
                 p_pc.level += 1
@@ -52,6 +55,29 @@ def prestige_level_up(p_pc):
                         p_pc.defense += C.LVL_UP_DEF_MID
                         p_pc.skill += C.LVL_UP_SKL_LOW
                         p_pc.maxmana += C.LVL_UP_MANA_MID
+        else:
+                print ("This is the limit of what I can do for you. ")
+
+#function that changes the player's class into a prestige class
+def prestige_class(p_pc):
+        if p_pc.name == "Cleric":
+                p_pc.name = "High Cleric"
+        elif p_pc.name == "Warrior":
+                p_pc.name = "Fierce Warrior"
+        elif p_pc.name == "Summoner":
+                p_pc.name = "Grand Summoner"
+        elif p_pc.name == "Mage":
+                p_pc.name = "Arch Mage"
+        elif p_pc.name == "Knight":
+                p_pc.name = "Royal Knight"
+        elif p_pc.name == "Ninja":
+                p_pc.name = "Shadow Ninja"
+        elif p_pc.name == "Tactician":
+                p_pc.name = "Master Tactician"
+        elif p_pc.name == "Hunter":
+                p_pc.name = "Monster Hunter"
+        elif p_pc.name == "Hero":
+                p_pc.name = "Chosen Hero"
 
 
 #functions that increase player stats

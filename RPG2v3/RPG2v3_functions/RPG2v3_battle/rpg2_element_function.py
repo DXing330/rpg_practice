@@ -18,7 +18,7 @@ def check_element_monster_attack(m_npc, m_npc_atk, armor):
                         if armor.element == "Fire" or armor.element == "Water":
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
-                        elif armor.element == "Light" and armor.user == "Hero":
+                        elif armor.element == "Light" and "Hero" in armor.user:
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
                         elif armor.element == "Air":
@@ -30,7 +30,7 @@ def check_element_monster_attack(m_npc, m_npc_atk, armor):
                         if armor.element == "Air" or armor.element == "Fire":
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
-                        elif armor.element == "Light" and armor.user == "Hero":
+                        elif armor.element == "Light" and "Hero" in armor.user:
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
                         elif armor.element == "Earth":
@@ -42,7 +42,7 @@ def check_element_monster_attack(m_npc, m_npc_atk, armor):
                         if armor.element == "Air" or armor.element == "Earth":
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
-                        elif armor.element == "Light" and armor.user == "Hero":
+                        elif armor.element == "Light" and "Hero" in armor.user:
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
                         elif armor.element == "Water":
@@ -54,7 +54,7 @@ def check_element_monster_attack(m_npc, m_npc_atk, armor):
                         if armor.element == "Water" or armor.element == "Earth":
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
-                        elif armor.element == "Light" and armor.user == "Hero":
+                        elif armor.element == "Light" and "Hero" in armor.user:
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
                         elif armor.element == "Fire":
@@ -66,7 +66,7 @@ def check_element_monster_attack(m_npc, m_npc_atk, armor):
                         if armor.element == "Dark":
                                 new_atk = round(m_npc_atk / C.ELEMENT_BONUS)
                                 print (armor.user, "resists the attack of", m_npc.name)
-                        elif armor.element == "Light" and armor.user == "Hero":
+                        elif armor.element == "Light" and "Hero" in armor.user:
                                 new_atk = round(m_npc_atk * C.ELEMENT_BONUS)
                                 print (armor.user, "is weak against the attack of", m_npc.name)
                         elif armor.element == "Light":

@@ -79,16 +79,16 @@ def angel_random_action(p_npc, h_p, m_p):
 
 def angel_action(p_npc, h_p, m_p):
         for hero in h_p:
-                if hero.name == "Summoner":
+                if "Summoner" in hero.name:
                         angel_random_action(p_npc, h_p, m_p)
-                elif hero.name == "Hero":
+                elif "Hero" in hero.name:
                         hero.maxhealth += round(p_npc.atk ** C.PET_HP_BUFF)
                         hero.atkbonus += round(p_npc.atk ** C.PET_ATK_BUFF)
                         hero.defbonus += round(p_npc.atk ** C.PET_DEF_BUFF)
                         hero.skill += round(p_npc.atk ** C.PET_SKILL_BUFF)
                         hero.poison -= min(p_npc.stage, hero.poison)
                         print (p_npc.name, "uses their blessing magic on", hero.name)                        
-                elif hero.name == "Totem":
+                elif "Totem" in hero.name:
                         if hero.atk > 0:
                                 monster = party_func.pick_random_healthy_monster(m_p)
                                 monster.health -= max((p_npc.atk - monster.defense), 1)

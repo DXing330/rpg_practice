@@ -14,6 +14,7 @@ C = Constants()
 Q = Q_Constants()
 
 e = len(L.ELEMENTS_LIST) - 1
+b = len(L.MONSTER_BUFF_LIST) - 1
 #function that makes goblins
 def goblin_maker():
         x = random.randint(0, 1)
@@ -80,6 +81,7 @@ def orc_chief():
                           element, Q.CORC_DC)
         return mon
 
+#function that makes giants
 def giant_maker():
         elmnt = random.randint(0, e)
         element = L.ELEMENTS_LIST[elmnt]
@@ -89,3 +91,14 @@ def giant_maker():
                           element, Q.GIANT_DC)
         return mon
 
+#function that makes wild elementals
+def elemental_maker():
+        elmnt = random.randint(0, e)
+        element = L.ELEMENTS_LIST[elmnt]
+        buf = random.randint(0, b)
+        buff = L.MONSTER_BUFF_LIST[buf]
+        mon = Monster_NPC(element + "Elemental", 
+                          C.MONSTER_MAX_HP, C.MONSTER_MAX_ATK,
+                          C.MONSTER_MAX_DEF, C.MONSTER_MAX_SKILL,
+                          element, C.MONSTER_MAX_DC, 0, buff)
+        return mon

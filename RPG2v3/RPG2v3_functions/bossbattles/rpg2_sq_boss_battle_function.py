@@ -48,11 +48,11 @@ def sq_phase_one_action(m_npc, h_p, b_p, ib_pc):
                 print ("Don't be so rough. We have plenty of time. ")
         print ("Come on out girls, greet our new friends. ")
         for hero in h_p:
-                if hero.name != "Golem":
+                if hero.name != "Totem":
                         mon = illusion_maker()
                         b_p.append(mon)
                         print (mon.name, "steps out from behind a curtain and smiles at", hero.name)
-                elif hero.name == "Golem":
+                elif hero.name == "Totem":
                         hero.health -= m_npc.atk
                         print (m_npc.name, "kickes ", hero.name, "aside.")
                         print ("Sorry we don't allow toys from outside. ")
@@ -64,7 +64,7 @@ def sq_phase_one_action(m_npc, h_p, b_p, ib_pc):
         print (m_npc.name, "sprays some perfume around", hero.name)
         print ("Don't you just smell lovely now? ")
         for hro in h_p:
-                if hro.name != "Golem":
+                if hro.name != "Totem":
                         hro.poison += 1
                         print ("The perfume's scent spreads to ", hro.name)
         
@@ -106,7 +106,7 @@ def sq_phase_one(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
                                         h_p.remove(hero)
                                         print (hero.name, "can't resist anymore. ")
                                         print (hero.name, "runs into the mob of pleasure. ")
-                                elif hero.health > 0 and hero.name != "Golem":
+                                elif hero.health > 0 and hero.name != "Totem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
                                                                   ib_pc, s_pc, new_h_s,
@@ -177,7 +177,7 @@ def sq_phase_two(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
                                         h_p.remove(hero)
                                         print (hero.name, "can't resist anymore. ")
                                         print (hero.name, "runs into the mob of pleasure. ")
-                                elif hero.health > 0 and hero.name != "Golem":
+                                elif hero.health > 0 and hero.name != "Totem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
                                                                   ib_pc, s_pc, new_h_s,

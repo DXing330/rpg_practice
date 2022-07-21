@@ -11,7 +11,57 @@ C = Constants()
 sys.path.append(".")
 import rpg2_element_function as element_func
 import rpg2_equipment_effect_function as ee_func
-
+#function that checks what kind of buffs the monster has
+def monster_def_buff_effect(m_npc, atk, p_pc, h_p, wpn, h_a, m_p):
+        new_atk = atk - m_npc.defense
+        if m_npc.buff == None:
+                new_atk = new_atk
+        else:
+                if "AA" in m_npc.buff:
+                        if wpn.element in m_npc.buff:
+                                new_atk = -new_atk
+                                print (m_npc.name, "absorbs the attack of", p_pc.name)
+                if "Poison Heal" in m_npc.buff:
+                        new_atk -= m_npc.poison
+                        m_npc.health += m_npc.poison * C.INCREASE_EXPONENT
+                        m_npc.poison -= 1
+                        print (m_npc.name, "seems to regenerate from poison. ")
+                if "Dmg Void" in m_npc.buff:
+                        if "A" in m_npc.buff:
+                                if new_atk > C.DMG_A:
+                                        new_atk = 0
+                                print (m_npc.name, "negates the attack of ", p_pc.name)
+                        elif "B" in m_npc.buff:
+                                if new_atk > C.DMG_B:
+                                        new_atk = 0
+                                print (m_npc.name, "negates the attack of ", p_pc.name)
+                        
+        return new_atk
+#function that checks monster
+def monster_buff_check_spell(m_npc, p_pc, spell, atk):
+        new_atk = atk + p_pc.mana
+        if m_npc.buff == None:
+                new_atk = new_atk
+        else:
+                if "AA" in m_npc.buff:
+                        if spell.element in m_npc.buff:
+                                new_atk = -new_atk
+                                print (m_npc.name, "absorbs the attack of", p_pc.name)
+                if "Dmg Void" in m_npc.buff:
+                        if "A" in m_npc.buff:
+                                if new_atk > C.DMG_A:
+                                        new_atk = 0
+                                print (m_npc.name, "negates the attack of ", p_pc.name)
+                        elif "B" in m_npc.buff:
+                                if new_atk > C.DMG_B:
+                                        new_atk = 0
+                                print (m_npc.name, "negates the attack of ", p_pc.name)
+                if "Poison Heal" in m_npc.buff:
+                        new_atk -= m_npc.poison
+                        m_npc.health += m_npc.poison * C.INCREASE_EXPONENT
+                        m_npc.poison -= 1
+                        print (m_npc.name, "seems to regenerate from poison. ")
+        return new_atk
 #function that checks what kind of passives a monster has
 def monster_passive_effect(m_npc, p_pc, h_p, m_p):
         for passive in L.MONSTER_PASSIVE_LIST:

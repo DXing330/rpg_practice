@@ -22,12 +22,12 @@ tactician = Player_PC("Tactician", 1, 10, 10, 1, 1, 5, 0, 0)
 ##functions in the town
 #inn function
 def inn(ib_pc, h_p, h_w, h_a):
-        print ("Welcome back, what would you like to do?  \n ")
-        print ("We always have space for weary heroes to SLEEP.  \n ")
-        print ("Feel free to use our dining area to TALK. \n ")
-        print ("Or you can rent a room for more PRIVACY.  \n ")
-        print ("If you're done with everything then go OUT and save the world.  \n ")
-        check = input("PRIVATE ROOM/SLEEP/TALK? P/S/T \n ")
+        print ("Welcome back, what would you like to do?  \n")
+        print ("We always have space for weary heroes to SLEEP.  \n")
+        print ("Feel free to use our dining area to TALK. \n")
+        print ("Or you can rent a room for more PRIVACY.  \n")
+        print ("If you're done with everything then go OUT and save the world.  \n")
+        check = input("PRIVATE ROOM/SLEEP/TALK? P/S/T \n")
         if check.upper() == "S":
                 for hero in h_p:
                         hero.stats()
@@ -40,11 +40,11 @@ def inn(ib_pc, h_p, h_w, h_a):
                         print ("I'll put it on your tab I guess. ")
                         print ("If you save the world then I'll wipe your tab. ")
         elif check.upper() == "T":
-                print ("We have a lot of adventurers passing through here. \n ")
-                print ("Lots of them are looking for friends. \n ")
-                print ("If you want, I can try to help you connect with one. \n ")
+                print ("We have a lot of adventurers passing through here. \n")
+                print ("Lots of them are looking for friends. \n")
+                print ("If you want, I can try to help you connect with one. \n")
                 print ("Ninja, Knight, Tactician? N/K/T ")
-                choice = input("Warrior, Mage, Cleric, or Summoner? C/M/S/W?  \n ")
+                choice = input("Warrior, Mage, Cleric, or Summoner? C/M/S/W?  \n")
                 if choice.upper() == "C":
                         hero = copy.copy(cleric)
                         party_func.add_to_party(h_p, hero)
@@ -161,6 +161,7 @@ def inn(ib_pc, h_p, h_w, h_a):
                                                 x = int(input("The first one is 1, etc. "))
                                                 armor = h_a[(x - 1)]
                                                 armor.user = "None"
+                                                armor.stats()
                                                 print ("Which hero do you want to give it to? ")
                                                 for hero in h_p:
                                                         hero.stats()
@@ -182,6 +183,7 @@ def inn(ib_pc, h_p, h_w, h_a):
                                                 x = int(input("The first one is 1, etc. "))
                                                 weapon = h_w[(x - 1)]
                                                 weapon.user = "None"
+                                                weapon.stats()
                                                 print ("Which hero do you want to give it to? ")
                                                 for hero in h_p:
                                                         hero.stats()
@@ -206,7 +208,7 @@ def practice_arena(p_pc, ib_pc):
                 return
         p_pc.bstats()
         ib_pc.stats()
-        print ("Welcome to the practice arena, I'm in charge here. \n ")
+        print ("Welcome to the practice arena, I'm in charge here. \n")
         if p_pc.level < C.LEVEL_LIMIT:
                 print ("Looks like you have a lot to work on.")
                 print ("Let's start with some basic training.")
@@ -227,7 +229,7 @@ def practice_arena(p_pc, ib_pc):
                 print ("You look like a powerful guy. ")
                 print ("What would you like to train? ")
                 print ("Attack, Defense, Health, Mana or Skill? ")
-                check = input("A/D/H/M/S ")
+                check = input("A/D/H/M/S \n")
                 if check.upper() == "A":
                         if ib_pc.coins >= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT):
                                 ib_pc.coins -= C.LEVEL_PRICE * (p_pc.atkbonus ** C.INCREASE_EXPONENT)
@@ -285,7 +287,7 @@ def potion_store(ib_pc):
         if choice.upper() == "B":
                 print ("What kind of potions do you want?")
                 #all potions cost C.POTION_PRICE
-                check = input("Health, Mana, or Boost? H/M/B")
+                check = input("Health, Mana, or Boost? H/M/B \n")
                 if check.upper() == "H":
                         try:
                                 quantity = int(input("How many do you want? "))
@@ -361,12 +363,12 @@ def potion_store(ib_pc):
 #equipment store
 def equipment_store(ib_pc, h_w, h_a):
         ib_pc.stats()
-        print ("Do you want a New armor or new weapon?  \n ")
-        print ("Or do you want to Upgrade something?  \n ")
-        print ("If there's nothing you want, then Leave.  \n ")
-        check = input("N/U/L")
+        print ("Do you want a New armor or new weapon?  \n")
+        print ("Or do you want to Upgrade something?  \n")
+        print ("If there's nothing you want, then Leave.  \n")
+        check = input("N/U/L \n")
         if check.upper() == "N":
-                print ("Armor or Weapon?  \n ")
+                print ("Armor or Weapon?  \n")
                 choice = input("A/W")
                 if choice.upper() == "A" and ib_pc.coins >= C.ARMOR_PRICE:
                         ib_pc.coins -= C.ARMOR_PRICE
@@ -390,10 +392,10 @@ def equipment_store(ib_pc, h_w, h_a):
                 if choice.upper() == "A":
                         for armor in h_a:
                                 armor.stats()
-                        print ("Which one do you want me to work on?  \n ")
+                        print ("Which one do you want me to work on?  \n")
                         amr = party_func.pick_hero(h_a)
                         amr.stats()
-                        print ("What do you want me to work on?  \n ")
+                        print ("What do you want me to work on?  \n")
                         upgrade = input("Effect Strength/Defense? D/S? ")
                         if upgrade.upper() == "D" and ib_pc.coins >= C.ARMOR_PRICE * (amr.defense ** C.INCREASE_EXPONENT):
                                 ib_pc.coins -= C.ARMOR_PRICE * (amr.defense ** C.INCREASE_EXPONENT)
@@ -410,10 +412,10 @@ def equipment_store(ib_pc, h_w, h_a):
                 elif choice.upper() == "W":
                         for wpn in h_w:
                                 wpn.stats()
-                        print ("Which one do you want me to work on?  \n ")
+                        print ("Which one do you want me to work on?  \n")
                         weapon = party_func.pick_hero(h_w)
                         weapon.stats()
-                        print ("What do you want me to work on?  \n ")
+                        print ("What do you want me to work on?  \n")
                         upgrade = input("Effect Strength/ATK? A/S? ")
                         if upgrade.upper() == "A" and ib_pc.coins >= C.WEAPON_PRICE * (weapon.atk ** C.INCREASE_EXPONENT):
                                 ib_pc.coins -= C.WEAPON_PRICE * (weapon.atk ** C.INCREASE_EXPONENT)
@@ -434,15 +436,14 @@ def equipment_store(ib_pc, h_w, h_a):
                         
 #general town ui where the player chooses what to do in town
 def city(ib_pc, h_p, h_w, h_a, a_i):
-        print (" \n")
         ib_pc.stats()
-        print ("Welcome to our town. Where would you like to go? \n ")
+        print ("Welcome to our town. Where would you like to go? \n")
         #inn will be a place to sleep and recover the player's health
         #practice arena will let the players increase stats and get quests
         #stores will let the player buy potions or equipment
-        check = input("LEAVE, INN, PRACTICE ARENA, STORES? L/I/P/S")
+        check = input("LEAVE, INN, PRACTICE ARENA, STORES? L/I/P/S \n")
         if check.upper() == "L":
-                print ("Thanks for stopping by. \n ")
+                print ("Thanks for stopping by. \n")
         elif check.upper() == "I":
                 inn(ib_pc, h_p, h_w, h_a)
         elif check.upper() == "P":

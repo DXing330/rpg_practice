@@ -18,6 +18,34 @@ import rpg2_quest_battle as battle_func
 import rpg2_quest_monster_function as mon_func
 import rpg2_orc_quest as orc_func
 import rpg2_giant_quest as giant_func
+#quest five is dealing with elementals
+def quest_five(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
+        print ("Seems like the magicians have summoned some wild elementals again. ")
+        print ("They're causing havoc around the city. ")
+        print ("Hurry up and deal with them. ")
+        new_h_p = []
+        for hro in h_p:
+                copy_hero = copy.copy(hro)
+                new_h_p.append(copy_hero)
+        e_p = []
+        q_i.package -= 1
+        y = a_i.rank
+        for m in range(0, y):
+                for hero in h_p:
+                        mon = mon_func.elemental_maker()
+                        e_p.append(mon)
+        print ("You run to the city. ")
+        print ("You see massive clumps of elementals! ")
+        battle_func.battle_phase(new_h_p, e_p, p_npc, ib_pc,
+                                 s_pc, h_w, h_a, q_i)
+        if len(new_h_p) <= 0:
+                print ("You look like a mess. ")
+                print ("At least we managed to deal with most of the elementals. ")
+                print ("The fees for saving you will be taken out of your pay, by the way. ")
+        elif len(new_h_p) > 0:
+                print ("I knew I could count on you.  Thanks.")
+                q_i.rpackage += 1
+                a_i.fame += a_i.rank//C.INCREASE_EXPONENT
 #quest four is dealing with giants
 def quest_four(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
         print ("There are reports of some giants fighting nearby. ")
@@ -77,7 +105,7 @@ def quest_three(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
         elif len(new_h_p) > 0:
                 print ("You were a big help, thanks. ")
                 q_i.rpackage += 1
-                a_i.fame += round(a_i.rank/C.DECREASE_EXPONENT)
+                a_i.fame += a_i.rank//C.INCREASE_EXPONENT
         
 #quest two is advanced goblin fighting
 #fight goblins until the town is saved
@@ -91,9 +119,10 @@ def quest_two(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
         g_p = []
         q_i.package -= 1
         y = len(h_p)
+        r = a_i.rank//2
         #at higher ranks you need to fight more goblins
-        for x in range(0, a_i.rank//2):
-                for z in range(0, y):
+        for x in range(0, y):
+                for z in range(0, r):
                         mon = mon_func.super_goblin_maker()
                         g_p.append(mon)
                 print ("You see a band of goblins approaching. ")
@@ -105,7 +134,7 @@ def quest_two(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
                 if len(new_h_p) == 0:
                         break
                 elif len(new_h_p) > 0:
-                        y += len(new_h_p)
+                        r += a_i.rank//2
         if len(new_h_p) <= 0:
                 print ("You ok? We managed to push the goblins back for now. ")
                 print ("The fees for saving you will be taken out of your pay, by the way. ")
@@ -141,7 +170,7 @@ def quest_one(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
                 for hero in new_h_p:
                         if hero.health <= 0:
                                 new_h_p.remove(hero)
-                y += 1
+                y += len(h_p)
         #if the heroes lose then they get no reward
         if len(new_h_p) <= 0:
                 print ("Damn it, how can you lose to goblins?! ")
@@ -169,6 +198,8 @@ def quest(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i):
                         quest_two(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
                 elif x == 7:
                         quest_three(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
+                elif x == 8:
+                        quest_five(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
                 elif x == 10:
                         quest_four(h_p, ib_pc, s_pc, p_npc, h_w, h_a, q_i, a_i)
                         

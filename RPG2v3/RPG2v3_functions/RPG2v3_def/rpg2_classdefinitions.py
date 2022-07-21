@@ -38,13 +38,13 @@ class Player_PC:
                 print ("Health:", self.health)
 
         def stats(self):
-                print ("\n" self.name, self.level,
+                print (self.name, self.level,
                       self.health, self.maxhealth,
                       self.atk, self.defense,
                       self.skill, self.mana, self.maxmana, 
                       self.atkbonus, self.defbonus, "\n")
                 if self.poison > 0:
-                        print ("POISON:", self.poison)
+                        print ("POISON:", self.poison, "\n")
         def sstats(self):
                 print (self.level, self.maxhealth, self.atk, self.defense)
         #bonus stats
@@ -110,7 +110,9 @@ class Spell_PC:
                        "Element:", self.element, "Cost:", self.cost, "\n")
 
 class Monster_NPC:
-        def __init__(self, name, health, atk, defense, skill, element, dropchance, poison = 0):
+        def __init__(self, name, health, atk, defense, skill,
+                     element, dropchance, poison = 0,
+                     buff = None):
                 self.name = name
                 self.health = health
                 self.atk = atk
@@ -120,10 +122,13 @@ class Monster_NPC:
                 #how many coins are dropped after battle
                 self.dropchance = dropchance
                 self.poison = poison
+                self.buff = buff
         def stats(self):
                 print(self.name, self.health, self.atk, self.defense, self.skill, "\n")
                 if self.poison > 0:
-                        print ("POISON:", self.poison)
+                        print ("POISON:", self.poison, "\n")
+                if self.buff != None:
+                        print ("Buff:", self.buff, "\n")
         def hstats(self):
                 print ("Health:", self.health)
 
@@ -148,7 +153,7 @@ class Weapon_PC:
                       ", Power:", self.strength, ", Element:", self.element, 
                       ", Attack:", self.atk, "\n")
                 if self.upgrade > 0:
-                        print ("Upgrades:", self.upgrade)
+                        print ("Upgrades:", self.upgrade, "\n")
 
 class Armor_PC:
         def __init__(self, name, user, effect, strength, element, defense, upgrade = 0):
@@ -169,7 +174,7 @@ class Armor_PC:
                       ", Power:", self.strength, ", Element:", self.element, 
                       ", Defense:", self.defense, "\n")
                 if self.upgrade > 0:
-                        print ("Upgrades:", self.upgrade)
+                        print ("Upgrades:", self.upgrade, "\n")
 #used during quests
 class QuestItems_NPC:
         def __init__(self, package = 0, rpackage = 0, managem = 0):

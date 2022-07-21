@@ -17,10 +17,10 @@ new_spell = Spell_PC("new", 1, 1, None, 1)
 #function that will allow the player to change the element of their equipment
 #also will allow for basic effects
 def equipment_enchanter(ib_pc, h_w, h_a):
-        print ("This is the enchanting pools. ")
+        print ("\n This is the enchanting pools. ")
         print ("What would you like us to work on? ")
         print ("And if you're done then LEAVE. ")
-        choice = input("WEAPONS or ARMOR? W/A? ")
+        choice = input("WEAPONS or ARMOR? W/A?  \n")
         if choice.upper() == "W" and ib_pc.coins >= C.ENCHANT_PRICE:
                 #list the equipments and then have the player pick one to change
                 for wpn in h_w:
@@ -157,11 +157,11 @@ def learn_magic(ib_pc, h_m):
         for spell in h_m:
                 spell.stats()
         ib_pc.stats()
-        print ("Welcome to the bookstore. Would you like to purchase one of our spellbooks? ")
+        print ("Welcome to the bookstore. Would you like to purchase one of our spellbooks? \n")
         choice = input("Y/N? ")
         if choice.upper() == "Y" and ib_pc.coins >= C.SPELL_PRICE:
                 print ("What element of spell do you want?",
-                       "Fire, Water, Earth, Air or Dark?")
+                       "Fire, Water, Earth, Air or Dark? \n")
                 elmnt = input("F/W/E/A/D? ")
                 if elmnt.upper() == "F":
                         ib_pc.coins -= C.SPELL_PRICE
@@ -251,10 +251,10 @@ def summoning_fields(h_p, p_npc, ib_pc):
                                 if p.name == "Summoner":
                                         hero = p
                         if hero != None:
-                                print ("Aww, what a cute little friend you have.")
+                                print ("\n Aww, what a cute little friend you have.")
                                 print ("It looks like it can still get a lot stronger.")
-                                print ("Do you want us to help you train it?")
-                                print ("It'll cost you", (ally.atk ** ally.stage), "coins.")
+                                print ("Do you want us to help you train it? ")
+                                print ("It'll cost you", (ally.atk ** ally.stage), "coins. \n")
                                 choice = input("Y/N? ")
                                 if choice.upper() == "Y" and ib_pc.coins >= ally.atk ** ally.stage:
                                         ib_pc.coins -= ally.atk ** ally.stage
@@ -272,8 +272,8 @@ def summoning_fields(h_p, p_npc, ib_pc):
                                 if p.name == "Summoner":
                                         hero = p
                         if hero != None:
-                                print ("That's a mighty strong looking ally you have.")
-                                print ("Do you want me to try to strengthen it?")
+                                print (" \n That's a mighty strong looking ally you have.")
+                                print ("Do you want me to try to strengthen it? \n")
                                 print ("It'll cost you", ((ally.atk * ally.stage) ** C.INCREASE_EXPONENT), "coins.")
                                 choice = input("Y/N? ")
                                 if choice.upper() == "Y" and ib_pc.coins >= (ally.atk * ally.stage) ** C.INCREASE_EXPONENT:

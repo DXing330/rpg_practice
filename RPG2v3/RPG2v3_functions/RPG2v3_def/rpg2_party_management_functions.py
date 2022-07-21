@@ -48,7 +48,7 @@ def pick_random_healthy_hero(heroes_party):
         hero = None
         #if there's a defender in the party, pick him first
         for player  in heroes_party:
-                if player.name == "Defender" and player.health > 0:
+                if "Defender" in player.name and player.health > 0:
                         hero = player
         #if there's no defender then try to pick a random hero
         if hero == None:
@@ -212,3 +212,9 @@ def pick_different_monster(m_npc, m_p):
                 if target == m_npc:
                         target = pick_different_monster(m_npc, m_p)
         return target
+
+#function that heals the party to full
+def recover(h_p):
+        for hero in h_p:
+                hero.health = hero.maxhealth
+                hero.mana = hero.maxmana

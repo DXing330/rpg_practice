@@ -18,7 +18,45 @@ sys.path.append("./RPG2v3_quest")
 import rpg2_hunter_function as hunt_func
 #grandmaster will allow you to upgrade your class
 def grandmaster(h_p, qi_npc, a_npc):
-        print ("Welcome. I continue to hear of your great exploits. ")
+        print ("I continue to hear of your great exploits. \n")
+        choice = input("REST, TRAIN, LEAVE? R/T/L ")
+        if choice.upper() == "R":
+                party_func.recover(h_p)
+                print ("Its important to have a place to relax. ")
+        elif choice.upper() == "T":
+                print ("Of course it's important to keep improving. ")
+                hero = party_func.pick_hero(h_p)
+                if hero.level == C.LEVEL_LIMIT:
+                        print ("Are you ready to go beyond your limits? ")
+                        check = ("Y/N")
+                        if check.upper() == "Y" and qi_npc.managem >= C.PRESTIGE_PRICE:
+                                qi_npc.managem -= C.PRESTIGE_PRICE
+                                lvl_func.prestige_class(hero)
+                                lvl_func.prestige_level_up(hero)
+                                print ("YOur potential is greater but you still need training. ")
+                                grandmaster(h_p, qi_npc, a_npc)
+                        elif check.upper() == "Y" and qi_npc.managem < C.PRESTIGE_PRICE:
+                                print ("We'll need more mana gems for the process. ")
+                        else:
+                                print ("Whenever you're ready. ")
+                elif C.LEVEL_LIMIT < hero.level < C.LEVEL_LIMIT * C.INCREASE_EXPONENT:
+                        print ("To further enhance your body I'll need ",
+                               hero.level ** C.INCREASE_EXPONENT, "mana gems. ")
+                        check = ("Y/N")
+                        if check.upper() == "Y" and qi_npc.managem >= hero.level ** C.INCREASE_EXPONENT:
+                                qi_npc.managem -= hero.level ** C.INCREASE_EXPONENT
+                                lvl_func.prestige_level_up(hero)
+                                print ("Can you feel the mana empowering you? ")
+                                grandmaster(h_p, qi_npc, a_npc)
+                        else:
+                                print ("Whenever you're ready. ")
+                else:
+                        print ("I can't do anything for you right now. ")
+        elif choice.upper() == "L":
+                print ("Come back anytime, I love to hear your stories. ")
+        else:
+                grandmaster(h_p, qi_npc, a_npc)
+                        
 #enchanter with the monster hunter guild
 #has access to new kinds of enchantments that cost mana gem
 def enchanter(p_npc, h_w, h_a, qi_npc, a_npc):
@@ -425,7 +463,7 @@ def monster_hunter_guild(h_p, ib_pc, p_npc, h_w, h_a, qi_npc, a_npc):
                 a_npc.fame += 1
                 monster_hunter_guild(h_p, ib_pc, p_npc, h_w, h_a, qi_npc, a_npc)
         elif a_npc.rank >= 1:
-                print ("Welcome back.  \n ")
+                print ("Welcome back.  \n")
                 if a_npc.fame > a_npc.rank ** C.INCREASE_EXPONENT:
                         print ("You've done a bit of work and we've noticed that. ")
                         print ("Here, take this badge, it might open some doors for you. ")
@@ -440,7 +478,7 @@ def monster_hunter_guild(h_p, ib_pc, p_npc, h_w, h_a, qi_npc, a_npc):
                         print ("The GRANDMASTER hall is open for you. ")
                 if len(h_p) < C.PARTY_LIMIT:
                         print ("If you want some help, we have some HUNTERS looking for a party. ")
-                check = input("Look for a Quest? Claim Reward? Visit Armorer? Q/A/R?")
+                check = input("Look for a Quest? Claim Reward? Visit Armorer? Q/A/R? \n")
                 if check.upper() == "Q" and qi_npc.package < a_npc.rank:
                         give_quest(qi_npc, a_npc)
                 elif check.upper() == "R" and qi_npc.rpackage > 0:

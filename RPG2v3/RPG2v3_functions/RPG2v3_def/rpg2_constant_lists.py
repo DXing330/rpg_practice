@@ -27,6 +27,9 @@ class List_Constants:
                                           "Slime", "Skeleton", "Beast",
                                           "Elemental", "Troll", "Goblin",
                                           "Bomb", "Trap", "Orc", "Giant"]
+             self.MONSTER_BUFF_LIST = ["AA Fire", "AA Water", "AA Earth",
+                                      "AA Air", "AA Dark", "AA Light",
+                                       "Poison Heal", "Dmg Void A", "Dmg Void B"]
              #lists of weapon and armor effects
              self.BASIC_ARMOR_EFFECT_LIST = ["Block",
                                              "Resist Fire", "Resist Water",

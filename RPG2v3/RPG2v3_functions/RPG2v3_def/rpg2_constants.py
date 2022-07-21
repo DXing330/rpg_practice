@@ -13,6 +13,8 @@ class Constants:
              self.LEVEL_LIMIT = 10
              #base price of leveling up
              self.LEVEL_PRICE = 10
+             #base price of going into a prestige class
+             self.PRESTIGE_PRICE = 1000
              #price of increasing skill, mana, and defense
              self.STAT_PRICE = 20
              #exponent to scale the difficulty of increasing levels/stats
@@ -52,11 +54,11 @@ class Constants:
              #potential attack increase per level for basic monster
              self.MONSTER_SCALE_ATK = 7
              #max atk for basic monster
-             self.MONSTER_MAX_ATK = 75
+             self.MONSTER_MAX_ATK = 100
              #potential defense increase per level for basic monster
              self.MONSTER_SCALE_DEF = 2
              #max def for basic monster
-             self.MONSTER_MAX_DEF = 30
+             self.MONSTER_MAX_DEF = 20
              #max skill for basic monster
              self.MONSTER_MAX_SKILL = 10
              #minimum stats for basic monster
@@ -65,6 +67,7 @@ class Constants:
              self.MONSTER_MIN_DEF = 1
              #max dropchance for basic monster
              self.MONSTER_MAX_DROPCHANCE = 5
+             self.MONSTER_MAX_DC = 5
              #critical hit bonus
              self.CRIT = 2
              #buff bonus
@@ -103,5 +106,8 @@ class Constants:
              #random event stuff
              self.CHARITY = 100
              self.THIEF = 10000
+             #monster buffs
+             self.DMG_A = 100
+             self.DMG_B = 500
 
 C = Constants()

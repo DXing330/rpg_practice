@@ -96,7 +96,7 @@ def dl_phase_one(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
 
                 else:
                         for hero in h_p:
-                                if hero.health > 0 and hero.name != "Golem":
+                                if hero.health > 0 and hero.name != "Totem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
                                                                   ib_pc, s_pc, new_h_s,
@@ -186,7 +186,7 @@ def dl_phase_two(h_p, b_p, new_h_s, ib_pc, s_pc, h_w, h_a):
 
                 else:
                         for hero in h_p:
-                                if hero.health > 0 and hero.name != "Golem":
+                                if hero.health > 0 and hero.name != "Totem":
                                         hero.stats()
                                         player_func.player_action(hero, h_p, b_p,
                                                                   ib_pc, s_pc, new_h_s,
